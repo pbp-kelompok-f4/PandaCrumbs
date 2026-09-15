@@ -2,21 +2,17 @@
 
 ## Nama Aplikasi: PandaCrumbs
 
-Kelas: F
-Kelompok: 4
+## Kelas: F
+## Kelompok: 4
 
-Anggota Kelompok:
+## Anggota Kelompok:
 Muhammad Gathfaan Nur Aziz Suhendar (2506609214)
-
 
 Malvin Lionard (2506591753)
 
-
 Rakhel Aqeela hapsari Ariwibowo
 
-
 Mohammad Adzka Aulia (2506657005)
-
 
 Fayiz Mahardika Ghulam Afandi (2506617374)
 
@@ -109,16 +105,16 @@ Nantinya, nama jalan atau alamat penjemputan akan diubah menjadi koordinat latit
 Aplikasi mengimplementasikan sistem multi-peran dengan batasan hak akses yang jelas:
 
 ### Pengguna Terdaftar (Household / Student User): yang sudah memiliki akun dan login di aplikasi/website
-Mengelola inventaris dapur pribadi (Smart Pantry).
-Menjelajahi, mengunggah, dan menandai resep olahan pangan sisa.
-Mencatat dan memantau audit pembuangan makanan rumah tangganya
-Membuat penawaran donasi makanan dan melakukan klaim paket makanan komunal
-Mengikuti tantangan gaya hidup hijau dan melakukan check-in streak harian.
+- Mengelola inventaris dapur pribadi (Smart Pantry).
+- Menjelajahi, mengunggah, dan menandai resep olahan pangan sisa.
+- Mencatat dan memantau audit pembuangan makanan rumah tangganya
+- Membuat penawaran donasi makanan dan melakukan klaim paket makanan komunal
+- Mengikuti tantangan gaya hidup hijau dan melakukan check-in streak harian.
 ### Pengguna Publik / Tamu (Unauthenticated User): pengguna guest yang tidak login ke aplikasinya
-Menjelajahi katalog resep olahan bahan sisa (dengan menggunakan fitur read-only).
-Melihat feed makanan berlebih yang tersedia untuk dibagikan di sekitar.
-Melihat papan peringkat (leaderboard) tantangan zero-waste komunitas.
+- Menjelajahi katalog resep olahan bahan sisa (dengan menggunakan fitur read-only).
+- Melihat feed makanan berlebih yang tersedia untuk dibagikan di sekitar.
+- Melihat papan peringkat (leaderboard) tantangan zero-waste komunitas.
 ### Administrator:
-Memvalidasi laporan postingan makanan berlebih yang mencurigakan.
-Mengelola master kategori bahan pangan dan kurasi resep rekomendasi.
+- Memvalidasi laporan postingan makanan berlebih yang mencurigakan.
+- Mengelola master kategori bahan pangan dan kurasi resep rekomendasi.
 
