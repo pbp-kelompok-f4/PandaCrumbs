@@ -7,9 +7,17 @@ Kelompok: 4
 
 Anggota Kelompok:
 Muhammad Gathfaan Nur Aziz Suhendar (2506609214)
-Malvin Lionard
+
+
+Malvin Lionard (2506591753)
+
+
 Rakhel Aqeela hapsari Ariwibowo
+
+
 Mohammad Adzka Aulia (2506657005)
+
+
 Fayiz Mahardika Ghulam Afandi (2506617374)
 
 ## Deskripsi Aplikasi:
