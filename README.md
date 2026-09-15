@@ -6,6 +6,7 @@
 ## Kelompok: 4
 
 ## Anggota Kelompok:
+
 1. Muhammad Gathfaan Nur Aziz Suhendar (2506609214)
 2. Malvin Lionard (2506591753)
 3. Rakhel Aqeela Hapsari Ariwibowo (2506605462)
@@ -23,6 +24,7 @@ Dengan menghubungkan proses penyimpanan, pemanfaatan, pencatatan, berbagi dan pe
 ### Modul Smart Pantry & Expiry Tracker (Gathfaan)
 Manajemen inventaris makanan dengan fitur tracker kadaluarsa otomatis 
 
+- Data utama: nama makanan, jumlah stok, tanggal kadaluarsa, tanggal masuk penyimpanan, lokasi simpan, dan jenis makanan.
 - Create: Menambah bahan makanan ke dalam kulkas atau storage melalui formulir input atau menggunakan auto-complete API.
 - Read: Menampilkan daftar stok bahan makanan. Daftar stok dikelompokkan berdasarkan lokasi simpan dan status urgensi masa simpan (Aman, Hampir Basi, dan Kadaluarsa)
 - Update: Memperbaharui atribut-atribut yang terdapat pada bahan makanan, seperti jumlah stok, tanggal kadaluarsa, tanggal dan waktu masuk bahan makanan.
