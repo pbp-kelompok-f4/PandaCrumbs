@@ -1,6 +1,6 @@
 # Project-PandaCrumbs
 
-### Nama Aplikasi: PandaCrumbs
+## Nama Aplikasi: PandaCrumbs
 
 Kelas: F
 Kelompok: 4
@@ -12,15 +12,15 @@ Rakhel Aqeela hapsari Ariwibowo
 Mohammad Adzka Aulia (2506657005)
 Fayiz Mahardika Ghulam Afandi (2506617374)
 
-### Deskripsi Aplikasi:
+## Deskripsi Aplikasi:
 
 PandaCrumbs adalah platform berbasis web yang berfokus pada pengurangan food waste melalui pengelolaan makanan yang lebih terencana, pemanfaatan bahan sisa, serta pembentukan kebiasaan konsumsi yang lebih berkelanjutan. Aplikasi ini ditujukan terutama bagi mahasiswa, anak kos dan individu yang mengelola makanan sendiri, namun tetap dapat digunakan oleh masyarakat umum. PandaCrumbs membantu pengguna mencatat stok makanan, memantau tanggal kedaluwarsa, menemukan resep dari bahan yang tersedia, mencatat makanan yang terbuang, membagikan makanan berlebih yang masih layak konsumsi, serta mengikuti tantangan zero-waste.  Melalui fitur-fitur tersebut, PandaCrumbs bertujuan membantu pengguna mengurangi jumlah makanan yang terbuang sekaligus meningkatkan kesadaran terhadap dampak finansial dan lingkungan dari food waste.
 
 Dengan menghubungkan proses penyimpanan, pemanfaatan, pencatatan, berbagi dan pembentukan kebiasaan dalam satu platform, PandaCrumbs diharapkan dapat membantu pengguna membangun pola konsumsi makanan yang lebih efesien.
 
-### Daftar Modul Rencana: 
+## Daftar Modul Rencana: 
 
-# Modul Smart Pantry & Expiry Tracker (Gathfaan)
+### Modul Smart Pantry & Expiry Tracker (Gathfaan)
 Manajemen inventaris makanan dengan fitur tracker kadaluarsa otomatis 
 
 CRUD:
@@ -40,7 +40,7 @@ Terdapat tombol quick-consume berbasis AJAX untuk mengurangi kuantitas atau meng
 	Filter Autentikasi: Data inventaris hanya bisa diakses dan dikelola oleh pemilik akun
 yang telah login. Bersifat strictly private.
 	
-# Modul Leftover Recipe (Malvin)
+### Modul Leftover Recipe (Malvin)
 Membantu pengguna menemukan cara mengolah bahan yang sudah tersedia melalui resep yang dibuat komunitas.
 Data utama: judul resep, daftar bahan dan takaran, langkah memasak, porsi, serta pembuat.
 Create: menambahkan resep.
@@ -52,7 +52,7 @@ API: menampilkan pilihan produk Open Food Facts sebagai referensi bahan kemasan,
 Akses: resep dapat dibaca publik; pembuatan resep dan bookmark memerlukan login. Bookmark bersifat pribadi.
 
 
-# Modul Food Waste Audit (Fayiz)
+### Modul Food Waste Audit (Fayiz)
 Membantu pengguna mengenali makanan yang sering terbuang, penyebabnya, dan perkiraan kerugian uang.
 Data utama: makanan, jumlah terbuang, satuan, tanggal, alasan, dan perkiraan nilai kerugian.
 Create: menambahkan catatan makanan terbuang.
@@ -64,7 +64,7 @@ API: menampilkan referensi produk Open Food Facts yang dapat difilter menurut ka
 Akses: catatan dan ringkasan hanya dapat diakses pemiliknya.
 
 
-# Modul Community Food Sharing (Adzka)
+### Modul Community Food Sharing (Adzka)
 Mempertemukan pengguna yang memiliki makanan berlebih dengan pengguna yang ingin mengambilnya.
 CRUD:
 Data utama: nama makanan, deskripsi, jumlah atau porsi, batas waktu pengambilan, lokasi, pemberi, dan status penawaran.
@@ -77,7 +77,7 @@ API: menyediakan referensi produk Open Food Facts dengan filter kategori untuk p
 Akses: ringkasan penawaran dapat dibaca publik; klaim memerlukan login. Kontak dan detail titik jemput dibatasi kepada pemberi dan penerima yang disetujui.
 
 
-# Modul Habit Challenge (Rakhel)
+### Modul Habit Challenge (Rakhel)
 Membantu pengguna menjalankan target pribadi, misalnya menghabiskan bahan yang tersedia sebelum membeli kembali.
 Data utama: rencana tantangan pribadi, target, kategori makanan sasaran, periode, serta catatan check-in.
 Create: membuat rencana tantangan pribadi.
@@ -89,7 +89,7 @@ API: menampilkan referensi produk Open Food Facts yang difilter berdasarkan kate
 Akses: rencana dan progres hanya dapat dikelola oleh pemiliknya.
 Streak dihitung dari check-in; nilainya tidak diubah langsung oleh pengguna.
 
-### Public API yang dipakai:
+## Public API yang dipakai:
 Open Food Facts API (https://world.openfoodfacts.org/api/v2/)
 Kami menggunakan API Open Food Facts di modul “Smart Pantry” untuk fitur auto-complete data produk pangan kemasan lokal.
 Saat pengguna mengetik nama bahan makanan atau memindai barcode dari produk mereka, sistem akan mengambil data nama standar, kategori pangan, estimasi umur simpan, serta nilai Eco-Score / Nutri-Score secara asinkron menggunakan AJAX.
@@ -97,20 +97,20 @@ OpenStreetMap atau Nominatim API (https://nominatim.openstreetmap.org/) dan Leaf
 Kami menggunakan OpenStreetMap di modul “Community Food Sharing & Claim” untuk membantu geocoding alamat dan visualisasi titik jemput.
 Nantinya, nama jalan atau alamat penjemputan akan diubah menjadi koordinat latitude dan longitude, dan merender peta interaktif penjemputan donasi makanan.
 
-### Peran Pengguna: 
+## Peran Pengguna: 
 Aplikasi mengimplementasikan sistem multi-peran dengan batasan hak akses yang jelas:
 
-# Pengguna Terdaftar (Household / Student User): yang sudah memiliki akun dan login di aplikasi/website
+### Pengguna Terdaftar (Household / Student User): yang sudah memiliki akun dan login di aplikasi/website
 Mengelola inventaris dapur pribadi (Smart Pantry).
 Menjelajahi, mengunggah, dan menandai resep olahan pangan sisa.
 Mencatat dan memantau audit pembuangan makanan rumah tangganya
 Membuat penawaran donasi makanan dan melakukan klaim paket makanan komunal
 Mengikuti tantangan gaya hidup hijau dan melakukan check-in streak harian.
-#  engguna Publik / Tamu (Unauthenticated User): pengguna guest yang tidak login ke aplikasinya
+### Pengguna Publik / Tamu (Unauthenticated User): pengguna guest yang tidak login ke aplikasinya
 Menjelajahi katalog resep olahan bahan sisa (dengan menggunakan fitur read-only).
 Melihat feed makanan berlebih yang tersedia untuk dibagikan di sekitar.
 Melihat papan peringkat (leaderboard) tantangan zero-waste komunitas.
-# Administrator:
+### Administrator:
 Memvalidasi laporan postingan makanan berlebih yang mencurigakan.
 Mengelola master kategori bahan pangan dan kurasi resep rekomendasi.
 
