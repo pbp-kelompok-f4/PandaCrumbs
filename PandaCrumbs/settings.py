@@ -29,7 +29,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "pws.cs.ui.ac.id",
-    "*.pws.cs.ui.ac.id",
+    "malvin-lionard-pandacrumbs.pws.cs.ui.ac.id",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
