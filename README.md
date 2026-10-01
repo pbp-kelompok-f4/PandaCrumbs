@@ -92,7 +92,7 @@ Streak dihitung dari check-in; nilainya tidak diubah langsung oleh pengguna.
 
 ### Open Food Facts API (https://world.openfoodfacts.org/api/v2/)
 - Kami menggunakan API Open Food Facts di modul “Smart Pantry” untuk fitur auto-complete data produk pangan kemasan lokal.
-- Saat pengguna mengetik nama bahan makanan atau memindai barcode dari produk mereka, sistem akan mengambil data nama standar, kategori pangan, estimasi umur simpan, serta nilai Eco-Score / Nutri-Score secara asinkron menggunakan AJAX.
+- Implementasi CP2 memakai pencarian eksplisit melalui tombol Cari Produk (AJAX), filter kategori, cache satu jam, dan penanganan API gagal. Nama produk, kategori, barcode, serta foto dapat menjadi referensi. Tanggal kedaluwarsa diisi pengguna dari kemasan, bukan diperkirakan dari API. Autocomplete setiap ketikan dan pemindaian barcode belum diimplementasikan.
 ### OpenStreetMap atau Nominatim API (https://nominatim.openstreetmap.org/) dan Leaflet.js
 - Kami menggunakan OpenStreetMap di modul “Community Food Sharing & Claim” untuk membantu geocoding alamat dan visualisasi titik jemput.
 - Nantinya, nama jalan atau alamat penjemputan akan diubah menjadi koordinat latitude dan longitude, dan merender peta interaktif penjemputan donasi makanan.
@@ -116,3 +116,66 @@ pengguna guest yang tidak login ke aplikasinya
 - Memvalidasi laporan postingan makanan berlebih yang mencurigakan.
 - Mengelola master kategori bahan pangan dan kurasi resep rekomendasi.
 
+
+## Desain dan status CP2 — 1 Oktober 2026
+
+- [Figma PandaCrumbs](https://www.figma.com/design/2iKWKXaQK0sTRMc11aJH2J/Untitled)
+- Frame utama: Smart Pantry `27:602`, Leftover Recipe `27:654`, detail resep `39:2897`, formulir pantry `37:1205`.
+- Modul 1 dan 2 telah tersedia lokal: CRUD, autentikasi, filter database/AJAX, quick-consume, bookmark pribadi, dan referensi produk Open Food Facts.
+- Template bersama: `templates/base.html`, `components/header.html`, `components/footer.html`, `components/fields.html`.
+- Modul 3–5 masih rencana. Navigasi modul tersebut belum aktif.
+- Deployment PWS: **belum diverifikasi dalam pengerjaan lokal ini**. Host yang sebelumnya tercantum di settings: https://malvin-lionard-pandacrumbs.pws.cs.ui.ac.id/ . Jangan menganggapnya sebagai bukti deployment berhasil.
+- Seed CP2 menyediakan **3 bahan + 3 resep**, bukan 50 data utama. Persyaratan data final masih perlu diselesaikan.
+- Gambar karakter pada beberapa kartu berasal langsung dari placeholder Figma. Ganti dengan foto makanan yang sesuai sebelum pengumpulan final.
+
+## Menjalankan lokal
+
+Python 3.12+ direkomendasikan; implementasi ini diuji dengan Python 3.14 dan Django 5.2.17.
+
+```sh
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements-dev.txt
+cp .env.example .env
+python manage.py migrate
+python manage.py seed_demo
+python manage.py runserver
+```
+
+`seed_demo` meminta password untuk akun `demo` baru. Akun yang sudah ada tidak diubah passwordnya. Jalankan ulang perintah ini tanpa menduplikasi data. Pada Windows, aktivasi environment memakai `.venv\Scripts\activate`.
+
+- Beranda: http://127.0.0.1:8000/
+- Pantry pribadi: http://127.0.0.1:8000/pantry/
+- Resep publik: http://127.0.0.1:8000/recipes/
+- Pendaftaran akun: http://127.0.0.1:8000/accounts/register/
+
+Foto produk dari API memerlukan internet. Font, stylesheet, JavaScript, dan aset Figma sudah disimpan lokal. Data produk dicari hanya saat pengguna menekan tombol; tidak ada request API per ketikan. Respons API di-cache satu jam dan pencarian baru dibatasi dengan jeda tujuh detik untuk deployment satu host. Untuk beberapa host, gunakan cache bersama dengan rate limiter atomik.
+
+## Pengujian
+
+```sh
+python manage.py check
+python manage.py makemigrations --check --dry-run
+coverage run --source=main,pantry,recipes manage.py test main pantry recipes
+coverage report --omit='*/tests.py,*/migrations/*'
+python manage.py collectstatic --noinput
+```
+
+28 tes backend lulus. Coverage baris Python aplikasi `main`, `pantry`, dan `recipes` sebesar 99% (tes dan migrasi dikecualikan). Angka ini **bukan coverage frontend atau seluruh proyek final**. Uji browser terpisah memeriksa CRUD, filter AJAX, bookmark, data privat, asset loading, dan layout empat lebar layar. Integrasi Open Food Facts juga diuji dengan request nyata.
+
+## Persiapan deployment PWS
+
+1. Gunakan environment baru dari `requirements.txt`. Environment Windows `env/`, bytecode, dan SQLite tidak lagi dilacak Git.
+2. Atur secret production yang unik, `DJANGO_DEBUG=false`, host dan origin HTTPS yang benar. Jangan commit `.env`.
+3. Bila memakai database ITF, isi `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`; konfigurasi PostgreSQL memakai schema `tugas_kelompok`. Pastikan schema tersedia dan akun DB memiliki izin yang diperlukan.
+4. Aktifkan `TRUST_PROXY_HTTPS=true` hanya bila reverse proxy PWS menjamin header `X-Forwarded-Proto` dibersihkan dan diatur oleh proxy.
+5. Jalankan `migrate`, `collectstatic --noinput`, dan `check --deploy` di environment deployment. Jalankan WSGI melalui Gunicorn/konfigurasi PWS yang berlaku.
+6. Periksa URL PWS dari browser, login, static files, koneksi DB, serta persistensi setelah restart. Baru nyatakan deployment CP2 selesai.
+
+Tidak ada push, PR, perubahan secret GitHub, atau deployment yang dilakukan dalam pengerjaan lokal ini.
+
+Lihat [rundown CP2](docs/CP2-RUNDOWN.md) dan [design system](docs/DESIGN-SYSTEM.md).
+
+## Lokasi implementasi utama
+
+Hasil CP2 sudah diterapkan ke repo asli pada branch `main`, tanpa commit atau push GitHub. Proyek PWS baru `mohammad.adzka/pandacrumbs-cp2` sudah dibuat tetapi belum di-deploy. Script `scripts/start-pws.sh` menyiapkan migrasi dan static files saat startup; konfigurasi PWS/database masih perlu diselesaikan.
