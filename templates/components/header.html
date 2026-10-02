@@ -1,0 +1,11 @@
+{% load static %}<header class="site-header flex items-center">
+<a class="brand flex items-center" href="{% url 'main:show_landing_page' %}" aria-label="PandaCrumbs beranda"><img src="{% static 'main/images/pantryDesign-imgCopySvg12.png' %}" width="58" height="67" alt=""><span>Panda<span>Crumbs</span></span></a>
+<button class="menu-toggle" type="button" aria-controls="site-navigation" aria-expanded="false">Menu ☰</button>
+<nav id="site-navigation" class="site-nav flex items-center" aria-label="Navigasi utama">
+<a href="{% url 'pantry:index' %}" {% if active == 'pantry' %}aria-current="page"{% endif %}>Pantry</a>
+<a href="{% url 'recipes:index' %}" {% if active == 'recipes' %}aria-current="page"{% endif %}>Recipe</a>
+<span class="nav-pending" title="Modul belum tersedia">Waste Audit</span><span class="nav-pending" title="Modul belum tersedia">Community</span><span class="nav-pending" title="Modul belum tersedia">Habit Challenge</span>
+</nav><div class="header-auth flex items-center">
+{% if user.is_authenticated %}<details class="account-menu"><summary><span class="avatar">{{ user.username|first|upper }}</span><span class="sr-only">Menu akun {{ user.username }}</span>⌄</summary><div class="account-popover"><strong>{{ user.username }}</strong><a href="{% url 'pantry:index' %}">Pantry saya</a><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button type="submit">Keluar</button></form></div></details>
+{% else %}<a class="sign-in" href="{% url 'login' %}">Sign in</a><a class="register" href="{% url 'main:register' %}">Register</a>{% endif %}
+</div></header>

@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block body_class %}auth-page{% endblock %}{% block content %}<section class="auth-card"><h1>Register</h1><form method="post">{% csrf_token %}{% include 'components/fields.html' %}<button class="button green" type="submit">Register</button></form><p>Sudah punya akun? <a href="{% url 'login' %}">Sign In now</a></p></section>{% endblock %}

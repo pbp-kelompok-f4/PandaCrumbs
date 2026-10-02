@@ -1,0 +1,13 @@
+{% load static %}<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{% block title %}PandaCrumbs{% endblock %}</title>
+<link rel="icon" href="{% static 'main/images/pantryDesign-imgCopySvg12.png' %}">
+<link rel="stylesheet" href="{% static 'main/css/fonts.css' %}">
+<link rel="stylesheet" href="{% static 'main/css/tailwind.css' %}">
+<link rel="stylesheet" href="{% static 'main/css/app.css' %}">
+<script src="{% static 'main/js/app.js' %}" defer></script></head>
+<body class="{% block body_class %}{% endblock %}"><a class="skip-link" href="#content">Lewati ke konten</a>
+{% include 'components/header.html' %}
+<div id="feedback" class="toast" role="status" aria-live="polite" hidden></div>
+{% if messages %}<div class="messages" role="status">{% for message in messages %}<p>{{ message }}</p>{% endfor %}</div>{% endif %}
+<main id="content" class="page {% block page_class %}{% endblock %}">{% block content %}{% endblock %}</main>
+{% include 'components/footer.html' %}</body></html>
