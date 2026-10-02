@@ -20,6 +20,11 @@ PandaCrumbs adalah platform berbasis web yang berfokus pada pengurangan food was
 
 Dengan menghubungkan proses penyimpanan, pemanfaatan, pencatatan, berbagi dan pembentukan kebiasaan dalam satu platform, PandaCrumbs diharapkan dapat membantu pengguna membangun pola konsumsi makanan yang lebih efesien.
 
+## Tautan Proyek:
+
+- [Deployment PWS](https://mohammad-adzka-pandacrumbs.pws.cs.ui.ac.id/)
+- [Desain Figma](https://www.figma.com/design/2iKWKXaQK0sTRMc11aJH2J/Untitled)
+
 ## Daftar Modul Rencana:
 
 ### Modul Smart Pantry & Expiry Tracker (Gathfaan)
@@ -93,19 +98,19 @@ Membantu pengguna menjalankan target pribadi, misalnya menghabiskan bahan yang t
 
 ## Public API yang dipakai:
 
-### Open Food Facts API (https://world.openfoodfacts.org/api/v2/)
+### Open Food Facts API ([dokumentasi](https://openfoodfacts.github.io/openfoodfacts-server/api/))
 
-- Kami menggunakan API Open Food Facts di modul “Smart Pantry” untuk fitur auto-complete data produk pangan kemasan lokal.
+- Kami menggunakan API Open Food Facts di modul “Smart Pantry” untuk pencarian metadata produk pangan kemasan.
 - Implementasi CP2 memakai pencarian eksplisit melalui tombol Cari Produk (AJAX), filter kategori, cache satu jam, dan penanganan API gagal. Nama produk, kategori, barcode, serta foto dapat menjadi referensi. Tanggal kedaluwarsa diisi pengguna dari kemasan, bukan diperkirakan dari API. Autocomplete setiap ketikan dan pemindaian barcode belum diimplementasikan.
 
 ### OpenStreetMap atau Nominatim API (https://nominatim.openstreetmap.org/) dan Leaflet.js
 
-- Kami menggunakan OpenStreetMap di modul “Community Food Sharing & Claim” untuk membantu geocoding alamat dan visualisasi titik jemput.
+- Kami merencanakan penggunaan OpenStreetMap di modul “Community Food Sharing & Claim” untuk membantu geocoding alamat dan visualisasi titik jemput; integrasi ini belum diimplementasikan.
 - Nantinya, nama jalan atau alamat penjemputan akan diubah menjadi koordinat latitude dan longitude, dan merender peta interaktif penjemputan donasi makanan.
 
 ## Peran Pengguna:
 
-Aplikasi mengimplementasikan sistem multi-peran dengan batasan hak akses yang jelas:
+Peran dan hak akses berikut mencakup rancangan seluruh aplikasi. Pada CP2, akses yang sudah tersedia adalah autentikasi, pantry pribadi, resep publik, CRUD resep milik sendiri, dan bookmark pribadi. Fitur modul lain serta fungsi administrator khusus di bawah masih berupa rencana:
 
 ### Pengguna Terdaftar (Household / Student User):
 
