@@ -4,7 +4,7 @@ import requests
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.core.management import call_command
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from pantry.models import PantryItem
 from recipes.models import Recipe
@@ -74,3 +74,23 @@ class ProductSearchTests(TestCase):
     def test_invalid_upstream_payload(self,get):
         get.return_value=Mock(json=lambda:{'products':None})
         self.assertEqual(self.client.get(self.url,{'q':'milk'}).status_code,503)
+
+
+@override_settings(DEBUG=False, STATIC_ROOT="", SECURE_SSL_REDIRECT=True)
+class ProductionStaticTests(TestCase):
+    """PWS starts from source without a collected static manifest."""
+
+    def test_pages_and_assets_without_collectstatic(self):
+        from django.contrib.staticfiles.storage import staticfiles_storage
+
+        for url in ["/", "/accounts/login/", "/accounts/register/", "/recipes/"]:
+            with self.subTest(page=url):
+                self.assertEqual(self.client.get(url, secure=True).status_code, 200)
+        for asset in ["main/css/app.css", "main/css/fonts.css", "main/css/tailwind.css",
+                      "main/js/app.js", "main/fonts/font-0.ttf",
+                      "main/images/1-2-imgImage3.png"]:
+            with self.subTest(asset=asset):
+                response = self.client.get(staticfiles_storage.url(asset), secure=True)
+                self.assertEqual(response.status_code, 200)
+                self.assertTrue(b"".join(response.streaming_content))
+                response.close()

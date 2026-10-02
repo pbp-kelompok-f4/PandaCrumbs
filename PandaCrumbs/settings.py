@@ -9,8 +9,8 @@ DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() == "true"
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-local-development-only-pandacrumbs")
 if not DEBUG and (not os.getenv("DJANGO_SECRET_KEY") or SECRET_KEY.startswith("django-insecure")):
     raise ImproperlyConfigured("Set a unique DJANGO_SECRET_KEY before production deployment.")
-ALLOWED_HOSTS = [h.strip() for h in os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,malvin-lionard-pandacrumbs.pws.cs.ui.ac.id,mohammad-adzka-pandacrumbs.pws.cs.ui.ac.id").split(",") if h.strip()]
-CSRF_TRUSTED_ORIGINS = [h.strip() for h in os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "https://malvin-lionard-pandacrumbs.pws.cs.ui.ac.id,https://mohammad-adzka-pandacrumbs.pws.cs.ui.ac.id").split(",") if h.strip()]
+ALLOWED_HOSTS = [h.strip() for h in os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,mohammad-adzka-pandacrumbs.pws.cs.ui.ac.id").split(",") if h.strip()]
+CSRF_TRUSTED_ORIGINS = [h.strip() for h in os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "https://mohammad-adzka-pandacrumbs.pws.cs.ui.ac.id").split(",") if h.strip()]
 INSTALLED_APPS = ["django.contrib.admin", "django.contrib.auth", "django.contrib.contenttypes", "django.contrib.sessions", "django.contrib.messages", "django.contrib.staticfiles", "main", "pantry", "recipes"]
 MIDDLEWARE = ["django.middleware.security.SecurityMiddleware", "whitenoise.middleware.WhiteNoiseMiddleware", "django.contrib.sessions.middleware.SessionMiddleware", "django.middleware.common.CommonMiddleware", "django.middleware.csrf.CsrfViewMiddleware", "django.contrib.auth.middleware.AuthenticationMiddleware", "django.contrib.messages.middleware.MessageMiddleware", "django.middleware.clickjacking.XFrameOptionsMiddleware"]
 ROOT_URLCONF = "PandaCrumbs.urls"
@@ -26,7 +26,10 @@ USE_I18N = True
 USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STORAGES = {"default": {"BACKEND": "django.core.files.storage.FileSystemStorage"}, "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage" if DEBUG else "whitenoise.storage.CompressedManifestStaticFilesStorage"}}
+# PWS auto-build starts Gunicorn without collectstatic or the Procfile.
+# Serve app static directories directly, as recommended by the PWS tutorial.
+WHITENOISE_USE_FINDERS = True
+STORAGES = {"default": {"BACKEND": "django.core.files.storage.FileSystemStorage"}, "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"}}
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "pantry:index"

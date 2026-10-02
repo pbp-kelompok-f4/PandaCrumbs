@@ -172,10 +172,12 @@ python manage.py collectstatic --noinput
 5. Jalankan `migrate`, `collectstatic --noinput`, dan `check --deploy` di environment deployment. Jalankan WSGI melalui Gunicorn/konfigurasi PWS yang berlaku.
 6. Periksa URL PWS dari browser, login, static files, koneksi DB, serta persistensi setelah restart. Baru nyatakan deployment CP2 selesai.
 
-Tidak ada push, PR, perubahan secret GitHub, atau deployment yang dilakukan dalam pengerjaan lokal ini.
+Deployment dikirim langsung ke remote `pws`; tidak ada push atau PR GitHub.
 
 Lihat [rundown CP2](docs/CP2-RUNDOWN.md) dan [design system](docs/DESIGN-SYSTEM.md).
 
 ## Lokasi implementasi utama
 
-Hasil CP2 sudah diterapkan ke repo asli pada branch `main`, tanpa commit atau push GitHub. Proyek PWS baru `mohammad.adzka/pandacrumbs-cp2` sudah dibuat tetapi belum di-deploy. Script `scripts/start-pws.sh` menyiapkan migrasi dan static files saat startup; konfigurasi PWS/database masih perlu diselesaikan.
+Hasil CP2 ada di repo asli pada branch `master`. Target deployment: https://mohammad-adzka-pandacrumbs.pws.cs.ui.ac.id/. PWS auto-build menjalankan migrasi dan Gunicorn sendiri, tetapi tidak menjalankan Procfile atau collectstatic. Karena itu WhiteNoise memakai `WHITENOISE_USE_FINDERS=True` dan StaticFilesStorage tanpa manifest, mengikuti Tutorial 01 PBP. Script `scripts/start-pws.sh` tetap tersedia untuk hosting yang mendukung Procfile.
+
+Database masih memakai SQLite sementara bila `DB_HOST` belum diisi. Data dalam container tidak boleh dianggap persisten saat redeploy; konfigurasi database ITF dengan schema `tugas_kelompok` masih diperlukan.
