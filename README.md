@@ -134,3 +134,16 @@ pengguna guest yang tidak login ke aplikasinya
 
 - Memvalidasi laporan postingan makanan berlebih yang mencurigakan.
 - Mengelola master kategori bahan pangan dan kurasi resep rekomendasi.
+
+
+## Food Waste Audit dan login SSO UI
+
+Food Waste Audit menyediakan CRUD catatan pribadi, filter periode/alasan melalui
+AJAX, ringkasan kerugian, dan referensi produk Open Food Facts berdasarkan
+kategori. Panduan: [Food Waste Audit](docs/FOOD-WASTE-AUDIT.md).
+
+Login biasa tetap tersedia. Login SSO UI merupakan opsi tambahan; konfigurasi,
+pemetaan akun, serta batasan endpoint dijelaskan pada [SSO UI](docs/SSO-UI.md).
+
+Setelah memperbarui dependensi, jalankan `python manage.py migrate` dan
+`python manage.py test` sebelum menggunakan atau menggabungkan perubahan.

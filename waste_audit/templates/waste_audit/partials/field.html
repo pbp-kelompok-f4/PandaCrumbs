@@ -1,0 +1,6 @@
+<div class="audit-field{% if field.errors %} audit-field-invalid{% endif %}">
+  <label for="{{ field.id_for_label }}">{{ label|default:field.label }}{% if field.field.required %}<span class="audit-required" aria-hidden="true"> *</span>{% else %}<span class="audit-optional">opsional</span>{% endif %}</label>
+  {% if currency %}<div class="audit-currency"><span aria-hidden="true">Rp</span>{{ field }}</div>{% else %}{{ field }}{% endif %}
+  {% if field.help_text %}<p class="audit-field-help" id="{{ field.auto_id }}_helptext">{{ field.help_text }}</p>{% endif %}
+  {{ field.errors }}
+</div>

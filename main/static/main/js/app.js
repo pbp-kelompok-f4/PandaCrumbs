@@ -225,12 +225,17 @@
                   product.image.startsWith('https://')
                     ? product.image
                     : '';
+              } else if (form.dataset.productTarget === 'audit') {
+                form.elements.food_name.value = product.name;
+                form.elements.food_name.focus();
               } else {
                 form.elements.ingredients.value +=
                   (form.elements.ingredients.value ? '\n' : '') + product.name;
               }
               toast(
-                'Produk dipilih. Lengkapi takaran, kategori, dan tanggal secara manual.',
+                form.dataset.productTarget === 'audit'
+                  ? 'Nama makanan terisi. Lengkapi jumlah, tanggal terbuang, alasan, dan perkiraan kerugian.'
+                  : 'Produk dipilih. Lengkapi takaran, kategori, dan tanggal secara manual.',
               );
             });
             container.append(choice);

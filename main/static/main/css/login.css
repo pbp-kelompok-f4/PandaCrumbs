@@ -1,0 +1,27 @@
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 22px 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+.auth-divider::before,
+.auth-divider::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: #deddd5;
+}
+.auth-card .sso-button {
+    background: var(--cream);
+    border: 1px solid var(--olive);
+    color: #455337;
+}
+.auth-card .sso-note {
+    margin-top: 10px;
+    color: var(--muted);
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.5;
+}

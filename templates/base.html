@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="{% static 'main/css/fonts.css' %}">
 <link rel="stylesheet" href="{% static 'main/css/tailwind.css' %}">
 <link rel="stylesheet" href="{% static 'main/css/app.css' %}">
+{% block extra_css %}{% endblock %}
 <script src="{% static 'main/js/app.js' %}" defer></script></head>
 <body class="{% block body_class %}{% endblock %}"><a class="skip-link" href="#content">Lewati ke konten</a>
 {% include 'components/header.html' %}
