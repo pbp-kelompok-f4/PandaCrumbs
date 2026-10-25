@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% if entry %}Edit{% else %}Tambah{% endif %} Catatan · Food Waste Audit{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'waste_audit/audit.css' %}">{% endblock %}
+{% block page_class %}audit-page{% endblock %}
+{% block content %}
+<a class="audit-back" href="{% url 'waste_audit:index' %}">← Kembali ke Food Waste Audit</a>
+<section class="audit-form-panel" aria-labelledby="audit-form-title">
+  <header class="audit-form-heading">
+    <p class="audit-eyebrow">Catatan pribadi</p>
+    <h1 id="audit-form-title">{% if entry %}Edit Catatan{% else %}Tambah Catatan{% endif %}</h1>
+    <p>Isi makanan yang terbuang dan penyebabnya. Catatan ini hanya dapat diakses olehmu.</p>
+  </header>
+  {% include 'components/product_search.html' with product_context='audit' %}
+  <p class="audit-form-help">Kolom bertanda * wajib diisi. Kerugian adalah total perkiraan rupiah untuk makanan yang terbuang pada catatan ini, bukan harga per satuan.</p>
+  <form method="post" class="data-form audit-data-form" data-product-target="audit">
+    {% csrf_token %}
+    {% include 'components/fields.html' %}
+    <div class="audit-form-actions">
+      <button class="button audit-primary" type="submit">{% if entry %}Simpan Perubahan{% else %}Simpan Catatan{% endif %}</button>
+      <a class="button secondary" href="{% url 'waste_audit:index' %}">Batal</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

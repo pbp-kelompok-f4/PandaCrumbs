@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     "main",
     "pantry",
     "recipes",
+    "waste_audit",
+    "ui_sso",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -61,6 +63,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "ui_sso.context_processors.sso_options",
             ]
         },
     }
@@ -126,3 +129,7 @@ SECURE_HSTS_PRELOAD = not DEBUG
 # Only enable if the hosting proxy strips and sets X-Forwarded-Proto itself.
 if os.getenv("TRUST_PROXY_HTTPS", "false").lower() == "true":
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# SSO is optional; confirm the endpoint before enabling it in production.
+SSO_UI_ENABLED = os.getenv("SSO_UI_ENABLED", "true" if DEBUG else "false").lower() == "true"
+SSO_UI_SERVER_URL = os.getenv("SSO_UI_SERVER_URL", "https://sso.ui.ac.id/cas2/")

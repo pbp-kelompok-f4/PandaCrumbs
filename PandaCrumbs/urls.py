@@ -7,6 +7,8 @@ urlpatterns = [
     path("", include("main.urls")),
     path("pantry/", include("pantry.urls")),
     path("recipes/", include("recipes.urls")),
+    path("waste-audit/", include("waste_audit.urls")),
+    path("accounts/sso/ui/", include("ui_sso.urls")),
     path(
         "accounts/login/",
         auth_views.LoginView.as_view(template_name="registration/login.html"),

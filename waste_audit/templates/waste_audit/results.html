@@ -1,0 +1,93 @@
+{% load audit_format %}
+{% if not filters_valid %}
+  <div class="audit-errors" role="alert">
+    <h2>Periksa filter yang dipilih</h2>
+    {{ filter_form.non_field_errors }}
+    {% for field in filter_form %}{% if field.errors %}<p><strong>{{ field.label }}</strong></p>{{ field.errors }}{% endif %}{% endfor %}
+    <p>Perbaiki isian di atas, lalu terapkan filter kembali.</p>
+  </div>
+{% else %}
+  <div class="audit-section-heading">
+    <h2>Ringkasan</h2>
+    <p>{% if filter_form.start_date.value or filter_form.end_date.value or filter_form.reason.value %}Sesuai filter yang dipilih{% else %}Semua catatanmu{% endif %}</p>
+  </div>
+  <div class="audit-summary">
+    <article class="audit-stat">
+      <h3>Catatan makanan terbuang</h3>
+      <p class="audit-stat-value">{{ summary.total_entries }}</p>
+      <p class="audit-stat-note">Jumlah kejadian yang kamu catat.</p>
+    </article>
+    <article class="audit-stat audit-stat-loss">
+      <h3>Perkiraan kerugian</h3>
+      {% if summary.valued_entries %}
+        <p class="audit-stat-value">{{ summary.estimated_loss|rupiah }}</p>
+        <p class="audit-stat-note">Nilai diisi pada {{ summary.valued_entries }} dari {{ summary.total_entries }} catatan.</p>
+      {% else %}
+        <p class="audit-stat-empty">Belum ada estimasi</p>
+        <p class="audit-stat-note">Isi perkiraan kerugian pada catatanmu.</p>
+      {% endif %}
+    </article>
+    <article class="audit-stat">
+      <h3>Alasan paling sering</h3>
+      {% if summary.top_reason %}
+        <p class="audit-stat-value audit-stat-reason">{{ summary.top_reason }}</p>
+        <p class="audit-stat-note">Tercatat {{ summary.top_reason_count }} kali.</p>
+      {% else %}
+        <p class="audit-stat-empty">Belum ada catatan</p>
+        <p class="audit-stat-note">Pola akan terlihat setelah kamu mencatat.</p>
+      {% endif %}
+    </article>
+  </div>
+
+  {% if top_foods %}
+  <section class="audit-foods" aria-labelledby="audit-foods-title">
+    <div><h2 id="audit-foods-title">Paling sering tercatat</h2><p>Berdasarkan jumlah kejadian, bukan berat makanan.</p></div>
+    <ol class="audit-food-list">
+      {% for food in top_foods %}<li><span>{{ food.food_name }}</span><strong>{{ food.count }} kali</strong></li>{% endfor %}
+    </ol>
+  </section>
+  {% endif %}
+
+  <section class="audit-history" aria-labelledby="audit-history-title">
+    <div class="audit-section-heading">
+      <h2 id="audit-history-title">Riwayat catatan</h2>
+      <p>Hanya kamu yang dapat melihat catatan ini.</p>
+    </div>
+    {% if entries %}
+    <div class="audit-table-wrap">
+      <table class="audit-table">
+        <caption class="sr-only">Riwayat makanan terbuang sesuai filter yang dipilih</caption>
+        <thead><tr><th scope="col">Makanan</th><th scope="col">Jumlah terbuang</th><th scope="col">Tanggal</th><th scope="col">Alasan</th><th scope="col">Kerugian</th><th scope="col"><span class="sr-only">Tindakan</span></th></tr></thead>
+        <tbody>
+          {% for entry in entries %}
+          <tr>
+            <th scope="row">{{ entry.food_name }}</th>
+            <td data-label="Jumlah terbuang">{{ entry.quantity|amount }} {{ entry.get_unit_display }}</td>
+            <td data-label="Tanggal">{{ entry.wasted_on|date:'d M Y' }}</td>
+            <td data-label="Alasan"><span class="audit-reason">{{ entry.get_reason_display }}</span></td>
+            <td data-label="Kerugian" class="audit-money">{% if entry.estimated_loss != None %}{{ entry.estimated_loss|rupiah }}{% else %}<span class="audit-unset">Belum diisi</span>{% endif %}</td>
+            <td class="audit-row-actions">
+              <a href="{% url 'waste_audit:edit' entry.pk %}" aria-label="Edit catatan {{ entry.food_name }}">Edit</a>
+              <a class="audit-delete-link" href="{% url 'waste_audit:delete' entry.pk %}" aria-label="Hapus catatan {{ entry.food_name }}">Hapus</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="audit-table-note">Perkiraan kerugian adalah nilai total per catatan. Jumlah dengan satuan berbeda tidak dijumlahkan.</p>
+    {% else %}
+    <div class="audit-empty">
+      {% if filter_form.start_date.value or filter_form.end_date.value or filter_form.reason.value %}
+        <h3>Belum ada catatan yang cocok</h3>
+        <p>Coba rentang tanggal atau alasan lain untuk melihat catatanmu.</p>
+        <a class="button secondary" href="{% url 'waste_audit:index' %}">Reset filter</a>
+      {% else %}
+        <h3>Mulai dari satu catatan</h3>
+        <p>Catat makanan yang terbuang untuk mengenali kebiasaan dan perkiraan kerugianmu.</p>
+        <a class="button audit-primary" href="{% url 'waste_audit:add' %}">Tambah Catatan Pertama</a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </section>
+{% endif %}

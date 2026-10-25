@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Food Waste Audit · PandaCrumbs{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'waste_audit/audit.css' %}">{% endblock %}
+{% block page_class %}audit-page{% endblock %}
+{% block content %}
+<header class="audit-heading">
+  <div>
+    <p class="audit-eyebrow">Catatan pribadi</p>
+    <h1>Food Waste Audit</h1>
+    <p class="audit-intro">Kenali makanan yang terbuang, penyebabnya, dan perkiraan kerugiannya.</p>
+  </div>
+  <a class="button audit-primary" href="{% url 'waste_audit:add' %}">+ Tambah Catatan</a>
+</header>
+
+<form class="audit-filters" method="get" action="{% url 'waste_audit:index' %}" data-filter-form data-target="audit-results" aria-label="Filter catatan makanan terbuang">
+  <div class="audit-filter-field">
+    <label for="{{ filter_form.start_date.id_for_label }}">Dari tanggal</label>
+    {{ filter_form.start_date }}
+  </div>
+  <div class="audit-filter-field">
+    <label for="{{ filter_form.end_date.id_for_label }}">Sampai tanggal</label>
+    {{ filter_form.end_date }}
+  </div>
+  <div class="audit-filter-field audit-filter-reason">
+    <label for="{{ filter_form.reason.id_for_label }}">Alasan</label>
+    {{ filter_form.reason }}
+  </div>
+  <div class="audit-filter-actions">
+    <button class="button audit-primary" type="submit">Terapkan</button>
+    <a class="audit-text-link" href="{% url 'waste_audit:index' %}">Reset filter</a>
+  </div>
+</form>
+
+<section id="audit-results" class="audit-results" aria-label="Ringkasan dan riwayat pribadi" aria-live="polite" aria-atomic="false">
+  {% include 'waste_audit/results.html' %}
+</section>
+{% endblock %}
