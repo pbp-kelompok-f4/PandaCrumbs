@@ -222,6 +222,78 @@ class SSOTests(TestCase):
         self.assertRedirects(self.client.post(reverse("logout")), "/", fetch_redirect_response=False)
         self.assertEqual(self.client.get("/waste-audit/").status_code, 302)
 
+    def test_sso_logout_ends_local_session_and_redirects_to_ui(self):
+        self.begin()
+        self.finish()
+        old_key = self.client.session.session_key
+        response = self.client.post(reverse("logout"), {"next": "https://evil.example/"})
+        self.assertRedirects(response, "https://sso.ui.ac.id/cas2/logout", fetch_redirect_response=False)
+        self.assertEqual(response["Referrer-Policy"], "no-referrer")
+        self.assertNotIn("_auth_user_id", self.client.session)
+        self.assertIn("no-store", response["Cache-Control"])
+        from django.conf import settings
+        from django.contrib.sessions.models import Session
+        self.assertFalse(Session.objects.filter(session_key=old_key).exists())
+        self.client.cookies[settings.SESSION_COOKIE_NAME] = old_key
+        self.assertEqual(self.client.get("/waste-audit/").status_code, 302)
+
+    def test_logout_requires_post_and_csrf(self):
+        self.begin()
+        self.finish()
+        self.assertEqual(self.client.get(reverse("logout")).status_code, 405)
+        self.assertIn("_auth_user_id", self.client.session)
+        client = Client(enforce_csrf_checks=True)
+        from django.conf import settings
+        client.cookies[settings.SESSION_COOKIE_NAME] = self.client.session.session_key
+        self.assertEqual(client.post(reverse("logout")).status_code, 403)
+        self.assertIn("_auth_user_id", client.session)
+
+    def test_sso_disabled_still_allows_existing_sso_session_to_logout(self):
+        self.begin()
+        self.finish()
+        with override_settings(SSO_UI_ENABLED=False):
+            response = self.client.post(reverse("logout"))
+        self.assertRedirects(response, "https://sso.ui.ac.id/cas2/logout", fetch_redirect_response=False)
+        self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_invalid_sso_config_does_not_prevent_local_logout(self):
+        self.begin()
+        self.finish()
+        with override_settings(SSO_UI_SERVER_URL="https://evil.example/"):
+            response = self.client.post(reverse("logout"), follow=True)
+        self.assertContains(response, "sesi UI mungkin masih aktif")
+        self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_activity_refreshes_thirty_minute_session(self):
+        from datetime import timedelta
+        from django.conf import settings
+        from django.contrib.sessions.models import Session
+        from django.utils import timezone
+        self.assertEqual(settings.SESSION_COOKIE_AGE, 1800)
+        self.assertTrue(settings.SESSION_SAVE_EVERY_REQUEST)
+        self.begin()
+        self.finish()
+        key = self.client.session.session_key
+        Session.objects.filter(session_key=key).update(expire_date=timezone.now() + timedelta(minutes=5))
+        self.assertEqual(self.client.get("/waste-audit/").status_code, 200)
+        remaining = (Session.objects.get(session_key=key).expire_date - timezone.now()).total_seconds()
+        self.assertGreater(remaining, 1790)
+        self.assertLessEqual(remaining, 1800)
+
+    def test_expired_session_cannot_access_private_pages(self):
+        from datetime import timedelta
+        from django.contrib.sessions.models import Session
+        from django.utils import timezone
+        self.begin()
+        self.finish()
+        Session.objects.filter(session_key=self.client.session.session_key).update(
+            expire_date=timezone.now() - timedelta(seconds=1),
+        )
+        response = self.client.get("/waste-audit/")
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith(reverse("login")))
+        self.assertNotIn("_auth_user_id", self.client.session)
+
     def test_sso_user_cannot_read_or_modify_another_users_audit(self):
         from waste_audit.models import FoodWasteLog
         from django.utils import timezone

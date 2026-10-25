@@ -9,6 +9,8 @@ import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login
+from django.contrib.auth.views import LogoutView
+from django.core.exceptions import ImproperlyConfigured
 from django.db import IntegrityError, transaction
 from django.http import Http404
 from django.shortcuts import redirect, resolve_url
@@ -116,3 +118,24 @@ def callback(request):
     response = redirect(safe_next(request, flow["next"]))
     response["Referrer-Policy"] = "no-referrer"
     return response
+
+
+class PandaLogoutView(LogoutView):
+    """End the local session before sending SSO users to UI's central logout."""
+
+    def post(self, request, *args, **kwargs):
+        # Existing SSO sessions also work: identity comes from the verified mapping.
+        used_sso = request.user.is_authenticated and UIIdentity.objects.filter(
+            user_id=request.user.pk,
+        ).exists()
+        response = super().post(request, *args, **kwargs)
+        if not used_sso:
+            return response
+        try:
+            logout_url = cas_client(None).get_logout_url()
+        except ImproperlyConfigured:
+            messages.warning(request, "Sudah keluar dari PandaCrumbs. Logout SSO UI belum tersedia; sesi UI mungkin masih aktif.")
+            return response
+        response = redirect(logout_url)
+        response["Referrer-Policy"] = "no-referrer"
+        return response

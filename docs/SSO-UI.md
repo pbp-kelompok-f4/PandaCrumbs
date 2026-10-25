@@ -20,8 +20,19 @@ User-Agent mengidentifikasi aplikasi PandaCrumbs karena gateway UI menolak
 User-Agent bawaan requests dengan HTTP 400 saat pemeriksaan.
 
 Akun SSO memiliki password lokal yang tidak dapat dipakai. Klaim SSO tidak
-memberi hak staff/admin. Data domain tetap mengikuti pemilik akun. Logout
-aplikasi mengakhiri sesi PandaCrumbs saja, bukan sesi pusat SSO UI.
+memberi hak staff/admin. Data domain tetap mengikuti pemilik akun. Sesi PandaCrumbs berakhir setelah 30 menit tanpa permintaan ke aplikasi.
+Setiap permintaan aktif memperbarui masa berlaku sesi, termasuk polling jika ada.
+Tombol Keluar menerima POST dengan CSRF dan langsung menghapus sesi lokal.
+Untuk akun UIIdentity, browser kemudian diarahkan ke endpoint /cas2/logout
+pada server UI yang dikonfigurasi. Logout pusat ini dapat memengaruhi layanan
+UI lain. Login biasa tetap keluar ke beranda PandaCrumbs.
+Jika server UI tidak dapat dijangkau, sesi lokal tetap sudah berakhir, tetapi
+sesi pusat UI mungkin belum berakhir. Durasi sesi pusat UI diatur oleh UI;
+berakhirnya sesi lokal karena tidak aktif tidak otomatis mengakhiri sesi pusat.
+Tidak ada pemaksaan login ulang melalui renew. Setelah logout pusat berhasil,
+login SSO berikutnya seharusnya meminta autentikasi kembali.
+Restart server lokal setelah mengubah konfigurasi ini. Sesi lama yang masih
+aktif akan mengikuti durasi baru setelah permintaan berikutnya.
 
 Pengujian: python manage.py test ui_sso. Respons verifikasi CAS disimulasikan
 pada transport HTTP; pengujian ini bukan bukti izin callback produksi.

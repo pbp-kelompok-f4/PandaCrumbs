@@ -1,0 +1,26 @@
+<details class="product-lookup">
+  <summary>{% if product_context == 'audit' %}Cari referensi bahan kemasan{% else %}Cari referensi produk · Open Food Facts{% endif %}</summary>
+  <div class="lookup-controls">
+    <label for="product-query">Nama produk kemasan</label>
+    <input id="product-query" placeholder="Contoh: susu" maxlength="80">
+    <label for="product-category">Kategori produk (opsional)</label>
+    {% if product_context == 'audit' %}
+      <select id="product-category">
+        <option value="">Semua kategori</option>
+        <option value="en:dairies">Produk susu</option>
+        <option value="en:breads">Roti</option>
+        <option value="en:beverages">Minuman</option>
+        <option value="en:snacks">Camilan</option>
+        <option value="en:canned-foods">Makanan kaleng</option>
+      </select>
+    {% else %}
+      <input id="product-category" placeholder="Contoh: dairy">
+    {% endif %}
+    <button type="button" class="button" data-product-search="{% url 'main:products' %}">Cari Produk</button>
+  </div>
+  <div id="product-results" aria-live="polite"></div>
+  <p class="help-text">Data dari <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a> · ODbL.
+    {% if product_context == 'audit' %}Pilih produk untuk mengisi nama makanan. Jumlah, tanggal terbuang, alasan, dan nilai kerugian tetap kamu isi sendiri. Kamu juga bisa mengetik nama makanan langsung pada formulir.
+    {% else %}Pilih produk untuk mengisi formulir. Tanggal kedaluwarsa tetap diperiksa pada kemasan.{% endif %}
+  </p>
+</details>

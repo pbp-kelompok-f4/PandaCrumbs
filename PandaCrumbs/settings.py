@@ -120,6 +120,9 @@ CACHES = {
 OFF_USER_AGENT = os.getenv(
     "OFF_USER_AGENT", "PandaCrumbs/0.2 (https://github.com/pbp-kelompok-f4/PandaCrumbs)"
 )
+# Expire after 30 minutes without requests; active requests renew the session.
+SESSION_COOKIE_AGE = 30 * 60
+SESSION_SAVE_EVERY_REQUEST = True
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 SECURE_SSL_REDIRECT = not DEBUG

@@ -1,0 +1,18 @@
+<form class="audit-filters" method="get" action="{% url 'waste_audit:index' %}" data-audit-filter aria-label="Filter catatan makanan terbuang">
+  <div class="audit-filter-field">
+    <label for="{{ filter_form.start_date.id_for_label }}">Dari tanggal</label>
+    {{ filter_form.start_date }}
+  </div>
+  <div class="audit-filter-field">
+    <label for="{{ filter_form.end_date.id_for_label }}">Sampai tanggal</label>
+    {{ filter_form.end_date }}
+  </div>
+  <div class="audit-filter-field audit-filter-reason">
+    <label for="{{ filter_form.reason.id_for_label }}">Alasan</label>
+    {{ filter_form.reason }}
+  </div>
+  <div class="audit-filter-actions">
+    <button id="audit-filter-submit" class="button audit-filter-submit" type="submit">{% include 'waste_audit/partials/icon.html' with name='filter' %} Terapkan</button>
+    <a class="audit-text-link" href="{% url 'waste_audit:index' %}">Reset filter</a>
+  </div>
+</form>
