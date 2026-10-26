@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "recipes",
     "waste_audit",
     "ui_sso",
+    "habit_challenge",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
