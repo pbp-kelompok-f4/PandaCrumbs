@@ -1,61 +1,70 @@
 {% load static %}
 <div class="pantry-grid grid">
-  {% for item in items %}
-    <article class="pantry-card">
-      <div class="card-heading flex items-center justify-between">
-        <h2>{{ item.name }}</h2>
-        <a class="pill" href="{% url 'pantry:edit' item.pk %}">Update</a>
-      </div>
-      
-      <div class="pantry-body">
-        <div class="pantry-photo {% if item.is_demo and not item.image_url %}figma-placeholder{% endif %}">
-          {% if item.image_url %}
-            <img src="{{ item.image_url }}" alt="{{ item.name }}" loading="lazy">
-          {% elif item.is_demo %}
-            <img src="{% static 'main/images/recipeDesign-imgImage1.png' %}" alt="Placeholder dari desain Figma" loading="lazy">
-          {% else %}
-            <div class="no-photo">Belum ada foto</div>
-          {% endif %}
-          <span class="status {{ item.status }}">{{ item.status_label }}</span>
-        </div>
-
-        <dl class="pantry-meta">
-          <div>
-            <dt>Kadaluarsa :</dt>
-            <dd>{{ item.expires_on|date:'j F Y' }}</dd>
+  {% if location_groups %}
+    <div class="pantry-group-list">
+      {% for group in location_groups %}
+        <section class="pantry-location-group" aria-labelledby="pantry-location-{{ forloop.counter }}">
+          <div class="pantry-location-heading">
+            <h2 id="pantry-location-{{ forloop.counter }}">{{ group.location }}</h2>
+            <span>{{ group.count }} bahan</span>
           </div>
-          <div>
-            <dt>Tanggal Masuk :</dt>
-            <dd>{{ item.stored_on|date:'j F Y' }}</dd>
-          </div>
-          <div>
-            <dt>Jenis :</dt>
-            <dd>{{ item.category }}</dd>
-          </div>
-          <div>
-            <dt>Kuantitas :</dt>
-            <dd>{{ item.quantity }} {{ item.unit }}</dd>
-          </div>
-          <div>
-            <dt>Lokasi :</dt>
-            <dd>{{ item.location }}</dd>
-          </div>
-        </dl>
-
-        <div class="card-actions flex items-center justify-between">
-          <form method="post" action="{% url 'pantry:consume' item.pk %}" data-action="consume">
-            {% csrf_token %}
-            <button class="consume" type="submit">Kurangi Kuantitas (-1)</button>
-          </form>
-          <a class="subtle-link" href="{% url 'pantry:delete' item.pk %}">Hapus</a>
-        </div>
-      </div>
-    </article>
-  {% empty %}
+          {% for status_group in group.status_groups %}
+            <section class="pantry-urgency-group pantry-urgency-{{ status_group.status }}" aria-label="{{ group.location }}: {{ status_group.label }}">
+              <div class="pantry-urgency-heading">
+                <h3><span class="status-dot" aria-hidden="true"></span>{{ status_group.label }}</h3>
+                <span>{{ status_group.items|length }} bahan</span>
+              </div>
+              <div class="pantry-grid grid">
+                {% for item in status_group.items %}
+                  <article class="pantry-card">
+                    <div class="card-heading flex items-center justify-between">
+                      <h2>{{ item.name }}</h2>
+                      <a class="pill" href="{% url 'pantry:edit' item.pk %}">Update</a>
+                    </div>
+                    <div class="pantry-body">
+                      <div class="pantry-photo {% if item.is_demo and not item.image_url %}figma-placeholder{% endif %}">
+                        {% if item.image_url %}
+                          <img src="{{ item.image_url }}" alt="{{ item.name }}" loading="lazy">
+                        {% elif item.is_demo %}
+                          <img src="{% static 'main/images/recipeDesign-imgImage1.png' %}" alt="Placeholder dari desain Figma" loading="lazy">
+                        {% else %}
+                          <div class="no-photo">Belum ada foto</div>
+                        {% endif %}
+                        <span class="status {{ item.status }}">{{ item.status_label }}</span>
+                      </div>
+                      <dl class="pantry-meta">
+                        <div><dt>Kadaluarsa :</dt><dd>{{ item.expires_on|date:'j F Y' }}</dd></div>
+                        <div><dt>Tanggal Masuk :</dt><dd>{{ item.stored_on|date:'j F Y' }}</dd></div>
+                        <div><dt>Jenis :</dt><dd>{{ item.category }}</dd></div>
+                        <div><dt>Kuantitas :</dt><dd>{{ item.quantity }} {{ item.unit }}</dd></div>
+                        <div><dt>Lokasi :</dt><dd>{{ item.location }}</dd></div>
+                      </dl>
+                      <div class="card-actions flex items-center justify-between">
+                        <form method="post" action="{% url 'pantry:consume' item.pk %}" data-action="consume">
+                          {% csrf_token %}
+                          <button class="consume" type="submit">Kurangi Kuantitas (-1)</button>
+                        </form>
+                        <form method="post" action="{% url 'pantry:consume' item.pk %}" data-action="consume-all">
+                          {% csrf_token %}
+                          <input type="hidden" name="consume_all" value="1">
+                          <button class="consume-all" type="submit">Tandai Habis Dikonsumsi</button>
+                        </form>
+                        <a class="subtle-link" href="{% url 'pantry:delete' item.pk %}">Hapus</a>
+                      </div>
+                    </div>
+                  </article>
+                {% endfor %}
+              </div>
+            </section>
+          {% endfor %}
+        </section>
+      {% endfor %}
+    </div>
+  {% else %}
     <div class="empty-state">
       <h2>Belum ada bahan yang cocok</h2>
       <p>Ubah filter atau tambahkan bahan makanan pertamamu.</p>
       <a class="button" href="{% url 'pantry:add' %}">+ Tambah Bahan Makanan</a>
     </div>
-  {% endfor %}
+  {% endif %}
 </div>

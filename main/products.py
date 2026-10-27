@@ -17,13 +17,58 @@ class ProductSearchError(Exception):
         self.status = status
 
 
+def pantry_category_for(categories):
+    value = categories.casefold()
+    if any(term in value for term in ("yogurt", "yoghurt", "yaourt")):
+        return "Yogurt"
+    if any(term in value for term in ("fruit", "fruits", "buah")):
+        return "Buah Segar"
+    if any(term in value for term in ("vegetable", "vegetables", "sayur")):
+        return "Sayuran"
+    if any(
+        term in value for term in ("dairy", "dairies", "milk", "cheese", "susu")
+    ):
+        return "Susu"
+    if any(
+        term in value
+        for term in (
+            "meat",
+            "fish",
+            "seafood",
+            "poultry",
+            "egg",
+            "eggs",
+            "protein",
+            "tofu",
+            "tempe",
+        )
+    ):
+        return "Protein"
+    if any(
+        term in value
+        for term in (
+            "bread",
+            "cereal",
+            "grain",
+            "rice",
+            "pasta",
+            "flour",
+            "legume",
+            "bean",
+            "beans",
+        )
+    ):
+        return "Bahan Pokok"
+    return ""
+
+
 def search_products(query, category=""):
     query = query.strip()[:80]
     category = category.strip()[:60]
     if len(query) < 2:
         raise ProductSearchError("Masukkan minimal dua karakter.", 400)
 
-    key = "off:" + hashlib.sha256((query + "|" + category).encode()).hexdigest()
+    key = "off:v2:" + hashlib.sha256((query + "|" + category).encode()).hexdigest()
     products = cache.get(key)
     if products is not None:
         return products
@@ -55,16 +100,20 @@ def search_products(query, category=""):
             payload.get("products"), list
         ):
             raise ValueError("Unexpected product payload")
-        products = [
-            {
-                "name": str(product.get("product_name", ""))[:120],
-                "barcode": str(product.get("code", ""))[:32],
-                "category": str(product.get("categories", ""))[:160],
-                "image": product.get("image_front_small_url", ""),
-            }
-            for product in payload["products"]
-            if isinstance(product, dict) and product.get("product_name")
-        ]
+        products = []
+        for product in payload["products"]:
+            if not isinstance(product, dict) or not product.get("product_name"):
+                continue
+            categories = str(product.get("categories", ""))[:160]
+            products.append(
+                {
+                    "name": str(product.get("product_name", ""))[:120],
+                    "barcode": str(product.get("code", ""))[:32],
+                    "category": categories,
+                    "pantry_category": pantry_category_for(categories),
+                    "image": product.get("image_front_small_url", ""),
+                }
+            )
     except (requests.RequestException, ValueError, TypeError) as error:
         raise ProductSearchError(
             "Open Food Facts belum dapat dihubungi. Isi data secara manual atau coba lagi nanti.",

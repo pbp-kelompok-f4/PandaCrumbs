@@ -101,6 +101,14 @@
         if (activeRequest === controller) target.removeAttribute('aria-busy');
       }
     };
+    filter?.addEventListener('click', (event) => {
+      const statusButton = event.target.closest('[data-status-filter]');
+      if (!statusButton) return;
+      event.preventDefault();
+      const params = new URLSearchParams(new FormData(filter));
+      params.set('status', statusButton.value);
+      refresh(params);
+    });
     filter?.addEventListener('submit', (event) => {
       event.preventDefault();
       const params = new URLSearchParams(new FormData(filter));
@@ -196,9 +204,11 @@
         toast(
           form.dataset.action === 'consume'
             ? 'Stok dikurangi. Bahan dengan stok nol otomatis dihapus.'
-            : data.saved
-              ? 'Resep disimpan.'
-              : 'Bookmark dihapus.',
+            : form.dataset.action === 'consume-all'
+              ? 'Bahan ditandai habis dikonsumsi.'
+              : data.saved
+                ? 'Resep disimpan.'
+                : 'Bookmark dihapus.',
         );
       } catch (error) {
         toast(error.message);
@@ -252,6 +262,14 @@
                   product.image.startsWith('https://')
                     ? product.image
                     : '';
+                if (
+                  product.pantry_category &&
+                  [...form.elements.category.options].some(
+                    (option) => option.value === product.pantry_category,
+                  )
+                ) {
+                  form.elements.category.value = product.pantry_category;
+                }
               } else if (form.dataset.productTarget === 'audit') {
                 form.elements.food_name.value = product.name;
                 form.elements.food_name.focus();
@@ -262,9 +280,11 @@
               toast(
                 form.dataset.productTarget === 'audit'
                   ? 'Nama makanan terisi. Lengkapi jumlah, tanggal terbuang, alasan, dan perkiraan kerugian.'
-                  : form.dataset.productTarget === 'recipe'
-                    ? 'Bahan ditambahkan. Lengkapi takaran dan langkah memasak.'
-                    : 'Produk dipilih. Lengkapi takaran, kategori, dan tanggal secara manual.',
+                  : form.dataset.productTarget === 'pantry'
+                    ? 'Nama, kategori, barcode, dan foto terisi jika tersedia. Lengkapi stok, lokasi, dan tanggal.'
+                    : form.dataset.productTarget === 'recipe'
+                      ? 'Bahan ditambahkan. Lengkapi takaran dan langkah memasak.'
+                      : 'Produk dipilih. Lengkapi takaran, kategori, dan tanggal secara manual.',
               );
             });
             container.append(choice);

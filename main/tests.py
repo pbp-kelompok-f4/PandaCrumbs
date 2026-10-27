@@ -6,6 +6,7 @@ from django.core.cache import cache
 from django.core.management import call_command
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from main.products import pantry_category_for
 from pantry.models import PantryItem
 from recipes.models import Recipe
 
@@ -177,6 +178,7 @@ class ProductSearchContractTests(TestCase):
                         "name": "n" * 120,
                         "barcode": "b" * 32,
                         "category": "c" * 160,
+                        "pantry_category": "",
                         "image": "https://example.com/image.png",
                     }
                 ]
@@ -185,6 +187,19 @@ class ProductSearchContractTests(TestCase):
         self.assertEqual(get.call_args.kwargs["params"]["search_terms"], "q" * 80)
         self.assertEqual(get.call_args.kwargs["params"]["tag_0"], "c" * 60)
         self.assertEqual(get.call_args.kwargs["timeout"], (3, 8))
+
+    def test_open_food_facts_categories_map_to_pantry_choices(self):
+        for categories, expected in [
+            ("Yogurts, dairy products", "Yogurt"),
+            ("Fresh fruits", "Buah Segar"),
+            ("Frozen vegetables", "Sayuran"),
+            ("Milk and cheese", "Susu"),
+            ("Meat, fish and eggs", "Protein"),
+            ("Bread, rice and cereals", "Bahan Pokok"),
+            ("Snacks and beverages", ""),
+        ]:
+            with self.subTest(categories=categories):
+                self.assertEqual(pantry_category_for(categories), expected)
 
     @patch("main.products.requests.get")
     def test_http_and_json_failures_keep_manual_entry_available(self, get):
