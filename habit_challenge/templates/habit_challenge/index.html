@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Habit Challenge · PandaCrumbs{% endblock %}
+{% block body_class %}habit-page{% endblock %}
+{% block page_class %}habit-content{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'habit_challenge/habit.css' %}">{% endblock %}
+{% block content %}
+<script src="{% static 'habit_challenge/habit.js' %}" defer></script>
+<div id="habit-dashboard">{% include 'habit_challenge/dashboard.html' %}</div>
+{% endblock %}
