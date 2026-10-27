@@ -21,7 +21,7 @@
     <h2>{{ recipe.title }}</h2>
     <span>{{ recipe.author.username }}</span>
   </div>
-  
+
   <div class="detail-photo">
     {% if recipe.image_url %}
     <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}">
@@ -33,7 +33,7 @@
     <div class="no-photo">Belum ada foto</div>
     {% endif %}
   </div>
-  
+
   <div class="recipe-info">
     <p>{{ recipe.portions }} Porsi · {{ recipe.author.username }}</p>
     <p>{{ recipe.ingredients|truncatechars:160 }}</p>
@@ -53,7 +53,7 @@
       {% endfor %}
     </ul>
   </section>
-  
+
   <section class="detail-panel">
     <div class="flex items-center justify-between">
       <h2>Langkah Memasak</h2>
