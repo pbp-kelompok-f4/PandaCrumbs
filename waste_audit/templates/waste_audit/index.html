@@ -3,13 +3,11 @@
 {% block audit_content %}
 <header class="audit-heading">
   <div>
-    <p class="audit-eyebrow"><span></span> Catatan dapurmu</p>
     <h1>Food Waste Audit</h1>
     <p class="audit-intro">Lihat apa yang terbuang, kenapa, dan berapa nilainya.</p>
   </div>
   <div class="audit-heading-action">
-    <a class="button audit-primary" href="{% url 'waste_audit:add' %}">{% include 'waste_audit/partials/icon.html' with name='plus' %} Tambah catatan</a>
-    <span class="audit-private">{% include 'waste_audit/partials/icon.html' with name='lock' %} Hanya terlihat olehmu</span>
+    <a class="button audit-add" href="{% url 'waste_audit:add' %}">{% include 'waste_audit/partials/icon.html' with name='plus' %} Tambah catatan</a>
   </div>
 </header>
 <p id="audit-filter-status" class="audit-filter-status" role="status" aria-live="polite"></p>
