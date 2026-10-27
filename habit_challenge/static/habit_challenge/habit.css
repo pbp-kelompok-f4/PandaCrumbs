@@ -81,6 +81,15 @@
 .habit-empty > span { font-size: 32px; }
 .habit-empty strong { font-size: 15px; }
 .habit-empty p { margin-top: 6px; font-size: 14px; line-height: 1.6; }
+.habit-content { max-width: 1160px; }
+.habit-title { font-size: clamp(36px, 4vw, 50px); line-height: 1.14; letter-spacing: -1.2px; margin: 0 0 28px; }
+.habit-section-heading h2 { font-size: 32px; letter-spacing: -.5px; }
+.habit-card h3 { min-height: 58px; padding: 14px 24px; font-size: 19px; }
+.habit-card-body { padding: 16px 24px 22px; }
+.habit-action { min-height: 44px; padding: 10px 14px; font-size: 13px; }
+.habit-checkin summary:not(.habit-action) { min-height: 44px; padding: 10px 8px; }
+.habit-form input[type=text], .habit-form select { min-height: 46px; padding: 11px 14px; }
+.habit-plan-actions a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px; }
 @media (max-width: 1150px) {
   .habit-page .site-header { width: calc(100% - 48px); }
   .habit-content { width: calc(100% - 48px); }
@@ -125,4 +134,12 @@
   .habit-card-body { padding: 18px 24px 24px; }
   .habit-history { margin-top: 36px; }
   .habit-empty { padding: 20px; }
+}
+
+.habit-content { max-width: 1160px; }
+.habit-action { min-height: 44px; }
+@media (max-width: 560px) {
+  .habit-title { font-size: 37px; margin: 0 0 22px; }
+  .habit-card h3 { min-height: 58px; padding: 14px 18px; font-size: 19px; }
+  .habit-card-body { padding: 16px 18px 22px; }
 }
