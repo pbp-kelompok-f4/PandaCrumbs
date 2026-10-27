@@ -40,8 +40,32 @@ def index(request):
         items = items.filter(
             expires_on__gt=today + timedelta(days=PantryItem.EXPIRING_SOON_DAYS)
         )
+    items = list(items)
+    location_groups = []
+    for location, _label in PantryItem.LOCATIONS:
+        location_items = [item for item in items if item.location == location]
+        if not location_items:
+            continue
+        status_groups = []
+        for urgency in ("expired", "soon", "safe"):
+            grouped_items = [item for item in location_items if item.status == urgency]
+            if grouped_items:
+                status_groups.append(
+                    {
+                        "status": urgency,
+                        "label": grouped_items[0].status_label,
+                        "items": grouped_items,
+                    }
+                )
+        location_groups.append(
+            {
+                "location": location,
+                "count": len(location_items),
+                "status_groups": status_groups,
+            }
+        )
     context = dict(
-        items=items,
+        location_groups=location_groups,
         q=query,
         status=status,
         location=location,
@@ -75,13 +99,22 @@ def consume(request, pk):
         item = get_object_or_404(
             PantryItem.objects.select_for_update(), pk=pk, owner=request.user
         )
-        changed = PantryItem.objects.filter(pk=item.pk, quantity__gt=1).update(
-            quantity=F("quantity") - 1
-        )
-        if not changed:
-            PantryItem.objects.filter(pk=item.pk, quantity=1).delete()
+        if request.POST.get("consume_all") == "1":
+            PantryItem.objects.filter(pk=item.pk).delete()
+            deleted = True
+        else:
+            changed = PantryItem.objects.filter(pk=item.pk, quantity__gt=1).update(
+                quantity=F("quantity") - 1
+            )
+            if not changed:
+                PantryItem.objects.filter(pk=item.pk, quantity=1).delete()
+                deleted = True
+            else:
+                deleted = False
     if is_ajax(request):
-        return JsonResponse({"ok": True})
+        return JsonResponse({"ok": True, "deleted": deleted})
+    if request.POST.get("consume_all") == "1":
+        messages.success(request, "Bahan ditandai habis dikonsumsi.")
     return redirect("pantry:index")
 
 

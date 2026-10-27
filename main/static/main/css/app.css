@@ -1313,3 +1313,23 @@ form {
 .pantry-photo.figma-placeholder>img,.recipe-photo.figma-recipe-placeholder>img {
   object-fit:fill
 }
+
+.pantry-page .pantry-group-list { grid-column: 1 / -1; display: grid; gap: 34px; }
+.pantry-page .pantry-location-group { min-width: 0; }
+.pantry-page .pantry-location-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #d9ddcd; }
+.pantry-page .pantry-location-heading h2 { font: 400 28px/1.2 Gloock, Georgia, serif; }
+.pantry-page .pantry-location-heading > span, .pantry-page .pantry-urgency-heading > span { color: #657060; font-size: 12px; }
+.pantry-page .pantry-urgency-group { margin-top: 18px; }
+.pantry-page .pantry-urgency-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.pantry-page .pantry-urgency-heading h3 { display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 600; }
+.pantry-page .status-dot { width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: var(--olive); }
+.pantry-page .pantry-urgency-soon .status-dot { background: var(--orange); }
+.pantry-page .pantry-urgency-expired .status-dot { background: var(--danger); }
+.pantry-page .pantry-urgency-group .pantry-grid { grid-column: auto; }
+.pantry-page .card-actions form[data-action="consume-all"] { order: 3; flex: 1 0 100%; }
+.pantry-page .card-actions .subtle-link { order: 2; }
+.pantry-page .consume-all { width: 100%; min-height: 44px; padding: 10px 14px; border: 1px solid #c8d2b7; border-radius: 30px; background: var(--sage); color: var(--olive); font: 600 12px/1.35 Inter, sans-serif; }
+.pantry-page .consume-all:hover { background: #cedbb5; }
+@media (max-width: 620px) {
+  .pantry-page .pantry-location-heading h2 { font-size: 24px; }
+}

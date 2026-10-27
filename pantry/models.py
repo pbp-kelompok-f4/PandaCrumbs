@@ -58,7 +58,7 @@ class PantryItem(models.Model):
 
     @property
     def status_label(self):
-        return {"expired": "Kadaluarsa", "soon": "Hampir Kadaluarsa", "safe": "Aman"}[
+        return {"expired": "Kadaluarsa", "soon": "Hampir Basi", "safe": "Aman"}[
             self.status
         ]
 
