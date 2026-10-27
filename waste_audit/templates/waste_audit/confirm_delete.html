@@ -3,22 +3,5 @@
 {% block title %}Hapus Catatan · Food Waste Audit{% endblock %}
 {% block audit_content %}
 <a class="audit-back" href="{% url 'waste_audit:index' %}">{% include 'waste_audit/partials/icon.html' with name='back' %} Kembali ke riwayat</a>
-<section class="audit-delete-panel" aria-labelledby="audit-delete-title">
-  <span class="audit-delete-symbol">{% include 'waste_audit/partials/icon.html' with name='trash' %}</span>
-  <p class="audit-eyebrow">Food Waste Audit</p>
-  <h1 id="audit-delete-title">Hapus catatan ini?</h1>
-  <p>Catatan akan dihapus dari riwayat dan ringkasan kerugianmu. Tindakan ini tidak dapat dibatalkan.</p>
-  <dl class="audit-delete-details">
-    <div class="audit-delete-food"><dt>Makanan</dt><dd>{{ entry.food_name }}</dd></div>
-    <div><dt>Jumlah terbuang</dt><dd>{{ entry.quantity|amount }} {{ entry.get_unit_display }}</dd></div>
-    <div><dt>Tanggal</dt><dd>{{ entry.wasted_on|date:'d M Y' }}</dd></div>
-    <div><dt>Alasan</dt><dd>{{ entry.get_reason_display }}</dd></div>
-    <div><dt>Perkiraan kerugian</dt><dd>{% if entry.estimated_loss != None %}{{ entry.estimated_loss|rupiah }}{% else %}Belum diisi{% endif %}</dd></div>
-  </dl>
-  <form method="post" class="audit-form-actions">
-    {% csrf_token %}
-    <a class="button audit-secondary" href="{% url 'waste_audit:index' %}">Batal, simpan catatan</a>
-    <button class="button audit-danger" type="submit">{% include 'waste_audit/partials/icon.html' with name='trash' %} Hapus catatan</button>
-  </form>
-</section>
+{% include 'waste_audit/partials/delete_form.html' %}
 {% endblock %}

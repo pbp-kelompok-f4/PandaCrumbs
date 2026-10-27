@@ -17,6 +17,9 @@ class FoodWasteLogForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # A dialog and the history filter can both contain an "Alasan" field.
+        for name, field in self.fields.items():
+            field.widget.attrs["id"] = f"audit-{name}"
         self.fields["wasted_on"].widget.attrs["max"] = timezone.localdate().isoformat()
 
     def clean_food_name(self):
