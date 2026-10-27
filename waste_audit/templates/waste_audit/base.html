@@ -2,11 +2,12 @@
 {% load static %}
 {% block body_class %}audit-body{% endblock %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'waste_audit/audit.css' %}?v=20261026">
-<script src="{% static 'waste_audit/audit.js' %}?v=20261026" defer></script>
+<link rel="stylesheet" href="{% static 'waste_audit/audit.css' %}?v=20261027e">
+<script src="{% static 'waste_audit/audit.js' %}?v=20261027e" defer></script>
 {% endblock %}
 {% block page_class %}audit-page{% endblock %}
 {% block content %}
 <div class="audit-background" aria-hidden="true"></div>
 {% block audit_content %}{% endblock %}
+<div class="audit-motion-control"><button type="button" class="audit-motion-toggle" aria-pressed="false" hidden>Jeda animasi latar</button></div>
 {% endblock %}
