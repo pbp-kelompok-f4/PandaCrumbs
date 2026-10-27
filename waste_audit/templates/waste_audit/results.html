@@ -54,8 +54,8 @@
             <td data-label="Alasan"><span class="audit-reason audit-reason-{{ entry.reason }}">{{ entry.get_reason_display }}</span></td>
             <td data-label="Kerugian" class="audit-money">{% if entry.estimated_loss != None %}{{ entry.estimated_loss|rupiah }}{% else %}<span class="audit-unset">Belum diisi</span>{% endif %}</td>
             <td class="audit-row-actions">
-              <a href="{% url 'waste_audit:edit' entry.pk %}" aria-label="Ubah catatan {{ entry.food_name }}">{% include 'waste_audit/partials/icon.html' with name='edit' %} Ubah</a>
-              <a class="audit-delete-link" href="{% url 'waste_audit:delete' entry.pk %}" aria-label="Hapus catatan {{ entry.food_name }}">{% include 'waste_audit/partials/icon.html' with name='trash' %} Hapus</a>
+              <a data-audit-open href="{% url 'waste_audit:edit' entry.pk %}" aria-label="Ubah catatan {{ entry.food_name }}">{% include 'waste_audit/partials/icon.html' with name='edit' %} Ubah</a>
+              <a class="audit-delete-link" data-audit-open href="{% url 'waste_audit:delete' entry.pk %}" aria-label="Hapus catatan {{ entry.food_name }}">{% include 'waste_audit/partials/icon.html' with name='trash' %} Hapus</a>
             </td>
           </tr>
         {% endfor %}
@@ -69,11 +69,11 @@
       {% if filter_form.start_date.value or filter_form.end_date.value or filter_form.reason.value %}
         <h3>Belum ada catatan yang cocok.</h3>
         <p>Coba rentang tanggal atau alasan lain untuk melihat catatanmu.</p>
-        <a class="button audit-secondary" href="{% url 'waste_audit:index' %}">Reset filter</a>
+        <a class="button audit-secondary" data-audit-reset href="{% url 'waste_audit:index' %}">Reset filter</a>
       {% else %}
         <h3>Mulai dari satu catatan.</h3>
         <p>Ada makanan yang terbuang hari ini? Catat dulu, supaya kamu bisa melihat polanya nanti.</p>
-        <a class="button audit-add" href="{% url 'waste_audit:add' %}">{% include 'waste_audit/partials/icon.html' with name='plus' %} Tambah catatan pertama</a>
+        <a class="button audit-add" data-audit-open href="{% url 'waste_audit:add' %}">{% include 'waste_audit/partials/icon.html' with name='plus' %} Tambah catatan pertama</a>
       {% endif %}
     </div>
   {% endif %}

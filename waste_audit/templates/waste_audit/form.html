@@ -4,42 +4,7 @@
 {% block audit_content %}
 <a class="audit-back" href="{% url 'waste_audit:index' %}">{% include 'waste_audit/partials/icon.html' with name='back' %} Kembali ke riwayat</a>
 <div class="audit-form-layout">
-  <section class="audit-form-panel" aria-labelledby="audit-form-title">
-    <header class="audit-form-heading">
-      <p class="audit-eyebrow">Food Waste Audit</p>
-      <h1 id="audit-form-title">{% if entry %}Ubah catatan{% else %}Tambah catatan{% endif %}</h1>
-      <p>{% if entry %}Koreksi detail catatanmu di bawah ini.{% else %}Apa yang terbuang dari dapurmu hari ini?{% endif %}</p>
-    </header>
-    <p class="audit-form-help">Kolom bertanda <span aria-hidden="true">*</span> wajib diisi.</p>
-    <form method="post" class="audit-data-form" data-product-target="audit">
-      {% csrf_token %}
-      {% if form.errors %}<div class="audit-errors" role="alert"><h2>Catatan belum tersimpan.</h2><p>Periksa kolom yang ditandai di bawah ini.</p>{{ form.non_field_errors }}</div>{% endif %}
-      <fieldset class="audit-form-section">
-        <legend>Makanan yang terbuang</legend>
-        {% include 'waste_audit/partials/field.html' with field=form.food_name %}
-        {% include 'waste_audit/partials/product_search.html' with product_context='audit' %}
-        <div class="audit-input-pair audit-quantity-pair">
-          {% include 'waste_audit/partials/field.html' with field=form.quantity %}
-          {% include 'waste_audit/partials/field.html' with field=form.unit %}
-        </div>
-      </fieldset>
-      <fieldset class="audit-form-section">
-        <legend>Waktu &amp; alasan</legend>
-        <div class="audit-input-pair">
-          {% include 'waste_audit/partials/field.html' with field=form.wasted_on %}
-          {% include 'waste_audit/partials/field.html' with field=form.reason %}
-        </div>
-      </fieldset>
-      <fieldset class="audit-form-section">
-        <legend>Perkiraan kerugian</legend>
-        {% include 'waste_audit/partials/field.html' with field=form.estimated_loss label='Nilai makanan yang terbuang' currency=True %}
-      </fieldset>
-      <div class="audit-form-actions">
-        <a class="button audit-secondary" href="{% url 'waste_audit:index' %}">Batal</a>
-        <button class="button audit-primary" type="submit">{% include 'waste_audit/partials/icon.html' with name='check' %} {% if entry %}Simpan perubahan{% else %}Simpan catatan{% endif %}</button>
-      </div>
-    </form>
-  </section>
+  {% include 'waste_audit/partials/entry_form.html' %}
   <aside class="audit-form-aside">
     <img src="{% static 'main/images/pantryDesign-imgCopySvg12.png' %}" alt="" width="140" height="162">
     <p class="audit-eyebrow">Sedikit panduan</p>

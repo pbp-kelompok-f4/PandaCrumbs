@@ -2,8 +2,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Min, Sum
 from django.db.models.functions import Lower, Trim
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from main.http import render_results
+from django.template.loader import render_to_string
+from django.urls import reverse
+from main.http import is_ajax, render_results
 from django.views.decorators.http import require_http_methods
 
 from .forms import AuditFilterForm, FoodWasteLogForm
@@ -56,11 +59,21 @@ def edit(request, pk=None):
         entry = form.save(commit=False)
         entry.owner = request.user
         entry.save()
+        if is_ajax(request):
+            return JsonResponse({
+                "ok": True, "message": "Catatan makanan terbuang berhasil disimpan.",
+                "index_url": reverse("waste_audit:index"), "entry_id": entry.pk,
+            }, status=201 if pk is None else 200)
         messages.success(request, "Catatan makanan terbuang berhasil disimpan.")
         return redirect("waste_audit:index")
-    return render(request, "waste_audit/form.html", {
+    context = {
         "form": form, "entry": entry, "active": "waste_audit", "product_context": "audit",
-    })
+    }
+    if is_ajax(request):
+        return JsonResponse({
+            "html": render_to_string("waste_audit/partials/entry_form.html", context, request=request),
+        }, status=422 if request.method == "POST" else 200)
+    return render(request, "waste_audit/form.html", context)
 
 
 @login_required
@@ -69,6 +82,16 @@ def delete(request, pk):
     entry = get_object_or_404(FoodWasteLog, pk=pk, owner=request.user)
     if request.method == "POST":
         entry.delete()
+        if is_ajax(request):
+            return JsonResponse({
+                "ok": True, "message": "Catatan makanan terbuang dihapus.",
+                "index_url": reverse("waste_audit:index"),
+            })
         messages.success(request, "Catatan makanan terbuang dihapus.")
         return redirect("waste_audit:index")
-    return render(request, "waste_audit/confirm_delete.html", {"entry": entry, "active": "waste_audit"})
+    context = {"entry": entry, "active": "waste_audit"}
+    if is_ajax(request):
+        return JsonResponse({
+            "html": render_to_string("waste_audit/partials/delete_form.html", context, request=request),
+        })
+    return render(request, "waste_audit/confirm_delete.html", context)

@@ -13,6 +13,6 @@
   </div>
   <div class="audit-filter-actions">
     <button id="audit-filter-submit" class="button audit-filter-submit" type="submit">{% include 'waste_audit/partials/icon.html' with name='filter' %} Terapkan</button>
-    <a class="button audit-secondary audit-reset" href="{% url 'waste_audit:index' %}">{% include 'waste_audit/partials/icon.html' with name='reset' %} Reset filter</a>
+    <a class="button audit-secondary audit-reset" data-audit-reset href="{% url 'waste_audit:index' %}">{% include 'waste_audit/partials/icon.html' with name='reset' %} Reset filter</a>
   </div>
 </form>
