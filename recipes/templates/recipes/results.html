@@ -1,18 +1,24 @@
 {% load static %}
+
 <div class="recipe-tabs flex items-center justify-between">
   <div class="pills flex">
     <a class="pill {% if tab == 'all' %}selected{% endif %}" href="{% querystring tab='all' ingredient=ingredients remove_ingredient=None reset_ingredients=None %}" data-tab="all">Semua Resep ({{ counts.all }})</a>
     <a class="pill {% if tab == 'saved' %}selected{% endif %}" href="{% querystring tab='saved' ingredient=ingredients remove_ingredient=None reset_ingredients=None %}" data-tab="saved">Tersimpan ({{ counts.saved }})</a>
     <a class="pill {% if tab == 'mine' %}selected{% endif %}" href="{% querystring tab='mine' ingredient=ingredients remove_ingredient=None reset_ingredients=None %}" data-tab="mine">Resep Saya ({{ counts.mine }})</a>
   </div>
-  <span class="privacy-note"><img src="{% static 'main/images/recipeDesign-imgContainer.svg' %}" alt=""> Bookmark bersifat pribadi</span>
+  <span class="privacy-note">
+    <img src="{% static 'main/images/recipeDesign-imgContainer.svg' %}" alt=""> Bookmark bersifat pribadi
+  </span>
 </div>
+
 <div class="recipe-grid grid">
   {% for recipe in recipes %}
   <article class="recipe-card">
     <div class="recipe-banner flex items-center justify-between">
-      <h2>{{ recipe.title }}</h2><span>{{ recipe.author.username }}</span>
+      <h2>{{ recipe.title }}</h2>
+      <span>{{ recipe.author.username }}</span>
     </div>
+
     <div class="recipe-photo {% if recipe.demo_image == 'recipeDesign-imgImage1.png' %}figma-recipe-placeholder{% endif %}">
       {% if recipe.image_url %}
       <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}" loading="lazy">
@@ -22,12 +28,14 @@
       <div class="no-photo">Belum ada foto</div>
       {% endif %}
     </div>
+
     <div class="recipe-info">
       <div class="recipe-meta flex items-center">
         <span class="tag">{% if ingredients %}Bahan Cocok{% else %}Resep Komunitas{% endif %}</span>
         <span>{{ recipe.portions }} Porsi · {{ recipe.author.username }}</span>
       </div>
       <p>{{ recipe.ingredients|truncatechars:130 }}</p>
+
       <div class="recipe-actions flex items-center justify-between">
         {% include 'recipes/bookmark.html' with saved=recipe.is_saved %}
         <a class="small-button" href="{% url 'recipes:detail' recipe.pk %}">Lihat Resep</a>

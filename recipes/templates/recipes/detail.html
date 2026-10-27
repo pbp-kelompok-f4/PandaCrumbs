@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block title %}{{ recipe.title }} · PandaCrumbs{% endblock %}
+
 {% block content %}
 <a class="back-link" href="{% url 'recipes:index' %}">← Semua Resep</a>
+
 <div class="page-heading flex items-center justify-between">
   <h1 class="detail-title">{{ recipe.title }}</h1>
   {% if recipe.author_id == user.pk %}
@@ -12,10 +15,13 @@
   </div>
   {% endif %}
 </div>
+
 <article class="recipe-card detail-card">
   <div class="recipe-banner flex items-center justify-between">
-    <h2>{{ recipe.title }}</h2><span>{{ recipe.author.username }}</span>
+    <h2>{{ recipe.title }}</h2>
+    <span>{{ recipe.author.username }}</span>
   </div>
+
   <div class="detail-photo">
     {% if recipe.image_url %}
     <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}">
@@ -27,27 +33,39 @@
     <div class="no-photo">Belum ada foto</div>
     {% endif %}
   </div>
+
   <div class="recipe-info">
     <p>{{ recipe.portions }} Porsi · {{ recipe.author.username }}</p>
     <p>{{ recipe.ingredients|truncatechars:160 }}</p>
     {% include 'recipes/bookmark.html' %}
   </div>
 </article>
+
 <div class="detail-grid grid">
   <section class="detail-panel">
     <h2>Bahan-Bahan</h2>
     <p>Takaran untuk {{ recipe.portions }} porsi</p>
     <ul class="ingredients-list">
-      {% for ingredient in ingredients %}{% if ingredient %}<li>{{ ingredient }}</li>{% endif %}{% endfor %}
+      {% for ingredient in ingredients %}
+      {% if ingredient %}
+      <li>{{ ingredient }}</li>
+      {% endif %}
+      {% endfor %}
     </ul>
   </section>
+
   <section class="detail-panel">
     <div class="flex items-center justify-between">
-      <h2>Langkah Memasak</h2><span class="tag">{{ recipe.minutes }} menit</span>
+      <h2>Langkah Memasak</h2>
+      <span class="tag">{{ recipe.minutes }} menit</span>
     </div>
     <p>Ikuti urutan langkah di bawah ini.</p>
     <ol class="steps-list">
-      {% for step in steps %}{% if step %}<li>{{ step }}</li>{% endif %}{% endfor %}
+      {% for step in steps %}
+      {% if step %}
+      <li>{{ step }}</li>
+      {% endif %}
+      {% endfor %}
     </ol>
   </section>
 </div>

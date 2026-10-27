@@ -1,5 +1,22 @@
 (() => {
   if (!document.body.classList.contains('audit-body')) return;
+  const motionButton = document.querySelector('.audit-motion-toggle');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let motionPaused = false;
+  try { motionPaused = localStorage.getItem('audit-motion-paused') === 'true'; } catch {}
+  const updateMotion = () => {
+    document.body.classList.toggle('audit-motion-paused', motionPaused);
+    motionButton.hidden = reducedMotion.matches;
+    motionButton.setAttribute('aria-pressed', String(motionPaused));
+    motionButton.textContent = motionPaused ? 'Lanjutkan animasi latar' : 'Jeda animasi latar';
+  };
+  motionButton.addEventListener('click', () => {
+    motionPaused = !motionPaused;
+    try { localStorage.setItem('audit-motion-paused', String(motionPaused)); } catch {}
+    updateMotion();
+  });
+  reducedMotion.addEventListener('change', updateMotion);
+  updateMotion();
   // Product lookup is optional and must not submit the audit form on Enter.
   document.querySelector('#product-query')?.addEventListener('keydown', (event) => {
     if (event.key !== 'Enter' || event.isComposing) return;

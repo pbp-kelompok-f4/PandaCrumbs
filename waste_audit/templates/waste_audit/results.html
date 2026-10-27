@@ -2,6 +2,7 @@
 {% if filters_valid %}
 <section class="audit-summary" aria-label="Ringkasan catatan">
   <div class="audit-stat audit-stat-loss">
+    <span class="audit-stat-art">{% include 'waste_audit/partials/icon.html' with name='wallet' %}</span>
     <div class="audit-summary-kicker"><h2>Perkiraan kerugian</h2><span>{% if filter_form.start_date.value or filter_form.end_date.value or filter_form.reason.value %}Hasil filter{% else %}Semua catatan{% endif %}</span></div>
     {% if summary.valued_entries %}
       <p class="audit-loss-value">{{ summary.estimated_loss|rupiah }}</p>
@@ -11,12 +12,14 @@
       <p class="audit-stat-note">Isi perkiraan kerugian pada catatanmu.</p>
     {% endif %}
   </div>
-  <div class="audit-stat">
+  <div class="audit-stat audit-stat-count">
+    <span class="audit-stat-art">{% include 'waste_audit/partials/icon.html' with name='receipt' %}</span>
     <h2>Catatan terbuang</h2>
     <p class="audit-stat-value">{{ summary.total_entries }} <span>catatan</span></p>
     <p class="audit-stat-note">Jumlah kejadian yang dicatat.</p>
   </div>
-  <div class="audit-stat">
+  <div class="audit-stat audit-stat-cause">
+    <span class="audit-stat-art">{% include 'waste_audit/partials/icon.html' with name='reason' %}</span>
     <h2>Alasan paling sering</h2>
     <p class="audit-stat-value audit-stat-reason">{% if summary.top_reason %}{{ summary.top_reason }}{% else %}Belum ada catatan{% endif %}</p>
     <p class="audit-stat-note">{% if summary.top_reason %}Tercatat {{ summary.top_reason_count }} kali.{% else %}Mulai dari satu catatan dulu.{% endif %}</p>
@@ -26,7 +29,7 @@
 
 <section class="audit-history" aria-labelledby="audit-history-title">
   <header class="audit-section-heading">
-    <div><p class="audit-eyebrow">Dari dapur, dicatat di sini</p><h2 id="audit-history-title">Riwayat catatan</h2></div>
+    <div><h2 id="audit-history-title">Riwayat makanan terbuang</h2><p class="audit-section-intro">Lihat kembali catatanmu atau cari berdasarkan tanggal dan alasan.</p></div>
     {% if filters_valid %}<span class="audit-record-count">{{ summary.total_entries }} catatan</span>{% endif %}
   </header>
   {% include 'waste_audit/partials/filters.html' %}
@@ -51,7 +54,7 @@
             <td data-label="Alasan"><span class="audit-reason audit-reason-{{ entry.reason }}">{{ entry.get_reason_display }}</span></td>
             <td data-label="Kerugian" class="audit-money">{% if entry.estimated_loss != None %}{{ entry.estimated_loss|rupiah }}{% else %}<span class="audit-unset">Belum diisi</span>{% endif %}</td>
             <td class="audit-row-actions">
-              <a href="{% url 'waste_audit:edit' entry.pk %}" aria-label="Edit catatan {{ entry.food_name }}">{% include 'waste_audit/partials/icon.html' with name='edit' %} Edit</a>
+              <a href="{% url 'waste_audit:edit' entry.pk %}" aria-label="Ubah catatan {{ entry.food_name }}">{% include 'waste_audit/partials/icon.html' with name='edit' %} Ubah</a>
               <a class="audit-delete-link" href="{% url 'waste_audit:delete' entry.pk %}" aria-label="Hapus catatan {{ entry.food_name }}">{% include 'waste_audit/partials/icon.html' with name='trash' %} Hapus</a>
             </td>
           </tr>
@@ -70,7 +73,7 @@
       {% else %}
         <h3>Mulai dari satu catatan.</h3>
         <p>Ada makanan yang terbuang hari ini? Catat dulu, supaya kamu bisa melihat polanya nanti.</p>
-        <a class="button audit-primary" href="{% url 'waste_audit:add' %}">{% include 'waste_audit/partials/icon.html' with name='plus' %} Tambah catatan pertama</a>
+        <a class="button audit-add" href="{% url 'waste_audit:add' %}">{% include 'waste_audit/partials/icon.html' with name='plus' %} Tambah catatan pertama</a>
       {% endif %}
     </div>
   {% endif %}
@@ -78,9 +81,17 @@
 
 {% if filters_valid and top_foods %}
 <section class="audit-foods" aria-labelledby="audit-foods-title">
-  <div class="audit-foods-heading"><h2 id="audit-foods-title">Paling sering tercatat</h2><p>Berdasarkan kejadian, bukan berat makanan.</p></div>
+  <div class="audit-foods-heading"><h2 id="audit-foods-title">Makanan paling sering terbuang</h2><p>Berdasarkan jumlah kejadian pada catatan yang ditampilkan.</p></div>
   <ol class="audit-food-list">
-    {% for food in top_foods %}<li><span class="audit-food-rank">0{{ forloop.counter }}</span><span class="audit-food-name">{{ food.food_name }}</span><strong>{{ food.count }} kali</strong></li>{% endfor %}
+    {% for food in top_foods %}
+    <li>
+      <span class="audit-food-rank" aria-hidden="true">0{{ forloop.counter }}</span>
+      <span class="audit-food-name">{{ food.food_name }}</span>
+      <strong>{{ food.count }} kali</strong>
+      <span class="audit-food-track" aria-hidden="true"><span style="width: {% widthratio food.count top_foods.0.count 100 %}%"></span></span>
+    </li>
+    {% endfor %}
   </ol>
+  <p class="audit-foods-note">Panjang batang dibandingkan dengan makanan teratas, bukan nilai kerugian.</p>
 </section>
 {% endif %}

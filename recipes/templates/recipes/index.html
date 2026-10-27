@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block title %}Leftover Recipe · PandaCrumbs{% endblock %}
+{% block body_class %}recipes-page{% endblock %}
+
 {% block content %}
 <div class="page-heading flex items-center justify-between">
   <h1>Leftover Recipe</h1>
@@ -9,25 +12,30 @@
     <span>+ Tambah Resep</span>
   </a>
 </div>
+
 <form method="get" class="recipe-search" data-filter-form data-target="results">
   <input type="hidden" name="tab" value="{{ tab }}">
+
   <div class="search-row flex">
     <label class="sr-only" for="recipe-query">Cari resep atau bahan</label>
     <input id="recipe-query" name="q" value="{{ q }}" placeholder="Ketik atau pilih bahan yang ada di kosmu...">
     <button class="button" type="submit">Cari</button>
   </div>
+
   <div class="ingredient-row flex items-center">
     <span>Bahan aktif:</span>
     <div id="active-ingredients" class="flex">
       {% for ingredient in ingredients %}
       <button class="pill selected" type="submit" name="remove_ingredient" value="{{ ingredient }}" data-remove-ingredient="{{ ingredient }}">
-        {{ ingredient }} <img src="{% static 'main/images/recipeDesign-imgButtonHapusNasi.svg' %}" alt="Hapus">
+        {{ ingredient }}
+        <img src="{% static 'main/images/recipeDesign-imgButtonHapusNasi.svg' %}" alt="Hapus">
         <input type="hidden" name="ingredient" value="{{ ingredient }}">
       </button>
       {% endfor %}
     </div>
     <button class="text-button" type="submit" name="reset_ingredients" value="1" data-reset-ingredients>Reset bahan</button>
   </div>
+
   <div class="ingredient-row flex items-center">
     <span>Saran cepat:</span>
     {% for ingredient in suggestions %}
@@ -35,6 +43,7 @@
     {% endfor %}
   </div>
 </form>
+
 <section id="results" aria-live="polite">
   {% include 'recipes/results.html' %}
 </section>
