@@ -1315,6 +1315,26 @@ form {
   object-fit:fill
 }
 
+.pantry-page .pantry-group-list { grid-column: 1 / -1; display: grid; gap: 34px; }
+.pantry-page .pantry-location-group { min-width: 0; }
+.pantry-page .pantry-location-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #d9ddcd; }
+.pantry-page .pantry-location-heading h2 { font: 400 28px/1.2 Gloock, Georgia, serif; }
+.pantry-page .pantry-location-heading > span, .pantry-page .pantry-urgency-heading > span { color: #657060; font-size: 12px; }
+.pantry-page .pantry-urgency-group { margin-top: 18px; }
+.pantry-page .pantry-urgency-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.pantry-page .pantry-urgency-heading h3 { display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 600; }
+.pantry-page .status-dot { width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: var(--olive); }
+.pantry-page .pantry-urgency-soon .status-dot { background: var(--orange); }
+.pantry-page .pantry-urgency-expired .status-dot { background: var(--danger); }
+.pantry-page .pantry-urgency-group .pantry-grid { grid-column: auto; }
+.pantry-page .card-actions form[data-action="consume-all"] { order: 3; flex: 1 0 100%; }
+.pantry-page .card-actions .subtle-link { order: 2; }
+.pantry-page .consume-all { width: 100%; min-height: 44px; padding: 10px 14px; border: 1px solid #c8d2b7; border-radius: 30px; background: var(--sage); color: var(--olive); font: 600 12px/1.35 Inter, sans-serif; }
+.pantry-page .consume-all:hover { background: #cedbb5; }
+@media (max-width: 620px) {
+  .pantry-page .pantry-location-heading h2 { font-size: 24px; }
+}
+
 @media (max-width: 620px) {
   .hero-heading { padding-top: 104px; }
   .hero h1 { max-width: 100%; font-size: clamp(38px, 9vw, 52px); line-height: 1.08; padding: 0; }
@@ -1373,11 +1393,12 @@ form {
 .recipes-page .recipe-banner { min-height: 58px; padding: 14px; }
 .recipes-page .recipe-photo { height: 208px; }
 .recipes-page .recipe-info { padding: 14px; }
-.recipes-page .recipe-add { width: 250px; height: 58px; min-height: 46px; font-size: 13px; border-radius: 32px; overflow: hidden; }
+.recipes-page .recipe-add { width: auto; height: auto; min-height: 46px; padding: 12px 19px; border: 4px solid var(--orange); border-radius: 32px; background: #f6eae6; color: var(--orange); font-size: 13px; }
 .pantry-page .form-panel, .recipes-page .form-panel { max-width: 740px; padding: 30px 32px; }
 .pantry-page .form-panel h1, .recipes-page .form-panel h1 { font-size: 30px; }
 .pantry-page .field input, .pantry-page .field select, .pantry-page .field textarea, .recipes-page .field input, .recipes-page .field select, .recipes-page .field textarea { min-height: 49px; }
 .pantry-page .back-link, .recipes-page .back-link { min-height: 44px; }
+.recipes-page .page-heading .recipe-add { width: auto; height: auto; min-height: 46px; padding: 12px 19px; font-size: 13px; border-radius: 32px; }
 @media (max-width: 620px) {
   .pantry-page .page-heading, .recipes-page .page-heading { align-items: flex-start; flex-direction: column; gap: 14px; margin: 0 0 22px; }
   .pantry-page .page-heading .button, .recipes-page .page-heading .recipe-add { width: auto; }

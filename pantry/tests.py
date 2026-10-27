@@ -51,6 +51,42 @@ class PantryTests(TestCase):
         self.assertContains(response, "Mangga")
         self.assertNotContains(response, "Secret food")
 
+    def test_pantry_items_are_grouped_by_location_then_urgency(self):
+        PantryItem.objects.create(
+            owner=self.user,
+            name="Bayam",
+            category="Sayuran",
+            quantity=1,
+            location="Freezer",
+            expires_on=self.today - timedelta(days=1),
+        )
+        PantryItem.objects.create(
+            owner=self.user,
+            name="Beras",
+            category="Bahan Pokok",
+            quantity=1,
+            location="Rak Dapur",
+            expires_on=self.today + timedelta(days=10),
+        )
+        response = self.client.get(reverse("pantry:index"))
+        groups = response.context["location_groups"]
+        self.assertEqual(
+            [group["location"] for group in groups],
+            ["Kulkas", "Freezer", "Rak Dapur"],
+        )
+        self.assertEqual(groups[0]["status_groups"][0]["status"], "soon")
+        self.assertEqual(groups[1]["status_groups"][0]["status"], "expired")
+        self.assertEqual(groups[2]["status_groups"][0]["status"], "safe")
+        self.assertContains(response, "Hampir Basi")
+        self.assertContains(response, "Bayam")
+        self.assertContains(response, "Beras")
+
+    def test_filter_status_buttons_target_the_get_filter_form(self):
+        response = self.client.get(reverse("pantry:index"))
+        self.assertContains(response, 'id="pantry-filter-form"')
+        self.assertContains(response, 'data-status-filter')
+        self.assertContains(response, 'form="pantry-filter-form"')
+
     def test_create_ignores_forged_owner(self):
         self.client.post(reverse("pantry:add"), {**self.data, "owner": self.other.pk})
         self.assertEqual(PantryItem.objects.get(name="Susu").owner, self.user)
@@ -117,6 +153,33 @@ class PantryTests(TestCase):
         self.client.post(url)
         self.assertFalse(PantryItem.objects.filter(pk=self.item.pk).exists())
         self.assertEqual(self.client.post(url).status_code, 404)
+
+    def test_consume_all_deletes_item_via_ajax_and_regular_post(self):
+        url = reverse("pantry:consume", args=[self.item.pk])
+        response = self.client.post(
+            url,
+            {"consume_all": "1"},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"ok": True, "deleted": True})
+        self.assertFalse(PantryItem.objects.filter(pk=self.item.pk).exists())
+
+        second_item = PantryItem.objects.create(
+            owner=self.user,
+            name="Pisang",
+            category="Buah Segar",
+            quantity=3,
+            location="Kulkas",
+            expires_on=self.today + timedelta(days=5),
+        )
+        response = self.client.post(
+            reverse("pantry:consume", args=[second_item.pk]),
+            {"consume_all": "1"},
+            follow=True,
+        )
+        self.assertContains(response, "Bahan ditandai habis dikonsumsi.")
+        self.assertFalse(PantryItem.objects.filter(pk=second_item.pk).exists())
 
     def test_invalid_quantity_and_future_storage_date(self):
         for changes in [
