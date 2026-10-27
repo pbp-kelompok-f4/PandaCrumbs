@@ -7,20 +7,20 @@
   <a class="button outline" href="{% url 'pantry:add' %}">+ Tambah Bahan Makanan</a>
 </div>
 
-<form class="pantry-filters" method="get" data-filter-form data-target="results">
+<form id="pantry-filter-form" class="pantry-filters" method="get" data-filter-form data-target="results">
   <div class="search-row flex">
     <label class="sr-only" for="pantry-search">Cari bahan makanan</label>
     <input id="pantry-search" name="q" value="{{ q }}" placeholder="Cari bahan makanan di pantry-mu...">
-    <button class="button" type="submit">Cari</button>
+    <button class="button" type="submit" form="pantry-filter-form">Cari</button>
   </div>
   
   <div class="filter-row flex items-center">
     <span>Filter</span>
     <div class="pills flex" role="group" aria-label="Status kedaluwarsa">
-      <button name="status" value="" type="submit" class="pill {% if not status %}selected{% endif %}">Semua</button>
-      <button name="status" value="soon" type="submit" class="pill {% if status == 'soon' %}selected{% endif %}">Hampir Kadaluarsa</button>
-      <button name="status" value="expired" type="submit" class="pill {% if status == 'expired' %}selected{% endif %}">Kadaluarsa</button>
-      <button name="status" value="safe" type="submit" class="pill {% if status == 'safe' %}selected{% endif %}">Aman</button>
+      <button name="status" value="" type="submit" form="pantry-filter-form" data-status-filter class="pill {% if not status %}selected{% endif %}">Semua</button>
+      <button name="status" value="soon" type="submit" form="pantry-filter-form" data-status-filter class="pill {% if status == 'soon' %}selected{% endif %}">Hampir Basi</button>
+      <button name="status" value="expired" type="submit" form="pantry-filter-form" data-status-filter class="pill {% if status == 'expired' %}selected{% endif %}">Kadaluarsa</button>
+      <button name="status" value="safe" type="submit" form="pantry-filter-form" data-status-filter class="pill {% if status == 'safe' %}selected{% endif %}">Aman</button>
     </div>
 
     <label class="sr-only" for="location">Lokasi penyimpanan</label>
