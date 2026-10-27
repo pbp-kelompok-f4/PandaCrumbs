@@ -21,6 +21,7 @@
   <div id="product-results" aria-live="polite"></div>
   <p class="help-text">Data dari <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a> · ODbL.
     {% if product_context == 'audit' %}Pilih produk untuk mengisi nama makanan. Jumlah, tanggal terbuang, alasan, dan nilai kerugian tetap kamu isi sendiri. Kamu juga bisa mengetik nama makanan langsung pada formulir.
+    {% elif product_context == "recipe" %}Pilih produk untuk menambahkan nama bahan. Isi takaran dan langkah memasak sendiri; input manual tetap tersedia.
     {% else %}Pilih produk untuk mengisi formulir. Tanggal kedaluwarsa tetap diperiksa pada kemasan.{% endif %}
   </p>
 </details>

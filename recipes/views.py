@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import redirect_to_login
 from django.db.models import Exists, OuterRef, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -12,8 +13,10 @@ from .models import Bookmark, Recipe
 
 def index(request):
     tab = request.GET.get("tab", "all")
+    if tab not in ("all", "saved", "mine"):
+        tab = "all"
     if tab in ("saved", "mine") and not request.user.is_authenticated:
-        return redirect("/accounts/login/?next=" + request.path + "?tab=" + tab)
+        return redirect_to_login(request.get_full_path())
     recipes = Recipe.objects.select_related("author")
     saved = (
         Bookmark.objects.filter(user=request.user)
@@ -39,6 +42,13 @@ def index(request):
             x.strip()[:40] for x in request.GET.getlist("ingredient") if x.strip()
         )
     )[:12]
+    if request.GET.get("reset_ingredients"):
+        ingredients = []
+    else:
+        removed = request.GET.get("remove_ingredient", "").strip()[:40]
+        ingredients = [
+            ingredient for ingredient in ingredients if ingredient != removed
+        ]
     if query:
         recipes = recipes.filter(
             Q(title__icontains=query) | Q(ingredients__icontains=query)
@@ -82,7 +92,7 @@ def detail(request, pk):
 @login_required
 def edit(request, pk=None):
     recipe = get_object_or_404(Recipe, pk=pk, author=request.user) if pk else None
-    form = RecipeForm(request.POST or None, instance=recipe)
+    form = RecipeForm(request.POST if request.method == "POST" else None, instance=recipe)
     if request.method == "POST" and form.is_valid():
         recipe = form.save(commit=False)
         recipe.author = request.user
@@ -114,7 +124,10 @@ def delete(request, pk):
 @require_POST
 def bookmark(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
-    saved = request.POST.get("saved") == "1"
+    action = request.POST.get("saved")
+    if action not in ("0", "1"):
+        return JsonResponse({"error": "Pilih simpan atau hapus bookmark."}, status=400)
+    saved = action == "1"
     if saved:
         Bookmark.objects.get_or_create(user=request.user, recipe=recipe)
     else:
