@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if offer %}Update Donasi - {{ offer.title }}{% else %}Bagikan Makanan Berlebih{% endif %} - PandaCrumbs
+{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<link rel="stylesheet" href="{% static 'community/css/community.css' %}">
+{% endblock %}
+
+{% block content %}
+<a class="back-link" href="{% url 'community:index' %}">&larr; Kembali ke Community</a>
+
+<section class="form-panel">
+    <h1>{% if offer %}Update Penawaran Donasi{% else %}Bagikan Makanan Berlebih{% endif %}</h1>
+    {% include 'components/product_search.html' %}
+
+    <form method="post" class="data-form" data-product-target="community">
+        {% csrf_token %}
+        {% include 'components/fields.html' %}
+
+        <div class="map-picker-section">
+            <div class="map-picker-header">
+                <div>
+                    <h3 class="map-picker-title">Tentukan Titik Jemput di Peta</h3>
+                    <p class="map-picker-help">Klik pada peta atau geser pin merah ke lokasi penjemputan yang tepat.</p>
+                </div>
+            </div>
+            <div id="map-picker"></div>
+            <p id="coords-display" class="map-coords-badge">Memuat koordinasi titik...</p>
+        </div>
+
+        <div class="flex form-actions">
+            <button class="button" type="submit">Simpan & Bagikan</button>
+            <a class="button secondary" href="{% url 'community:index' %}">Batal</a>
+        </div>
+    </form>
+</section>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="{% static 'community/js/community-form.js' %}" defer></script>
+{% endblock %}

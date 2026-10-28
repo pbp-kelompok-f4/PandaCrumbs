@@ -131,7 +131,12 @@
             form.elements.name.value = product.name;
             form.elements.barcode.value = product.barcode;
             form.elements.image_url.value = typeof product.image === 'string' && product.image.startsWith('https://') ? product.image : '';
-          } else {
+          } else if (form.dataset.productTarget === 'community') {
+              if (form.elements.title) form.elements.title.value = product.name;
+              if (form.elements.image_url) {
+                  form.elements.image_url.value = typeof product.image === 'string' && product.image.startsWith('https://') ? product.image : '';
+              }
+          }  else {
             form.elements.ingredients.value += (form.elements.ingredients.value ? '\n' : '') + product.name;
           }
           toast('Produk dipilih. Lengkapi takaran, kategori, dan tanggal secara manual.');

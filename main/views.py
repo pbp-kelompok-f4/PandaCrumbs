@@ -45,8 +45,12 @@ def product_search(request):
     if category:
         params.update(tagtype_0="categories", tag_contains_0="contains", tag_0=category)
     try:
-        response = requests.get("https://world.openfoodfacts.org/cgi/search.pl", params=params,
-            headers={"User-Agent": settings.OFF_USER_AGENT}, timeout=(3, 8))
+        response = requests.get(
+            "https://id.openfoodfacts.org/cgi/search.pl",
+            params=params,
+            headers={"User-Agent": settings.OFF_USER_AGENT, "Accept": "application/json"},
+            timeout=(5, 15),
+        )
         response.raise_for_status()
         payload = response.json()
         if not isinstance(payload, dict) or not isinstance(payload.get("products"), list):

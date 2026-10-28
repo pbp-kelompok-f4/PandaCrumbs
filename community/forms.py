@@ -42,6 +42,12 @@ class FoodOfferForm(forms.ModelForm):
             self.initial["pickup_deadline"] = self.instance.pickup_deadline.strftime("%Y-%m-%dT%H:%M")
 
     def clean_portions(self):
+            portions = self.cleaned_data.get("portions")
+            if portions is None or portions < 1:
+                raise forms.ValidationError("Jumlah porsi minimal adalah 1 porsi.")
+            return portions
+
+    def clean_pickup_deadline(self):
         deadline = self.cleaned_data.get("pickup_deadline")
         if deadline and deadline <= timezone.now():
             raise forms.ValidationError("Batas waktu penjemputan harus berada di masa yang akan datang.")
