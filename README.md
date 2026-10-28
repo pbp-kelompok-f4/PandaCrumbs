@@ -43,7 +43,7 @@ Manajemen inventaris makanan dengan fitur tracker kadaluarsa otomatis
 - Filter Autentikasi: Data inventaris hanya bisa diakses dan dikelola oleh pemilik akun
   yang telah login. Bersifat strictly private.
 
-### Modul Leftover Recipe (Malvin)
+### Modul Leftover Recipe (Adzka)
 
 Membantu pengguna menemukan cara mengolah bahan yang sudah tersedia melalui resep yang dibuat komunitas.
 
@@ -69,7 +69,7 @@ Membantu pengguna mengenali makanan yang sering terbuang, penyebabnya, dan perki
 - API: menampilkan referensi produk Open Food Facts yang dapat difilter menurut kategori saat mencatat makanan kemasan.
 - Akses: catatan dan ringkasan hanya dapat diakses pemiliknya.
 
-### Modul Community Food Sharing (Adzka)
+### Modul Community Food Sharing (Malvin)
 
 Mempertemukan pengguna yang memiliki makanan berlebih dengan pengguna yang ingin mengambilnya.
 
