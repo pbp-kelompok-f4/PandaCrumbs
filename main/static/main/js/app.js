@@ -153,6 +153,41 @@
 
   const initActions = (filter, refresh) => {
     const pending = new Set();
+    const removePantryCard = (card) => {
+      const urgencyGroup = card.closest('.pantry-urgency-group');
+      const locationGroup = card.closest('.pantry-location-group');
+      card.remove();
+
+      const urgencyCount = urgencyGroup?.querySelector('.pantry-urgency-heading > span');
+      if (urgencyCount) {
+        const count = urgencyGroup.querySelectorAll('.pantry-card').length;
+        urgencyCount.textContent = `${count} bahan`;
+        if (!count) urgencyGroup.remove();
+      }
+
+      const locationCount = locationGroup?.querySelector('.pantry-location-heading > span');
+      if (locationCount) {
+        const count = locationGroup.querySelectorAll('.pantry-card').length;
+        locationCount.textContent = `${count} bahan`;
+        if (!count) locationGroup.remove();
+      }
+
+      const results = document.querySelector('#results');
+      if (results && !results.querySelector('.pantry-card')) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-state';
+        const heading = document.createElement('h2');
+        heading.textContent = 'Belum ada bahan yang cocok';
+        const message = document.createElement('p');
+        message.textContent = 'Ubah filter atau tambahkan bahan makanan pertamamu.';
+        const link = document.createElement('a');
+        link.className = 'button';
+        link.href = results.dataset.addUrl;
+        link.textContent = '+ Tambah Bahan Makanan';
+        empty.append(heading, message, link);
+        results.replaceChildren(empty);
+      }
+    };
     document.addEventListener('submit', async (event) => {
       const form = event.target.closest('[data-action]');
       if (!form) return;
@@ -161,6 +196,9 @@
       if (button.disabled || pending.has(form.action)) return;
       pending.add(form.action);
       let changed = false;
+      const pantryMutation =
+        form.dataset.action === 'consume' ||
+        form.dataset.action === 'consume-all';
       button.disabled = true;
       try {
         const data = await request(form.action, {
@@ -168,6 +206,16 @@
           body: new FormData(form),
         });
         changed = true;
+        if (pantryMutation) {
+          const card = form.closest('.pantry-card');
+          if (data.deleted) removePantryCard(card);
+          else {
+            const quantity = card?.querySelector('[data-pantry-quantity]');
+            if (quantity) {
+              quantity.textContent = `${data.quantity} ${quantity.dataset.unit}`;
+            }
+          }
+        }
         if (!filter && form.dataset.action === 'bookmark') {
           form.elements.saved.value = data.saved ? '0' : '1';
           button.setAttribute('aria-pressed', String(data.saved));
@@ -187,7 +235,7 @@
             document.createTextNode(data.saved ? 'Tersimpan' : 'Simpan'),
           );
         }
-        if (filter) {
+        if (filter && !pantryMutation) {
           // Keep stale actions locked until server-rendered cards replace them.
           document.querySelectorAll('[data-action] button').forEach((button) => {
             button.disabled = true;
@@ -214,7 +262,7 @@
         toast(error.message);
       } finally {
         pending.delete(form.action);
-        if (!changed || !filter) button.disabled = false;
+        if (!changed || !filter || pantryMutation) button.disabled = false;
       }
     });
   };
