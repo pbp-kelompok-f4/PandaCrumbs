@@ -31,8 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const locationInput = document.getElementById("id_pickup_location");
     const coordsDisplay = document.getElementById("coords-display");
 
-    const initialLat = latInput.value ? parseFloat(latInput.value) : -6.3627;
-    const initialLng = lngInput.value ? parseFloat(lngInput.value) : 106.8271;
+    const initialLat = (latInput && latInput.value) ? parseFloat(latInput.value.replace(",", ".")) : -6.3627;
+    const initialLng = (lngInput && lngInput.value) ? parseFloat(lngInput.value.replace(",", ".")) : 106.8271;
 
     const map = L.map("map-picker").setView([initialLat, initialLng], 14);
 

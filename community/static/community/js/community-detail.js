@@ -1,8 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // 1. Tampilkan Peta Titik Jemput Esri
     const mapElement = document.getElementById("detail-map");
     if (mapElement) {
-        const lat = parseFloat(mapElement.dataset.lat || "-6.3627");
-        const lng = parseFloat(mapElement.dataset.lng  || "106.8271");
+        const rawLat = (mapElement.dataset.lat || "-6.3627").replace(",", ".");
+        const rawLng = (mapElement.dataset.lng || "106.8271").replace(",", ".");
+        const lat = parseFloat(rawLat);
+        const lng = parseFloat(rawLng);
         const title = mapElement.dataset.title || "Titik Penjemputan";
 
         const map = L.map("detail-map").setView([lat, lng], 15);
@@ -17,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .openPopup();
     }
 
+    // 2. Transaksi Klaim Porsi Makanan via AJAX (Dengan Debug Logging)
     const claimForm = document.getElementById("claim-food-form");
     if (claimForm) {
         claimForm.addEventListener("submit", async (e) => {
@@ -27,42 +31,61 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const url = claimForm.action;
             const formData = new FormData(claimForm);
-            
+            const csrfToken = formData.get("csrfmiddlewaretoken");
+
+            console.log("Mengirim request ke URL:", url);
+
             try {
-                const response = await fetch(urll, {
+                const response = await fetch(url, {
                     method: "POST",
                     body: formData,
                     headers: {
                         "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRFToken": csrfToken,
                     }
                 });
-                const data = await response.json();
 
-                if (!response.ok) {
-                    alert(data.error || "Gagal memproses klaim.");
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = "Ajukan Klaim Porsi";
+                console.log("Status respons server:", response.status);
+
+                const responseText = await response.text();
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch {
+                    console.error("Server tidak mengembalikan JSON, respons mentah:", responseText);
+                    alert("Server mengembalikan error (Status " + response.status + "). Cek tab Network / Console.");
                     return;
                 }
 
+                if (!response.ok) {
+                    alert(data.error || "Gagal memproses klaim.");
+                    return;
+                }
+
+                // Perbarui sisa porsi dan kontak secara dinamis di antarmuka
                 const remainingBadge = document.getElementById("remaining-badge");
                 if (remainingBadge) {
                     remainingBadge.textContent = data.remaining_portions + " Porsi Tersedia";
                 }
-
+                
                 const contactContainer = document.getElementById("contact-section");
                 if (contactContainer && data.contact_info) {
-                    contactContainer.innerHTML = '<div class="contact-box">' + '<strong>Kontak Penjemputan:</strong><br>' + data.contact_info + '</div>'; 
+                    contactContainer.innerHTML = 
+                        '<div class="contact-box">' +
+                            '<strong>Kontak Penjemputan:</strong><br>' +
+                            data.contact_info +
+                        '</div>';
                 }
 
-                claimForm.requestFullscreen();
+                claimForm.reset();
                 alert(data.message);
 
                 if (data.remaining_portions <= 0) {
                     claimForm.style.display = "none";
                 }
             } catch (err) {
-                alert("Terjadi kesalahan jaringan. Silakan coba lagi.");
+                console.error("Detail error fetch:", err);
+                alert("Detail galat koneksi: " + err.message);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = "Ajukan Klaim Porsi";

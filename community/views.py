@@ -160,7 +160,7 @@ def claim_food(request, pk):
         claim.save()
 
         offer.remaining_portions = F("remaining_portions") - portions
-        offer.save(update_field=["remaining_portions", "updated_at"])
+        offer.save(update_fields=["remaining_portions", "updated_at"])
         offer.refresh_from_db()
 
         if offer.remaining_portions == 0:

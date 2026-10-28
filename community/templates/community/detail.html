@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static l10n %}
 
 {% block title %}{{ offer.title }} - PandaCrumbs{% endblock %}
 
@@ -46,8 +46,8 @@
         <p class="text-xs test-stone-600">📍 {{ offer.pickup_location }}</p>
 
         <div id="detail-map"
-             data-lat="{{ offer.latitude|default:'-6.3627' }}"
-             data-lng="{{ offer.longitude|default:'106.8271' }}"
+             data-lat="{{ offer.latitude|unlocalize|default:'-6.3627' }}"
+             data-lng="{{ offer.longitude|unlocalize|default:'106.8271' }}"
              data-title="{{ offer.title }}">
         </div>
 
