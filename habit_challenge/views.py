@@ -88,7 +88,7 @@ def complete(request, kind):
             request.user, invalid_kind=kind, invalid_form=form,
         ), status=400)
     # A database unique constraint also prevents rewards from parallel requests.
-    _, created = Completion.objects.get_or_create(
+    completion, created = Completion.objects.get_or_create(
         user=request.user, kind=kind, completed_on=timezone.localdate(),
         defaults={"food": form.cleaned_data["food"], "points": challenge["points"], "plan": form.cleaned_data["plan"]},
     )
@@ -97,7 +97,13 @@ def complete(request, kind):
     else:
         message = "Tantangan ini sudah kamu selesaikan hari ini. Kembali lagi besok, ya!"
     if is_ajax(request):
-        return JsonResponse({"message": message, "html": render_to_string(
+        return JsonResponse({"message": message, "completion": {
+            "created": created,
+            "food": completion.food,
+            "points": completion.points if created else 0,
+            "action": "dibagikan" if kind == "share" else "diolah",
+            "reward": challenge["reward"],
+        }, "html": render_to_string(
             "habit_challenge/dashboard.html", dashboard_context(request.user), request=request,
         )})
     messages.success(request, message)

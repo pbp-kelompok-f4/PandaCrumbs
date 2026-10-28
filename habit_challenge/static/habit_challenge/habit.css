@@ -3,9 +3,7 @@
   --habit-olive: #54613e;
   --habit-gradient: linear-gradient(105deg, #c97a57 0%, #d9e3c5 100%);
   background: #f9f6ef;
-  color: #2c2422;
 }
-.habit-page .site-header { max-width: 1358px; width: calc(100% - 112px); margin-top: 18px; min-height: 82px; }
 .habit-content { max-width: 1380px; width: calc(100% - 80px); margin-top: 40px; }
 .habit-title { font-size: clamp(40px, 5vw, 72px); margin: 0 12px 50px; letter-spacing: -2.5px; }
 .habit-profile { display: grid; grid-template-columns: 28% minmax(0, 1fr); align-items: center; gap: 28px; padding: 30px 36px 30px 30px; border-radius: 26px; background: var(--habit-gradient); min-height: 440px; }
@@ -91,7 +89,6 @@
 .habit-form input[type=text], .habit-form select { min-height: 46px; padding: 11px 14px; }
 .habit-plan-actions a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px; }
 @media (max-width: 1150px) {
-  .habit-page .site-header { width: calc(100% - 48px); }
   .habit-content { width: calc(100% - 48px); }
   .habit-profile { grid-template-columns: 27% minmax(0, 1fr); padding: 28px; gap: 20px; }
   .habit-card h3 { font-size: 20px; padding: 20px; }
@@ -110,7 +107,6 @@
   .habit-section-heading h2 { font-size: 40px; }
 }
 @media (max-width: 560px) {
-  .habit-page .site-header { width: calc(100% - 28px); padding-inline: 16px; margin-top: 14px; min-height: 68px; }
   .habit-content { width: calc(100% - 32px); margin-top: 32px; }
   .habit-title { margin: 0 0 28px; font-size: 40px; letter-spacing: -1.5px; }
   .habit-profile { position: relative; display: block; padding: 24px 20px; border-radius: 24px; min-height: 0; }
@@ -138,7 +134,51 @@
 
 .habit-content { max-width: 1160px; }
 .habit-action { min-height: 44px; }
+.habit-modal-open { overflow: hidden; }
+.habit-dialog {
+  width: min(620px, calc(100% - 32px));
+  max-height: calc(100dvh - 40px);
+  margin: auto;
+  padding: 42px;
+  border: 0;
+  border-radius: 32px;
+  background: #fcf7f4;
+  color: var(--ink);
+  box-shadow: 0 24px 80px #0004;
+  overflow-y: auto;
+}
+.habit-dialog::backdrop { background: #24221fd1; backdrop-filter: blur(3px); }
+.habit-dialog-close {
+  position: absolute; top: 16px; right: 16px;
+  display: grid; place-items: center;
+  width: 44px; height: 44px; padding: 0;
+  border: 0; border-radius: 50%; background: transparent;
+  color: #3d3935; font-size: 34px; line-height: 1;
+}
+.habit-dialog-close:hover { background: #eee6df; }
+.habit-dialog-eyebrow { color: #6e7e55; font-size: 12px; font-weight: 700; letter-spacing: .06em; margin: 6px 36px 12px 0; }
+.habit-dialog h2 { font: 600 30px/1.3 Poppins, Inter, sans-serif; padding-right: 22px; }
+.habit-dialog-description { margin-top: 10px; color: #706357; font-size: 16px; }
+.habit-dialog .habit-form { margin-top: 24px; padding-top: 24px; gap: 14px; font-size: 16px; }
+.habit-dialog .habit-form input[type=text], .habit-dialog .habit-form select { min-height: 54px; padding: 14px 16px; border-radius: 16px; font-size: 16px; }
+.habit-dialog .habit-confirm { margin-top: 8px; font-size: 15px; gap: 12px; }
+.habit-dialog .habit-confirm input { width: 22px; height: 22px; }
+.habit-dialog .habit-action { min-height: 52px; font-size: 16px; }
+.habit-dialog .habit-form-errors:empty { display: none; }
+.habit-dialog .habit-form > button { margin-top: 10px; }
+.habit-success-dialog { width: min(780px, calc(100% - 32px)); padding: 94px 54px 42px; border-radius: 48px; text-align: center; }
+.habit-success-dialog h2 { padding: 0; font-size: clamp(25px, 3vw, 36px); color: #3d3935; }
+.habit-success-food { display: inline-block; max-width: 100%; margin-top: 42px; padding: 16px 28px; border-radius: 32px; background: #dbe3c8; box-shadow: inset 0 2px 5px #0002; color: #564a40; font-size: 24px; font-weight: 700; line-height: 1.45; overflow-wrap: anywhere; }
+.habit-success-reward { margin-top: 18px; color: #6e7e55; font: 600 19px/1.5 Poppins, Inter, sans-serif; }
+.habit-success-back { margin-top: 72px; min-height: 56px !important; font-size: 21px !important; }
 @media (max-width: 560px) {
+  .habit-dialog { padding: 30px 22px 24px; border-radius: 26px; max-height: calc(100dvh - 24px); }
+  .habit-dialog h2 { font-size: 25px; }
+  .habit-dialog-close { top: 10px; right: 10px; }
+  .habit-success-dialog { padding-top: 70px; }
+  .habit-success-food { margin-top: 28px; padding: 14px 20px; font-size: 20px; border-radius: 24px; }
+  .habit-success-reward { font-size: 16px; }
+  .habit-success-back { margin-top: 40px; font-size: 17px !important; }
   .habit-title { font-size: 37px; margin: 0 0 22px; }
   .habit-card h3 { min-height: 58px; padding: 14px 18px; font-size: 19px; }
   .habit-card-body { padding: 16px 18px 22px; }
