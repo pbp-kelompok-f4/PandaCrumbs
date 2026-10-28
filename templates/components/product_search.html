@@ -1,8 +1,8 @@
 <details class="product-lookup">
-  <summary>{% if product_context == 'audit' %}Cari referensi bahan kemasan{% else %}Cari referensi produk · Open Food Facts{% endif %}</summary>
+  <summary>{% if product_context == 'audit' %}Cari referensi bahan kemasan{% elif product_context == 'community' %}Cari referensi donasi · Open Food Facts{% else %}Cari referensi produk · Open Food Facts{% endif %}</summary>
   <div class="lookup-controls">
-    <label for="product-query">Nama produk kemasan</label>
-    <input id="product-query" placeholder="Contoh: susu" minlength="2" maxlength="80">
+    <label for="product-query">Nama produk kemasan <span class="text-xs text-stone-500 font-normal">(Gunakan bahasa Inggris agar pencarian lebih akurat)</span></label>
+    <input id="product-query" placeholder="Contoh: milk" minlength="2" maxlength="80">
     <label for="product-category">Kategori produk (opsional)</label>
     {% if product_context == 'audit' %}
       <select id="product-category">
@@ -22,6 +22,7 @@
   <p class="help-text">Data dari <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a> · ODbL.
     {% if product_context == 'audit' %}Pilih produk untuk mengisi nama makanan. Jumlah, tanggal terbuang, alasan, dan nilai kerugian tetap kamu isi sendiri. Kamu juga bisa mengetik nama makanan langsung pada formulir.
     {% elif product_context == "recipe" %}Pilih produk untuk menambahkan nama bahan. Isi takaran dan langkah memasak sendiri; input manual tetap tersedia.
+    {% elif product_context == "community" %}Pilih produk untuk mengisi nama dan foto makanan donasi. Kuota porsi, titik jemput, dan batas waktu tetap kamu isi sendiri.
     {% else %}Pilih produk untuk mengisi formulir. Tanggal kedaluwarsa tetap diperiksa pada kemasan.{% endif %}
   </p>
 </details>

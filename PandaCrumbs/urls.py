@@ -8,6 +8,7 @@ urlpatterns = [
     path("", include("main.urls")),
     path("pantry/", include("pantry.urls")),
     path("recipes/", include("recipes.urls")),
+    path("community/", include("community.urls")),
     path("waste-audit/", include("waste_audit.urls")),
     path("habit-challenge/", include("habit_challenge.urls")),
     path("accounts/sso/ui/", include("ui_sso.urls")),

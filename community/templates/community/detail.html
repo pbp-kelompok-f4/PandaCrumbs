@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static l10n %}
+
+{% block title %}{{ offer.title }} - PandaCrumbs{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<link rel="stylesheet" href="{% static 'community/css/community.css' %}">
+{% endblock %}
+
+{% block content %}
+<a class="back-link" href="{% url 'community:index' %}">&larr; Kembali ke Katalog Donasi</a>
+
+<div class="detail-layout">
+    <article class="detail-main-card">
+        {% if offer.image_url %}
+            <img src="{{ offer.image_url }}" alt="{{ offer.title }}" class="detail-main-photo">
+        {% endif %}
+
+        <div class="flex items-center justify-between gap-2 flex-wrap mb-2">
+            <span clas="community-category-tag">{{ offer.category }}</span>
+            <span id="remaning-badge" class="community-badge badge-available" style="position: static;">
+                {{ offer.remaining_portions }} Porsi Tersedia
+            </span>
+        </div>
+
+        <h1 class="text-2xl md:text-3xl font-bold text-stone-900 mb-3">{{ offer.title }}</h1>
+        <p class="text-stone-700 leading-relaxed whitepace-pre-line mb-4">{{ offer.description }}</p>
+
+        <div class="detali-meta-group">
+            <div><strong>Pemberi Donasi:</strong> {{ offer.donor.username }}</div>
+            <div><strong>Total Kuota Awal:</strong> {{ offer.portions }} porsi</div>
+            <div><strong>Batas Akhir Ambil:</strong> {{ offer.pickup_deadline|date:"l, d F Y, H:i" }} WIB</div>
+        </div>
+
+        {% if user == offer.donor %}
+            <div class="flex gap-2 pt-3 border-t border-stone-200">
+                <a href="{% url 'community:edit' offer.pk %}" class="button secondary">Edit Penawaran</a>
+                <a href="{% url 'community:delete' offer.pk %}" class="button" style="background-color: #dc2626; color: white;">Hapus</a>
+            </div>
+        {% endif %}
+    </article>
+
+    <aside class="detail-sidebar-card">
+        <h2 class="text-lg font-bold text-stone-800 mb-2">Titik Penjemputan</h2>
+        <p class="text-xs test-stone-600">📍 {{ offer.pickup_location }}</p>
+
+        <div id="detail-map"
+             data-lat="{{ offer.latitude|unlocalize|default:'-6.3627' }}"
+             data-lng="{{ offer.longitude|unlocalize|default:'106.8271' }}"
+             data-title="{{ offer.title }}">
+        </div>
+
+        <div id="contact-section">
+            {% if can_view_contact %}
+                <div class="contact-box">
+                    <strong>Kontak Penjemputan:</strong><br>
+                    {{ offer.contact_info }}
+                </div>
+            {% else %}
+                <div class="contact-box locked">
+                    🔒<em>Kontak penjemputan (WhatsApp/HP) akan terlihat setelah Anda mengajukan klaim porsi.</em>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if user.is_authenticated and user != offer.donor and offer.status == 'AVAILABLE' and not offer.is_expired %}
+            <div class="claim-form-box">
+                <h3 class="text-sm font-bold text-stone-800 mb-2">Ajukan Klaim Makanan</h3>
+                <form id="claim-food-form" action="{% url 'community:claim' offer.pk %}" method="post">
+                    {% csrf_token %}
+                    <div class="field mb-3">
+                        <label for="id_portions_claimed">Jumlah Porsi yang Diambil:</label>
+                        <input type="number" name="portions_claimed" id="id_portions_claimed" min="1" max="{{ offer.remaining_portions }}" value="1" required class="form-input">
+                    </div>
+                    <div class="field mb-3">
+                        <label for="id_notes">Catatan Waktu Penjemputan:</label>
+                        <textarea name="notes" id="id_notes" rows="2" placeholder="Contoh: Saya ambil jam 15.00 nanti" class="form-input"></textarea>
+                    </div>
+                    <button type="submit" class="button w-full" style="background-color: #059669; color: white;">
+                        Ajukan Klaim Porsi
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+    </aside>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="{% static 'community/js/community-detail.js' %}" defer></script>
+{% endblock %}

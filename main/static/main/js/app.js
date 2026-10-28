@@ -10,6 +10,7 @@
       }, 6000);
     }
   };
+
   const request = async (url, options = {}) => {
     const response = await fetch(url, {
       ...options,
@@ -29,6 +30,7 @@
       throw new Error(data.error || 'Perubahan gagal disimpan. Coba lagi.');
     return data;
   };
+
   const initNavigation = () => {
     const menu = document.querySelector('.menu-toggle');
     menu?.addEventListener('click', () => {
@@ -46,6 +48,7 @@
     );
     const selectedStatus = filter?.querySelector('[name=status].selected');
     if (selectedStatus) latestParams.set('status', selectedStatus.value);
+
     const renderIngredients = (params) => {
       const container = document.querySelector('#active-ingredients');
       if (!container) return;
@@ -69,6 +72,7 @@
         container.append(button);
       });
     };
+
     const refresh = async (params = latestParams) => {
       if (!filter) return;
       activeRequest?.abort();
@@ -101,6 +105,7 @@
         if (activeRequest === controller) target.removeAttribute('aria-busy');
       }
     };
+
     filter?.addEventListener('click', (event) => {
       const statusButton = event.target.closest('[data-status-filter]');
       if (!statusButton) return;
@@ -109,6 +114,7 @@
       params.set('status', statusButton.value);
       refresh(params);
     });
+
     filter?.addEventListener('submit', (event) => {
       event.preventDefault();
       const params = new URLSearchParams(new FormData(filter));
@@ -135,11 +141,13 @@
       }
       refresh(params);
     });
+
     document
       .querySelectorAll('[data-auto-submit]')
       .forEach((element) =>
         element.addEventListener('change', () => filter.requestSubmit()),
       );
+
     document.addEventListener('click', (event) => {
       const tab = event.target.closest('[data-tab]');
       if (!filter || !tab) return;
@@ -148,6 +156,7 @@
       params.set('tab', tab.dataset.tab);
       refresh(params);
     });
+
     return { filter, refresh };
   };
 
@@ -188,6 +197,7 @@
         results.replaceChildren(empty);
       }
     };
+
     document.addEventListener('submit', async (event) => {
       const form = event.target.closest('[data-action]');
       if (!form) return;
@@ -236,7 +246,6 @@
           );
         }
         if (filter && !pantryMutation) {
-          // Keep stale actions locked until server-rendered cards replace them.
           document.querySelectorAll('[data-action] button').forEach((button) => {
             button.disabled = true;
           });
@@ -318,6 +327,15 @@
                 ) {
                   form.elements.category.value = product.pantry_category;
                 }
+              } else if (form.dataset.productTarget === 'community') {
+                if (form.elements.title) form.elements.title.value = product.name;
+                if (form.elements.image_url) {
+                  form.elements.image_url.value =
+                    typeof product.image === 'string' &&
+                    product.image.startsWith('https://')
+                      ? product.image
+                      : '';
+                }
               } else if (form.dataset.productTarget === 'audit') {
                 form.elements.food_name.value = product.name;
                 form.elements.food_name.focus();
@@ -330,9 +348,11 @@
                   ? 'Nama makanan terisi. Lengkapi jumlah, tanggal terbuang, alasan, dan perkiraan kerugian.'
                   : form.dataset.productTarget === 'pantry'
                     ? 'Nama, kategori, barcode, dan foto terisi jika tersedia. Lengkapi stok, lokasi, dan tanggal.'
-                    : form.dataset.productTarget === 'recipe'
-                      ? 'Bahan ditambahkan. Lengkapi takaran dan langkah memasak.'
-                      : 'Produk dipilih. Lengkapi takaran, kategori, dan tanggal secara manual.',
+                    : form.dataset.productTarget === 'community'
+                      ? 'Nama dan foto donasi terisi jika tersedia. Lengkapi porsi, titik jemput, dan batas waktu.'
+                      : form.dataset.productTarget === 'recipe'
+                        ? 'Bahan ditambahkan. Lengkapi takaran dan langkah memasak.'
+                        : 'Produk dipilih. Lengkapi takaran, kategori, dan tanggal secara manual.',
               );
             });
             container.append(choice);

@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="{% static 'main/css/tailwind.css' %}">
   <link rel="stylesheet" href="{% static 'main/css/app.css' %}">
   {% block extra_css %}{% endblock %}
+  {% block extra_head %}{% endblock %}
   <script src="{% static 'main/js/app.js' %}" defer></script>
 </head>
 <body class="{% block body_class %}{% endblock %}">

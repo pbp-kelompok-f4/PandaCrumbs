@@ -1,0 +1,80 @@
+{% load static %}
+
+<div class="recipe-tabs flex items-center justify-between">
+    <div class="pills flex">
+        <a class="pill {% if tab == 'all' %}selected{% endif %}" href="?tab=all" data-tab="all">
+            Semua ({{ counts.all }})
+        </a>
+        <a class="pill {% if tab == 'available' %}selected{% endif %}" href="?tab=available" data-tab="available">
+            Tersedia ({{counts.available}})
+        </a>
+        {% if user.is_authenticated %}
+        <a class="pill {% if tab == 'mine' %}selected{% endif %}" href="?tab=mine" data-tab="mine">
+            Donasi Saya ({{ counts.mine }})
+        </a>
+        <a class="pill {% if tab == 'claimed' %}selected{% endif %}" href="?tab=claim" data-tab="claimed">
+            Klaim Saya ({{ counts.claimed }})
+        </a>
+        {% endif %}
+    </div>
+    <span class="privacy-note">
+        Titik Jemput Terverifikasi OpenStreetMap
+    </span>
+</div>
+
+<div class="communiuty-grid">
+    {% for offer in offers %}
+    <article class="community-card">
+        <div>
+            <div class="community-card-banner">
+                <span class="community-category-tag">{{ offer.category }}</span>
+                <span class="community-donor-name">{{ offer.donor.username }}</span>
+            </div>
+
+            <div class="community-photo-wrapper">
+                {% if offer.image_url %}
+                    <img src="{{ offer.image_url }}" alt="{{ offer.title }}" class="community-photo-img" loading="lazy">
+                {% else %}
+                    <span class="community-photo-empty">Belum Ada Foto</span>
+                {% endif %}
+
+                {% if offer.is_expired %}
+                    <span class="community-badge badge-expired">Kedaluwarsa</span>
+                {% elif offer.status == 'AVAILABLE' %}
+                    <span class="community-badge badge-available">{{ offer.remaining_portions }} Porsi Tersedia</span>
+                {% else %}
+                    <span class="community-badge badge-claimed">{{ offer.get_status_display }}</span>
+                {% endif %}
+            </div>
+
+            <div class="commmunity-card-body">
+                <h2 class="community-card-title">{{ offer.title }}</h2>
+                <p class="community-card-desc">{{ offer.description }}</p>
+
+                <div class="community-card-meta">
+                    <div class="community-card-meta-item">
+                        <span>📍</span>
+                        <span>{{ offer.pickup_location }}</span>
+                    </div>
+                    <div class="community-card-meta-item">
+                        <span>⏰</span>
+                        <span>Batas Pengambilan: {{ offer.pickup_deadline|date:"j M Y, H:i" }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="community-card-footer">
+            <a href="{% url 'community:detail' offer.pk %}" class="community-detail-btn">
+                Lihat Detail dan Titik Jemput
+            </a>
+        </div>
+    </article>
+    {% empty %}
+    <div class="empty-state">
+        <h2>Belum Ada Donasi Makanan</h2>
+        <p>Mulai Bagikan Makanan Berlebih yang Masih Layak Konsumsi untuk Teman-Teman di Sekitarmu.</p>
+        <a class="button" href="{% url 'community:add' %}">+Bagikan Makanan</a>
+    </div>
+    {% endfor %}
+</div>

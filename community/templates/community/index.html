@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Community Food Sharing - PandaCrumbs{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'community/css/community.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="page-heading flex items-center justify-between">
+    <h1>Community Food Sharing</h1>
+    <a class="button recipe-add" href="{% url 'community:add' %}">
+        <span>+ Bagikan Makanan</span>
+    </a>
+</div>
+
+<form method="get" class="recipe-search" data-filter-form data-target="results">
+    <input type="hidden" name="tab" value="{{ tab }}">
+    <div class="search-row flex">
+        <label class="sr-only" for="community-query">Cari Makanan atau Lokasi</label>
+        <input id="community-query" name="q" value="{{ q }}" placeholder="Cari nama makanan, lokasi jemput, atau deskripsi...">
+        <button class="button" type="submit">Cari</button>
+    </div>
+
+    <div class="ingredient-row flex items-center">
+        <span>Kategori:</span>
+        <button name="category" value="" type="submit" class="pill {% if not selected_category %}selected{% endif %}">Semua</button>
+        {% for cat in category %}
+            <button name="category" value="{{ cat }}" type="submit" class="pill {% if selected_category == cat %}selected{% endif %}">{{ cat }}</button>
+        {% endfor %}
+    </div>
+</form>
+
+<section id="results" aria-live="polite">
+    {% include 'community/cards.html' %}
+</section>
+{% endblock %}
