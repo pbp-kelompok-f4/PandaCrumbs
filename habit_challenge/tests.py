@@ -97,6 +97,31 @@ class HabitChallengeTests(TestCase):
         self.assertEqual(invalid.status_code, 400)
         self.assertIn("food", invalid.json()["errors"])
 
+    def test_confirmation_uses_saved_food_and_does_not_reward_duplicate(self):
+        endpoint = reverse("habit_challenge:complete", args=["share"])
+        headers = {"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"}
+        response = self.client.post(endpoint, {"food": "Sup sayur (2 porsi)", "confirmed": "on"}, **headers)
+        self.assertEqual(response.json()["completion"], {
+            "created": True, "food": "Sup sayur (2 porsi)", "points": 15,
+            "action": "dibagikan", "reward": "setelah berbagi",
+        })
+        duplicate = self.client.post(endpoint, {"food": "Nama lain", "confirmed": "on"}, **headers)
+        result = duplicate.json()["completion"]
+        self.assertFalse(result["created"])
+        self.assertEqual(result["points"], 0)
+        self.assertEqual(result["food"], "Sup sayur (2 porsi)")
+        self.assertEqual(Completion.objects.count(), 1)
+
+    def test_cooking_confirmation_and_accessible_dialogs(self):
+        response = self.client.post(reverse("habit_challenge:complete", args=["leftovers"]),
+            {"food": "Nasi matang", "confirmed": "on"}, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
+        self.assertEqual(response.json()["completion"]["action"], "diolah")
+        self.assertEqual(response.json()["completion"]["points"], 10)
+        page = self.client.get(self.index)
+        self.assertContains(page, 'id="habit-checkin-dialog"')
+        self.assertContains(page, 'aria-labelledby="habit-success-title"')
+        self.assertContains(page, 'aria-label="Tutup konfirmasi"')
+
     def test_progress_level_boundaries_and_streak_gap(self):
         for days in [0, 1, 2, 4]:
             Completion.objects.create(user=self.user, kind="pantry", points=10, food="Nasi", completed_on=self.today - timedelta(days=days))

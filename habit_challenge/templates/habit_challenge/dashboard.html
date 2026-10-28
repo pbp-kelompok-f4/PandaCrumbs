@@ -28,7 +28,7 @@
         {% if card.completion %}
           <div class="habit-completed"><strong>✓ Selesai hari ini · +{{ card.completion.points }} poin</strong><span>{{ card.completion.food }}</span></div>
         {% else %}
-          <details class="habit-checkin" {% if card.open %}open{% endif %}>
+          <details class="habit-checkin" data-challenge-title="{{ card.title }}" {% if card.open %}open{% endif %}>
             <summary class="{% if card.kind == 'share' %}habit-action{% endif %}">{% if card.kind == 'share' %}{{ card.action }}{% else %}Sudah memasak? Catat tantangan{% endif %}</summary>
             <form method="post" action="{% url 'habit_challenge:complete' card.kind %}" class="habit-form" data-habit-checkin>
               {% csrf_token %}
