@@ -102,6 +102,7 @@ def consume(request, pk):
         if request.POST.get("consume_all") == "1":
             PantryItem.objects.filter(pk=item.pk).delete()
             deleted = True
+            quantity = 0
         else:
             changed = PantryItem.objects.filter(pk=item.pk, quantity__gt=1).update(
                 quantity=F("quantity") - 1
@@ -109,10 +110,15 @@ def consume(request, pk):
             if not changed:
                 PantryItem.objects.filter(pk=item.pk, quantity=1).delete()
                 deleted = True
+                quantity = 0
             else:
                 deleted = False
+                quantity = item.quantity - 1
     if is_ajax(request):
-        return JsonResponse({"ok": True, "deleted": deleted})
+        data = {"ok": True, "deleted": deleted}
+        if not deleted:
+            data["quantity"] = quantity
+        return JsonResponse(data)
     if request.POST.get("consume_all") == "1":
         messages.success(request, "Bahan ditandai habis dikonsumsi.")
     return redirect("pantry:index")

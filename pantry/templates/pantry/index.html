@@ -41,7 +41,7 @@
   </div>
 </form>
 
-<section id="results" aria-label="Bahan makanan" aria-live="polite">
+<section id="results" aria-label="Bahan makanan" aria-live="polite" data-add-url="{% url 'pantry:add' %}">
   {% include 'pantry/cards.html' %}
 </section>
 {% endblock %}

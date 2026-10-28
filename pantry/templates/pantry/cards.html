@@ -36,7 +36,7 @@
                         <div><dt>Kadaluarsa :</dt><dd>{{ item.expires_on|date:'j F Y' }}</dd></div>
                         <div><dt>Tanggal Masuk :</dt><dd>{{ item.stored_on|date:'j F Y' }}</dd></div>
                         <div><dt>Jenis :</dt><dd>{{ item.category }}</dd></div>
-                        <div><dt>Kuantitas :</dt><dd>{{ item.quantity }} {{ item.unit }}</dd></div>
+                        <div><dt>Kuantitas :</dt><dd data-pantry-quantity data-unit="{{ item.unit }}">{{ item.quantity }} {{ item.unit }}</dd></div>
                         <div><dt>Lokasi :</dt><dd>{{ item.location }}</dd></div>
                       </dl>
                       <div class="card-actions flex items-center justify-between">
