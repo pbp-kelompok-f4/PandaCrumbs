@@ -1,1 +1,33 @@
-{% extends 'base.html' %}{% block body_class %}auth-page{% endblock %}{% block content %}<section class="auth-card"><h1>Sign In</h1><form method="post">{% csrf_token %}<input type="hidden" name="next" value="{{ next }}">{% include 'components/fields.html' %}<button class="button green" type="submit">Sign In</button></form><p>Belum punya akun? <a href="{% url 'main:register' %}">Register now</a></p></section>{% endblock %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}auth-page{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'main/css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+  <h1>Sign In</h1>
+  
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}">
+    {% include 'components/fields.html' %}
+    <button class="button green" type="submit">Sign In</button>
+  </form>
+  
+  {% if sso_ui_enabled %}
+  <div class="auth-divider"><span>atau</span></div>
+  <form method="post" action="{% url 'ui_sso:login' %}">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}">
+    <button class="button sso-button" type="submit">Masuk dengan SSO UI</button>
+    <p class="sso-note">Gunakan akun Universitas Indonesia.</p>
+  </form>
+  {% endif %}
+  
+  <p>Belum punya akun? <a href="{% url 'main:register' %}">Register now</a></p>
+</section>
+{% endblock %}

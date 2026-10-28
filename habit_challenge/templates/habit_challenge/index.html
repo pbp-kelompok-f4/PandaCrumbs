@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Habit Challenge · PandaCrumbs{% endblock %}
+{% block body_class %}habit-page{% endblock %}
+{% block page_class %}habit-content{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'habit_challenge/habit.css' %}">{% endblock %}
+{% block content %}
+<script src="{% static 'habit_challenge/habit.js' %}" defer></script>
+<div id="habit-dashboard">{% include 'habit_challenge/dashboard.html' %}</div>
+<dialog id="habit-checkin-dialog" class="habit-dialog" aria-labelledby="habit-checkin-title">
+  <button type="button" class="habit-dialog-close" data-close-dialog aria-label="Tutup pencatatan tantangan">×</button>
+  <p class="habit-dialog-eyebrow">Langkah kecil, dampak baik</p>
+  <h2 id="habit-checkin-title">Catat tantangan</h2>
+  <p class="habit-dialog-description" id="habit-checkin-description"></p>
+  <div id="habit-dialog-form"></div>
+</dialog>
+<dialog id="habit-success-dialog" class="habit-dialog habit-success-dialog" aria-labelledby="habit-success-title" aria-describedby="habit-success-food habit-success-reward">
+  <button type="button" class="habit-dialog-close" data-close-dialog aria-label="Tutup konfirmasi">×</button>
+  <h2 id="habit-success-title">Poin berhasil ditambahkan!</h2>
+  <p id="habit-success-food" class="habit-success-food"></p>
+  <p id="habit-success-reward" class="habit-success-reward"></p>
+  <button type="button" class="habit-action habit-success-back" data-close-dialog autofocus>Lihat Habit Challenge</button>
+</dialog>
+{% endblock %}

@@ -1,155 +1,391 @@
 (() => {
-  const toast = (message) => {
+  const toast = (message, persistent = false) => {
     const box = document.querySelector('#feedback');
     box.textContent = message;
     box.hidden = false;
     clearTimeout(toast.timer);
-    toast.timer = setTimeout(() => { box.hidden = true; }, 6000);
+    if (!persistent) {
+      toast.timer = setTimeout(() => {
+        box.hidden = true;
+      }, 6000);
+    }
   };
+
   const request = async (url, options = {}) => {
-    const response = await fetch(url, { ...options, headers: { 'X-Requested-With': 'XMLHttpRequest', ...options.headers } });
-    if (response.redirected && new URL(response.url).pathname.includes('/accounts/login/')) {
+    const response = await fetch(url, {
+      ...options,
+      headers: { 'X-Requested-With': 'XMLHttpRequest', ...options.headers },
+    });
+    if (
+      response.redirected &&
+      new URL(response.url).pathname.includes('/accounts/login/')
+    ) {
       window.location.assign(response.url);
       throw new Error('Sesi berakhir. Silakan masuk kembali.');
     }
-    const data = await response.json().catch(() => { throw new Error('Respons tidak valid. Muat ulang halaman dan coba lagi.'); });
-    if (!response.ok) throw new Error(data.error || 'Perubahan gagal disimpan. Coba lagi.');
+    const data = await response.json().catch(() => {
+      throw new Error('Respons tidak valid. Muat ulang halaman dan coba lagi.');
+    });
+    if (!response.ok)
+      throw new Error(data.error || 'Perubahan gagal disimpan. Coba lagi.');
     return data;
   };
-  const menu = document.querySelector('.menu-toggle');
-  menu?.addEventListener('click', () => {
-    const open = menu.getAttribute('aria-expanded') !== 'true';
-    menu.setAttribute('aria-expanded', String(open));
-    document.querySelector('#site-navigation').classList.toggle('open', open);
-  });
-  const filter = document.querySelector('[data-filter-form]');
-  let activeRequest;
-  const renderIngredients = (params) => {
-    const container = document.querySelector('#active-ingredients');
-    if (!container) return;
-    container.replaceChildren();
-    [...new Set(params.getAll('ingredient'))].forEach(value => {
-      const button = document.createElement('button');
-      button.type = 'button'; button.className = 'pill selected'; button.dataset.removeIngredient = value;
-      button.append(document.createTextNode(value + ' '));
-      const icon = document.createElement('img');
-      icon.src = '/static/main/images/recipeDesign-imgButtonHapusNasi.svg'; icon.alt = 'Hapus';
-      const hidden = document.createElement('input');
-      hidden.type = 'hidden'; hidden.name = 'ingredient'; hidden.value = value;
-      button.append(icon, hidden); container.append(button);
+
+  const initNavigation = () => {
+    const menu = document.querySelector('.menu-toggle');
+    menu?.addEventListener('click', () => {
+      const open = menu.getAttribute('aria-expanded') !== 'true';
+      menu.setAttribute('aria-expanded', String(open));
+      document.querySelector('#site-navigation').classList.toggle('open', open);
     });
   };
-  const refresh = async (params, updateHistory = true) => {
-    if (!filter) return;
-    activeRequest?.abort();
-    activeRequest = new AbortController();
-    const target = document.getElementById(filter.dataset.target);
-    target.setAttribute('aria-busy', 'true');
-    const url = new URL(window.location.pathname, window.location.origin);
-    url.search = params.toString();
-    try {
-      const data = await request(url, { signal: activeRequest.signal });
-      target.innerHTML = data.html;
-      if (updateHistory) history.replaceState(null, '', url);
-      filter.querySelectorAll('[name=status]').forEach(b => b.classList.toggle('selected', b.value === (params.get('status') || '')));
+
+  const initFilters = () => {
+    const filter = document.querySelector('[data-filter-form]');
+    let activeRequest;
+    let latestParams = new URLSearchParams(
+      filter ? new FormData(filter) : undefined,
+    );
+    const selectedStatus = filter?.querySelector('[name=status].selected');
+    if (selectedStatus) latestParams.set('status', selectedStatus.value);
+
+    const renderIngredients = (params) => {
+      const container = document.querySelector('#active-ingredients');
+      if (!container) return;
+      container.replaceChildren();
+      [...new Set(params.getAll('ingredient'))].forEach((value) => {
+        const button = document.createElement('button');
+        button.type = 'submit';
+        button.name = 'remove_ingredient';
+        button.value = value;
+        button.className = 'pill selected';
+        button.dataset.removeIngredient = value;
+        button.append(document.createTextNode(value + ' '));
+        const icon = document.createElement('img');
+        icon.src = '/static/main/images/recipeDesign-imgButtonHapusNasi.svg';
+        icon.alt = 'Hapus';
+        const hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.name = 'ingredient';
+        hidden.value = value;
+        button.append(icon, hidden);
+        container.append(button);
+      });
+    };
+
+    const refresh = async (params = latestParams) => {
+      if (!filter) return;
+      activeRequest?.abort();
+      const controller = new AbortController();
+      activeRequest = controller;
+      latestParams = new URLSearchParams(params);
+      const target = document.getElementById(filter.dataset.target);
+      target.setAttribute('aria-busy', 'true');
+      const url = new URL(window.location.pathname, window.location.origin);
+      url.search = params.toString();
+      filter.querySelectorAll('[name=status]').forEach((button) => {
+        button.classList.toggle(
+          'selected', button.value === (params.get('status') || ''),
+        );
+      });
       if (filter.elements.tab) filter.elements.tab.value = params.get('tab') || 'all';
       renderIngredients(params);
-    } catch (error) {
-      if (error.name !== 'AbortError') toast(error.message);
-    } finally { target.removeAttribute('aria-busy'); }
-  };
-  filter?.addEventListener('submit', event => {
-    event.preventDefault();
-    const params = new URLSearchParams(new FormData(filter));
-    const submitter = event.submitter;
-    if (submitter?.name === 'ingredient') {
-      if (!params.getAll('ingredient').includes(submitter.value)) params.append('ingredient', submitter.value);
-    } else if (submitter?.name) params.set(submitter.name, submitter.value);
-    if (filter.querySelector('[name=status]') && submitter?.name !== 'status') {
-      params.set('status', new URLSearchParams(location.search).get('status') || '');
-    }
-    refresh(params);
-  });
-  document.querySelectorAll('[data-auto-submit]').forEach(element => element.addEventListener('change', () => filter.requestSubmit()));
-  document.addEventListener('click', event => {
-    const remove = event.target.closest('[data-remove-ingredient]');
-    const reset = event.target.closest('[data-reset-ingredients]');
-    const tab = event.target.closest('[data-tab]');
-    if (!filter || (!remove && !reset && !tab)) return;
-    event.preventDefault();
-    const params = new URLSearchParams(new FormData(filter));
-    if (remove) {
-      const remaining = params.getAll('ingredient').filter(value => value !== remove.dataset.removeIngredient);
-      params.delete('ingredient'); remaining.forEach(value => params.append('ingredient', value));
-    }
-    if (reset) params.delete('ingredient');
-    if (tab) params.set('tab', tab.dataset.tab);
-    refresh(params);
-  });
-  document.addEventListener('submit', async event => {
-    const form = event.target.closest('[data-action]');
-    if (!form) return;
-    event.preventDefault();
-    const button = form.querySelector('button');
-    if (button.disabled) return;
-    button.disabled = true;
-    try {
-      const data = await request(form.action, { method: 'POST', body: new FormData(form) });
-      if (filter) await refresh(new URLSearchParams(location.search), false);
-      else if (form.dataset.action === 'bookmark') {
-        form.elements.saved.value = data.saved ? '0' : '1';
-        button.setAttribute('aria-pressed', String(data.saved));
-        button.setAttribute('aria-label', data.saved ? 'Hapus bookmark' : 'Simpan resep');
-        button.replaceChildren();
-        const img = document.createElement('img');
-        img.src = '/static/main/images/recipeDesign-imgContainer' + (data.saved ? '1' : '2') + '.svg'; img.alt = '';
-        button.append(img, document.createTextNode(data.saved ? 'Tersimpan' : 'Simpan'));
+      try {
+        const data = await request(url, { signal: controller.signal });
+        if (activeRequest !== controller) return;
+        target.innerHTML = data.html;
+        history.replaceState(null, '', url);
+        document.querySelector('#feedback').hidden = true;
+        return true;
+      } catch (error) {
+        if (activeRequest !== controller || error.name === 'AbortError') return;
+        toast('Daftar belum diperbarui. Gunakan Cari atau muat ulang halaman.', true);
+        return false;
+      } finally {
+        if (activeRequest === controller) target.removeAttribute('aria-busy');
       }
-      toast(form.dataset.action === 'consume' ? 'Stok dikurangi. Bahan dengan stok nol otomatis dihapus.' : (data.saved ? 'Resep disimpan.' : 'Bookmark dihapus.'));
-    } catch (error) { toast(error.message); }
-    finally { button.disabled = false; }
-  });
-  document.querySelector('[data-product-search]')?.addEventListener('click', async event => {
-    const button = event.currentTarget;
-    const container = document.querySelector('#product-results');
-    const query = document.querySelector('#product-query').value.trim();
-    if (query.length < 2) { container.textContent = 'Masukkan minimal dua karakter.'; return; }
-    button.disabled = true; container.textContent = 'Mencari produk…';
-    const params = new URLSearchParams({ q: query, category: document.querySelector('#product-category').value.trim() });
-    try {
-      const data = await request(button.dataset.productSearch + '?' + params);
-      container.replaceChildren();
-      if (!data.products.length) container.textContent = 'Produk tidak ditemukan. Coba kata lain atau isi manual.';
-      data.products.forEach(product => {
-        const choice = document.createElement('button');
-        choice.type = 'button'; choice.className = 'product-result';
-        choice.textContent = product.name;
-        const category = document.createElement('small'); category.textContent = product.category; choice.append(category);
-        choice.addEventListener('click', () => {
-          const form = document.querySelector('[data-product-target]');
-          if (form.dataset.productTarget === 'pantry') {
-            form.elements.name.value = product.name;
-            form.elements.barcode.value = product.barcode;
-            form.elements.image_url.value = typeof product.image === 'string' && product.image.startsWith('https://') ? product.image : '';
-          } else if (form.dataset.productTarget === 'community') {
-              if (form.elements.title) form.elements.title.value = product.name;
-              if (form.elements.image_url) {
-                  form.elements.image_url.value = typeof product.image === 'string' && product.image.startsWith('https://') ? product.image : '';
-              }
-          }  else {
-            form.elements.ingredients.value += (form.elements.ingredients.value ? '\n' : '') + product.name;
-          }
-          toast('Produk dipilih. Lengkapi takaran, kategori, dan tanggal secara manual.');
+    };
+
+    filter?.addEventListener('click', (event) => {
+      const statusButton = event.target.closest('[data-status-filter]');
+      if (!statusButton) return;
+      event.preventDefault();
+      const params = new URLSearchParams(new FormData(filter));
+      params.set('status', statusButton.value);
+      refresh(params);
+    });
+
+    filter?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const params = new URLSearchParams(new FormData(filter));
+      const submitter = event.submitter;
+      if (submitter?.name === 'ingredient') {
+        if (!params.getAll('ingredient').includes(submitter.value))
+          params.append('ingredient', submitter.value);
+      } else if (submitter?.name === 'remove_ingredient') {
+        const remaining = params.getAll('ingredient')
+          .filter((value) => value !== submitter.value);
+        params.delete('ingredient');
+        remaining.forEach((value) => params.append('ingredient', value));
+      } else if (submitter?.name === 'reset_ingredients') {
+        params.delete('ingredient');
+      } else if (submitter?.name) params.set(submitter.name, submitter.value);
+      if (
+        filter.querySelector('[name=status]') &&
+        submitter?.name !== 'status'
+      ) {
+        params.set(
+          'status',
+          latestParams.get('status') || '',
+        );
+      }
+      refresh(params);
+    });
+
+    document
+      .querySelectorAll('[data-auto-submit]')
+      .forEach((element) =>
+        element.addEventListener('change', () => filter.requestSubmit()),
+      );
+
+    document.addEventListener('click', (event) => {
+      const tab = event.target.closest('[data-tab]');
+      if (!filter || !tab) return;
+      event.preventDefault();
+      const params = new URLSearchParams(new FormData(filter));
+      params.set('tab', tab.dataset.tab);
+      refresh(params);
+    });
+
+    return { filter, refresh };
+  };
+
+  const initActions = (filter, refresh) => {
+    const pending = new Set();
+    const removePantryCard = (card) => {
+      const urgencyGroup = card.closest('.pantry-urgency-group');
+      const locationGroup = card.closest('.pantry-location-group');
+      card.remove();
+
+      const urgencyCount = urgencyGroup?.querySelector('.pantry-urgency-heading > span');
+      if (urgencyCount) {
+        const count = urgencyGroup.querySelectorAll('.pantry-card').length;
+        urgencyCount.textContent = `${count} bahan`;
+        if (!count) urgencyGroup.remove();
+      }
+
+      const locationCount = locationGroup?.querySelector('.pantry-location-heading > span');
+      if (locationCount) {
+        const count = locationGroup.querySelectorAll('.pantry-card').length;
+        locationCount.textContent = `${count} bahan`;
+        if (!count) locationGroup.remove();
+      }
+
+      const results = document.querySelector('#results');
+      if (results && !results.querySelector('.pantry-card')) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-state';
+        const heading = document.createElement('h2');
+        heading.textContent = 'Belum ada bahan yang cocok';
+        const message = document.createElement('p');
+        message.textContent = 'Ubah filter atau tambahkan bahan makanan pertamamu.';
+        const link = document.createElement('a');
+        link.className = 'button';
+        link.href = results.dataset.addUrl;
+        link.textContent = '+ Tambah Bahan Makanan';
+        empty.append(heading, message, link);
+        results.replaceChildren(empty);
+      }
+    };
+
+    document.addEventListener('submit', async (event) => {
+      const form = event.target.closest('[data-action]');
+      if (!form) return;
+      event.preventDefault();
+      const button = form.querySelector('button');
+      if (button.disabled || pending.has(form.action)) return;
+      pending.add(form.action);
+      let changed = false;
+      const pantryMutation =
+        form.dataset.action === 'consume' ||
+        form.dataset.action === 'consume-all';
+      button.disabled = true;
+      try {
+        const data = await request(form.action, {
+          method: 'POST',
+          body: new FormData(form),
         });
-        container.append(choice);
+        changed = true;
+        if (pantryMutation) {
+          const card = form.closest('.pantry-card');
+          if (data.deleted) removePantryCard(card);
+          else {
+            const quantity = card?.querySelector('[data-pantry-quantity]');
+            if (quantity) {
+              quantity.textContent = `${data.quantity} ${quantity.dataset.unit}`;
+            }
+          }
+        }
+        if (!filter && form.dataset.action === 'bookmark') {
+          form.elements.saved.value = data.saved ? '0' : '1';
+          button.setAttribute('aria-pressed', String(data.saved));
+          button.setAttribute(
+            'aria-label',
+            data.saved ? 'Hapus bookmark' : 'Simpan resep',
+          );
+          button.replaceChildren();
+          const img = document.createElement('img');
+          img.src =
+            '/static/main/images/recipeDesign-imgContainer' +
+            (data.saved ? '1' : '2') +
+            '.svg';
+          img.alt = '';
+          button.append(
+            img,
+            document.createTextNode(data.saved ? 'Tersimpan' : 'Simpan'),
+          );
+        }
+        if (filter && !pantryMutation) {
+          document.querySelectorAll('[data-action] button').forEach((button) => {
+            button.disabled = true;
+          });
+          const refreshed = await refresh();
+          if (refreshed === false) {
+            toast(
+              'Perubahan tersimpan, tetapi daftar belum diperbarui. Gunakan Cari atau muat ulang halaman sebelum mengubah data lagi.',
+              true,
+            );
+          }
+          if (refreshed !== true) return;
+        }
+        toast(
+          form.dataset.action === 'consume'
+            ? 'Stok dikurangi. Bahan dengan stok nol otomatis dihapus.'
+            : form.dataset.action === 'consume-all'
+              ? 'Bahan ditandai habis dikonsumsi.'
+              : data.saved
+                ? 'Resep disimpan.'
+                : 'Bookmark dihapus.',
+        );
+      } catch (error) {
+        toast(error.message);
+      } finally {
+        pending.delete(form.action);
+        if (!changed || !filter || pantryMutation) button.disabled = false;
+      }
+    });
+  };
+
+  const initProductSearch = () => {
+    document
+      .querySelector('[data-product-search]')
+      ?.addEventListener('click', async (event) => {
+        const button = event.currentTarget;
+        const container = document.querySelector('#product-results');
+        const query = document.querySelector('#product-query').value.trim();
+        if (query.length < 2) {
+          container.textContent = 'Masukkan minimal dua karakter.';
+          return;
+        }
+        button.disabled = true;
+        container.textContent = 'Mencari produk…';
+        const params = new URLSearchParams({
+          q: query,
+          category: document.querySelector('#product-category').value.trim(),
+        });
+        try {
+          const data = await request(
+            button.dataset.productSearch + '?' + params,
+          );
+          container.replaceChildren();
+          if (!data.products.length)
+            container.textContent =
+              'Produk tidak ditemukan. Coba kata lain atau isi manual.';
+          data.products.forEach((product) => {
+            const choice = document.createElement('button');
+            choice.type = 'button';
+            choice.className = 'product-result';
+            choice.textContent = product.name;
+            const category = document.createElement('small');
+            category.textContent = product.category;
+            choice.append(category);
+            choice.addEventListener('click', () => {
+              const form = document.querySelector('[data-product-target]');
+              if (form.dataset.productTarget === 'pantry') {
+                form.elements.name.value = product.name;
+                form.elements.barcode.value = product.barcode;
+                form.elements.image_url.value =
+                  typeof product.image === 'string' &&
+                  product.image.startsWith('https://')
+                    ? product.image
+                    : '';
+                if (
+                  product.pantry_category &&
+                  [...form.elements.category.options].some(
+                    (option) => option.value === product.pantry_category,
+                  )
+                ) {
+                  form.elements.category.value = product.pantry_category;
+                }
+              } else if (form.dataset.productTarget === 'community') {
+                if (form.elements.title) form.elements.title.value = product.name;
+                if (form.elements.image_url) {
+                  form.elements.image_url.value =
+                    typeof product.image === 'string' &&
+                    product.image.startsWith('https://')
+                      ? product.image
+                      : '';
+                }
+              } else if (form.dataset.productTarget === 'audit') {
+                form.elements.food_name.value = product.name;
+                form.elements.food_name.focus();
+              } else {
+                form.elements.ingredients.value +=
+                  (form.elements.ingredients.value ? '\n' : '') + product.name;
+              }
+              toast(
+                form.dataset.productTarget === 'audit'
+                  ? 'Nama makanan terisi. Lengkapi jumlah, tanggal terbuang, alasan, dan perkiraan kerugian.'
+                  : form.dataset.productTarget === 'pantry'
+                    ? 'Nama, kategori, barcode, dan foto terisi jika tersedia. Lengkapi stok, lokasi, dan tanggal.'
+                    : form.dataset.productTarget === 'community'
+                      ? 'Nama dan foto donasi terisi jika tersedia. Lengkapi porsi, titik jemput, dan batas waktu.'
+                      : form.dataset.productTarget === 'recipe'
+                        ? 'Bahan ditambahkan. Lengkapi takaran dan langkah memasak.'
+                        : 'Produk dipilih. Lengkapi takaran, kategori, dan tanggal secara manual.',
+              );
+            });
+            container.append(choice);
+          });
+        } catch (error) {
+          container.textContent = error.message;
+        } finally {
+          button.disabled = false;
+        }
       });
-    } catch (error) { container.textContent = error.message; }
-    finally { button.disabled = false; }
-  });
-  document.addEventListener('error', event => {
-    if (event.target.tagName === 'IMG' && event.target.closest('.pantry-photo,.recipe-photo,.detail-photo')) {
-      const fallback = document.createElement('div'); fallback.className = 'no-photo'; fallback.textContent = 'Foto tidak tersedia';
-      event.target.replaceWith(fallback);
-    }
-  }, true);
+  };
+
+  const initImageFallback = () => {
+    document.addEventListener(
+      'error',
+      (event) => {
+        if (
+          event.target.tagName === 'IMG' &&
+          event.target.closest('.pantry-photo,.recipe-photo,.detail-photo')
+        ) {
+          const fallback = document.createElement('div');
+          fallback.className = 'no-photo';
+          fallback.textContent = 'Foto tidak tersedia';
+          event.target.replaceWith(fallback);
+        }
+      },
+      true,
+    );
+  };
+
+  initNavigation();
+  const { filter, refresh } = initFilters();
+  initActions(filter, refresh);
+  initProductSearch();
+  initImageFallback();
 })();

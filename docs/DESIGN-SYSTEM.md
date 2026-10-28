@@ -22,7 +22,7 @@ Komponen bersama: header/navigation pill, status badge, tombol primary/outline, 
 ## Pemetaan aset
 
 - Logo `pantryDesign-imgCopySvg12.png`: header, 58 × 67 px desktop.
-- Placeholder `pantryDesign-imgImage1.png`: tiga kartu pantry seed, mengikuti crop Figma.
+- Placeholder `recipeDesign-imgImage1.png`: tiga kartu pantry seed, mengikuti crop Figma.
 - `recipeDesign-imgImage1.png`: placeholder kartu Nasi Goreng Sayur; file berbeda dari foto pada halaman detail, sesuai frame sumber.
 - `recipeDesign-imgTelurDadarWortel.png`, `recipeDesign-imgPudingRotiTawar.png`: foto bulat resep, diameter luar 208 px.
 - `recipeDesign-imgRectangle21.svg`: bingkai tombol tambah resep, ukuran intrinsik 250 × 58 px.

@@ -4,7 +4,9 @@
 <nav id="site-navigation" class="site-nav flex items-center" aria-label="Navigasi utama">
 <a href="{% url 'pantry:index' %}" {% if active == 'pantry' %}aria-current="page"{% endif %}>Pantry</a>
 <a href="{% url 'recipes:index' %}" {% if active == 'recipes' %}aria-current="page"{% endif %}>Recipe</a>
-<span class="nav-pending" title="Modul belum tersedia">Waste Audit</span><a href="{% url 'community:index' %}" {% if active == 'community' %}aria-current="page"{% endif %}>Community</a><span class="nav-pending" title="Modul belum tersedia">Habit Challenge</span>
+<a href="{% url 'waste_audit:index' %}" {% if active == 'waste_audit' %}aria-current="page"{% endif %}>Waste Audit</a>
+<a href="{% url 'community:index' %}" {% if active == 'community' %}aria-current="page"{% endif %}>Community</a>
+<a href="{% url 'habit_challenge:index' %}" {% if active == 'habit_challenge' %}aria-current="page"{% endif %}>Habit Challenge</a>
 </nav><div class="header-auth flex items-center">
 {% if user.is_authenticated %}<details class="account-menu"><summary><span class="avatar">{{ user.username|first|upper }}</span><span class="sr-only">Menu akun {{ user.username }}</span>⌄</summary><div class="account-popover"><strong>{{ user.username }}</strong><a href="{% url 'pantry:index' %}">Pantry saya</a><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button type="submit">Keluar</button></form></div></details>
 {% else %}<a class="sign-in" href="{% url 'login' %}">Sign in</a><a class="register" href="{% url 'main:register' %}">Register</a>{% endif %}

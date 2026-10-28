@@ -1,0 +1,185 @@
+.habit-page {
+  --habit-orange: #c97956;
+  --habit-olive: #54613e;
+  --habit-gradient: linear-gradient(105deg, #c97a57 0%, #d9e3c5 100%);
+  background: #f9f6ef;
+}
+.habit-content { max-width: 1380px; width: calc(100% - 80px); margin-top: 40px; }
+.habit-title { font-size: clamp(40px, 5vw, 72px); margin: 0 12px 50px; letter-spacing: -2.5px; }
+.habit-profile { display: grid; grid-template-columns: 28% minmax(0, 1fr); align-items: center; gap: 28px; padding: 30px 36px 30px 30px; border-radius: 26px; background: var(--habit-gradient); min-height: 440px; }
+.habit-mascot { display: grid; place-items: center; }
+.habit-mascot img { width: min(100%, 330px); height: auto; }
+.habit-stats { min-width: 0; }
+.habit-name { display: flex; gap: 32px; align-items: center; margin-bottom: 27px; }
+.habit-name h2 { font: 700 48px/1.2 Poppins, Inter, sans-serif; color: #49443e; }
+.habit-level { border-radius: 40px; padding: 17px 30px; background: #fff; color: #554942; box-shadow: inset 0 2px 3px #0002; font-weight: 700; font-size: 34px; white-space: nowrap; }
+.habit-points { font: 600 38px/1.4 Poppins, Inter, sans-serif; color: var(--habit-olive); margin-bottom: 18px; }
+.habit-progress { appearance: none; display: block; height: 5px; width: 100%; border: 0; border-radius: 8px; overflow: hidden; background: #53623d26; color: #75805a; }
+.habit-progress::-webkit-progress-bar { background: #53623d26; border-radius: 8px; }
+.habit-progress::-webkit-progress-value { background: #75805a; border-radius: 8px; }
+.habit-progress::-moz-progress-bar { background: #75805a; border-radius: 8px; }
+.habit-progress-label { font-size: 21px; color: #4d573b; margin-top: 8px; }
+.habit-streak { display: flex; align-items: center; gap: 26px; margin-top: 34px; padding: 12px 30px; min-height: 122px; border-radius: 26px; background: #fafafaef; }
+.habit-flame { font-size: 76px; line-height: 1.2; }
+.habit-streak p { font: 600 38px/1.25 Poppins, Inter, sans-serif; color: #b86443; }
+.habit-streak p span { display: block; font: 400 14px/1.5 Inter, sans-serif; color: #685b52; margin-top: 5px; }
+.habit-challenges { margin-top: 62px; }
+.habit-section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; margin-bottom: 24px; }
+.habit-section-heading h2 { font-size: 50px; letter-spacing: -1.5px; }
+.habit-section-heading > span { font-size: 14px; color: #656e52; }
+.habit-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; align-items: start; }
+.habit-card { border-radius: 40px; background: #fcf7f4; box-shadow: 0 5px 13px #29251e30; overflow: hidden; }
+.habit-card h3 { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 0; min-height: 80px; padding: 20px 32px; background: var(--habit-gradient); font: 600 25px/1.4 Poppins, Inter, sans-serif; color: #fff; }
+.habit-card h3 > span { display: grid; place-items: center; flex: 0 0 28px; height: 28px; border-radius: 50%; background: #fff; color: var(--habit-olive); font-size: 18px; }
+.habit-card-body { padding: 16px 32px 24px; }
+.habit-card-subtitle { font: 600 17px/1.5 Poppins, Inter, sans-serif; color: #5c5956; }
+.habit-tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0 8px; min-height: 40px; }
+.habit-tags span { display: inline-flex; align-items: center; padding: 6px 14px; background: #fff; border: 1px solid #e1dedb; box-shadow: inset 0 1px 2px #0002; border-radius: 24px; color: #564941; font-weight: 600; font-size: 15px; max-width: 100%; overflow-wrap: anywhere; }
+.habit-card-hint { font-size: 12px; line-height: 1.5; color: #75685e; min-height: 36px; }
+.habit-reward { margin: 9px 0; color: #5e6c43; font-weight: 700; font-size: 12px; }
+.habit-action { display: flex; align-items: center; justify-content: center; border: 0; width: 100%; min-height: 40px; padding: 9px 12px; border-radius: 24px; background: var(--habit-orange); color: #fff; font-size: 15px; font-weight: 600; line-height: 1.4; text-align: center; cursor: pointer; }
+.habit-action:hover { background: #b56849; }
+.habit-checkin { margin-top: 10px; }
+.habit-checkin summary:not(.habit-action) { color: #5f694c; cursor: pointer; font-size: 12px; text-align: center; padding: 6px 0; }
+.habit-checkin summary.habit-action { list-style: none; }
+.habit-checkin summary.habit-action::-webkit-details-marker { display: none; }
+.habit-form { display: grid; gap: 10px; margin-top: 16px; padding-top: 14px; border-top: 1px solid #ded8ce; font-size: 13px; }
+.habit-form > label { font-weight: 600; }
+.habit-form input[type=text] { width: 100%; min-width: 0; border: 1px solid #b9b0a5; border-radius: 12px; padding: 12px; background: #fff; }
+.habit-form select { width: 100%; min-width: 0; padding: 10px; border: 1px solid #b9b0a5; border-radius: 12px; background: #fff; }
+.habit-form-errors { color: #a13333; line-height: 1.5; }
+.habit-form input:focus-visible { outline: 3px solid #75805a; outline-offset: 2px; }
+.habit-confirm { display: flex; gap: 10px; align-items: flex-start; line-height: 1.5; cursor: pointer; }
+.habit-confirm input { width: 18px; height: 18px; flex-shrink: 0; accent-color: #647247; margin-top: 1px; }
+.habit-form .errorlist { color: #a13333; margin: 0; padding-left: 18px; }
+.habit-completed { display: grid; gap: 5px; margin-top: 12px; padding: 10px 12px; border-radius: 14px; background: #e8eddc; color: #4f6038; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.habit-daily-note { margin: 24px 0 0; color: #756b60; font-size: 13px; line-height: 1.7; text-align: center; }
+.habit-history { margin-top: 52px; }
+.habit-plans { margin-top: 52px; }
+.habit-plans .habit-section-heading h2 { font-size: 32px; letter-spacing: -.5px; }
+.habit-plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 20px; }
+.habit-plan { background: #fffcf7; border: 1px solid #dedfd0; border-radius: 24px; padding: 24px; overflow-wrap: anywhere; }
+.habit-plan h3 { font: 600 21px/1.4 Poppins, sans-serif; margin: 16px 0 10px; }
+.habit-plan p { font-size: 13px; color: #6a665b; line-height: 1.8; }
+.habit-plan-top, .habit-plan-actions { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: #53643b; }
+.habit-plan-top > span:last-child { background: #e6ecd8; padding: 3px 10px; border-radius: 12px; }
+.habit-plan progress { width: 100%; height: 7px; accent-color: #75805a; margin-top: 20px; }
+.habit-plan-actions { justify-content: flex-start; margin-top: 20px; font-size: 13px; font-weight: 600; }
+.habit-plan-actions a { text-decoration: underline; text-underline-offset: 4px; }
+.habit-plan-actions a:last-child { color: #994b39; }
+.habit-history .habit-section-heading h2 { font-size: 32px; letter-spacing: -.5px; }
+.habit-history ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid #e3ded4; }
+.habit-history li { display: flex; align-items: center; gap: 16px; padding: 20px 4px; border-bottom: 1px solid #e3ded4; }
+.habit-history li > div { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.habit-history li strong { font-size: 14px; }
+.habit-history li p { font-size: 13px; color: #72695e; margin-top: 5px; line-height: 1.6; }
+.habit-history-check { display: grid; place-items: center; width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: #e3e9d7; color: #566742; }
+.habit-history-points { color: #566742; font-size: 14px; font-weight: 600; white-space: nowrap; }
+.habit-empty { display: flex; align-items: center; gap: 20px; padding: 28px; border: 1px dashed #c6cbb5; border-radius: 22px; color: #5e654d; }
+.habit-empty > span { font-size: 32px; }
+.habit-empty strong { font-size: 15px; }
+.habit-empty p { margin-top: 6px; font-size: 14px; line-height: 1.6; }
+.habit-content { max-width: 1160px; }
+.habit-title { font-size: clamp(36px, 4vw, 50px); line-height: 1.14; letter-spacing: -1.2px; margin: 0 0 28px; }
+.habit-section-heading h2 { font-size: 32px; letter-spacing: -.5px; }
+.habit-card h3 { min-height: 58px; padding: 14px 24px; font-size: 19px; }
+.habit-card-body { padding: 16px 24px 22px; }
+.habit-action { min-height: 44px; padding: 10px 14px; font-size: 13px; }
+.habit-checkin summary:not(.habit-action) { min-height: 44px; padding: 10px 8px; }
+.habit-form input[type=text], .habit-form select { min-height: 46px; padding: 11px 14px; }
+.habit-plan-actions a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px; }
+@media (max-width: 1150px) {
+  .habit-content { width: calc(100% - 48px); }
+  .habit-profile { grid-template-columns: 27% minmax(0, 1fr); padding: 28px; gap: 20px; }
+  .habit-card h3 { font-size: 20px; padding: 20px; }
+  .habit-card-body { padding: 16px 20px 24px; }
+  .habit-grid { gap: 20px; }
+  .habit-points, .habit-streak p { font-size: 30px; }
+}
+@media (max-width: 850px) {
+  .habit-profile { min-height: 360px; }
+  .habit-name h2 { font-size: 36px; }
+  .habit-name { gap: 16px; margin-bottom: 22px; }
+  .habit-level { font-size: 24px; padding: 12px 20px; }
+  .habit-streak { padding: 14px 20px; gap: 16px; min-height: 92px; margin-top: 24px; }
+  .habit-flame { font-size: 48px; }
+  .habit-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .habit-section-heading h2 { font-size: 40px; }
+}
+@media (max-width: 560px) {
+  .habit-content { width: calc(100% - 32px); margin-top: 32px; }
+  .habit-title { margin: 0 0 28px; font-size: 40px; letter-spacing: -1.5px; }
+  .habit-profile { position: relative; display: block; padding: 24px 20px; border-radius: 24px; min-height: 0; }
+  .habit-mascot { position: absolute; right: 18px; top: 14px; width: 108px; }
+  .habit-name { align-items: flex-start; flex-direction: column; gap: 10px; min-height: 108px; padding-right: 110px; margin-bottom: 18px; }
+  .habit-name h2 { font-size: 32px; }
+  .habit-level { padding: 8px 15px; font-size: 18px; }
+  .habit-points { font-size: 28px; margin-bottom: 12px; }
+  .habit-progress-label { font-size: 15px; }
+  .habit-streak { border-radius: 18px; padding: 14px; gap: 12px; }
+  .habit-streak p { font-size: 24px; }
+  .habit-streak p span { font-size: 11px; }
+  .habit-flame { font-size: 44px; }
+  .habit-challenges { margin-top: 36px; }
+  .habit-section-heading { flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .habit-section-heading h2 { font-size: 34px; }
+  .habit-section-heading > span { font-size: 12px; }
+  .habit-grid { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .habit-card { border-radius: 28px; }
+  .habit-card h3 { padding: 18px 24px; min-height: 72px; font-size: 23px; }
+  .habit-card-body { padding: 18px 24px 24px; }
+  .habit-history { margin-top: 36px; }
+  .habit-empty { padding: 20px; }
+}
+
+.habit-content { max-width: 1160px; }
+.habit-action { min-height: 44px; }
+.habit-modal-open { overflow: hidden; }
+.habit-dialog {
+  width: min(620px, calc(100% - 32px));
+  max-height: calc(100dvh - 40px);
+  margin: auto;
+  padding: 42px;
+  border: 0;
+  border-radius: 32px;
+  background: #fcf7f4;
+  color: var(--ink);
+  box-shadow: 0 24px 80px #0004;
+  overflow-y: auto;
+}
+.habit-dialog::backdrop { background: #24221fd1; backdrop-filter: blur(3px); }
+.habit-dialog-close {
+  position: absolute; top: 16px; right: 16px;
+  display: grid; place-items: center;
+  width: 44px; height: 44px; padding: 0;
+  border: 0; border-radius: 50%; background: transparent;
+  color: #3d3935; font-size: 34px; line-height: 1;
+}
+.habit-dialog-close:hover { background: #eee6df; }
+.habit-dialog-eyebrow { color: #6e7e55; font-size: 12px; font-weight: 700; letter-spacing: .06em; margin: 6px 36px 12px 0; }
+.habit-dialog h2 { font: 600 30px/1.3 Poppins, Inter, sans-serif; padding-right: 22px; }
+.habit-dialog-description { margin-top: 10px; color: #706357; font-size: 16px; }
+.habit-dialog .habit-form { margin-top: 24px; padding-top: 24px; gap: 14px; font-size: 16px; }
+.habit-dialog .habit-form input[type=text], .habit-dialog .habit-form select { min-height: 54px; padding: 14px 16px; border-radius: 16px; font-size: 16px; }
+.habit-dialog .habit-confirm { margin-top: 8px; font-size: 15px; gap: 12px; }
+.habit-dialog .habit-confirm input { width: 22px; height: 22px; }
+.habit-dialog .habit-action { min-height: 52px; font-size: 16px; }
+.habit-dialog .habit-form-errors:empty { display: none; }
+.habit-dialog .habit-form > button { margin-top: 10px; }
+.habit-success-dialog { width: min(780px, calc(100% - 32px)); padding: 94px 54px 42px; border-radius: 48px; text-align: center; }
+.habit-success-dialog h2 { padding: 0; font-size: clamp(25px, 3vw, 36px); color: #3d3935; }
+.habit-success-food { display: inline-block; max-width: 100%; margin-top: 42px; padding: 16px 28px; border-radius: 32px; background: #dbe3c8; box-shadow: inset 0 2px 5px #0002; color: #564a40; font-size: 24px; font-weight: 700; line-height: 1.45; overflow-wrap: anywhere; }
+.habit-success-reward { margin-top: 18px; color: #6e7e55; font: 600 19px/1.5 Poppins, Inter, sans-serif; }
+.habit-success-back { margin-top: 72px; min-height: 56px !important; font-size: 21px !important; }
+@media (max-width: 560px) {
+  .habit-dialog { padding: 30px 22px 24px; border-radius: 26px; max-height: calc(100dvh - 24px); }
+  .habit-dialog h2 { font-size: 25px; }
+  .habit-dialog-close { top: 10px; right: 10px; }
+  .habit-success-dialog { padding-top: 70px; }
+  .habit-success-food { margin-top: 28px; padding: 14px 20px; font-size: 20px; border-radius: 24px; }
+  .habit-success-reward { font-size: 16px; }
+  .habit-success-back { margin-top: 40px; font-size: 17px !important; }
+  .habit-title { font-size: 37px; margin: 0 0 22px; }
+  .habit-card h3 { min-height: 58px; padding: 14px 18px; font-size: 19px; }
+  .habit-card-body { padding: 16px 18px 22px; }
+}

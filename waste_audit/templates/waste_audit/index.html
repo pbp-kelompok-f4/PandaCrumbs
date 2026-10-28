@@ -1,0 +1,22 @@
+{% extends 'waste_audit/base.html' %}
+{% block title %}Food Waste Audit · PandaCrumbs{% endblock %}
+{% block audit_content %}
+<header class="audit-heading">
+  <div>
+    <h1>Food Waste Audit</h1>
+    <p class="audit-intro">Lihat apa yang terbuang, kenapa, dan berapa nilainya.</p>
+  </div>
+  <div class="audit-heading-action">
+    <a class="button audit-add" data-audit-open href="{% url 'waste_audit:add' %}">{% include 'waste_audit/partials/icon.html' with name='plus' %} Tambah catatan</a>
+  </div>
+</header>
+<p id="audit-filter-status" class="audit-filter-status" role="status" aria-live="polite"></p>
+<div id="audit-results" class="audit-results">
+  {% include 'waste_audit/results.html' %}
+</div>
+<dialog id="audit-dialog" class="audit-dialog" aria-label="Catatan makanan terbuang">
+  <div class="audit-dialog-bar"><button type="button" class="button audit-secondary audit-dialog-close" data-audit-close aria-label="Tutup formulir"><span aria-hidden="true">&times;</span></button></div>
+  <p id="audit-dialog-status" class="audit-dialog-status" role="status" aria-live="polite"></p>
+  <div id="audit-dialog-content"></div>
+</dialog>
+{% endblock %}

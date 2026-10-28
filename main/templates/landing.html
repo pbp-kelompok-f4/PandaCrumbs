@@ -1,1 +1,20 @@
-{% extends 'base.html' %}{% load static %}{% block body_class %}landing{% endblock %}{% block page_class %}hero{% endblock %}{% block content %}<div class="hero-heading"><h1>Kurangi <span>Food Waste</span>,<br>Mulai dari Dapurmu</h1><img class="hero-panda" src="{% static 'main/images/1-2-imgCopySvg12.png' %}" alt="PandaCrumbs" width="248" height="285"></div><p><strong>PandaCrumbs</strong> membantu mahasiswa dan anak kos mengelola makanan lebih cerdas. Mulai dari pantry tracker hingga community sharing, semuanya dalam satu platform.</p><a class="button green" href="{% if user.is_authenticated %}{% url 'pantry:index' %}{% else %}{% url 'main:register' %}{% endif %}">Mulai Gratis Sekarang</a>{% endblock %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}landing{% endblock %}
+{% block page_class %}hero{% endblock %}
+
+{% block content %}
+<div class="hero-heading">
+  <h1>Kurangi <span>Food Waste</span>,<br>Mulai dari Dapurmu</h1>
+  <img class="hero-panda" src="{% static 'main/images/pantryDesign-imgCopySvg12.png' %}" alt="PandaCrumbs" width="248" height="285">
+</div>
+
+<p>
+  <strong>PandaCrumbs</strong> membantu mahasiswa dan anak kos mengelola makanan lebih cerdas. Mulai dari pantry tracker hingga community sharing, semuanya dalam satu platform.
+</p>
+
+<a class="button green" href="{% if user.is_authenticated %}{% url 'pantry:index' %}{% else %}{% url 'main:register' %}{% endif %}">
+  Mulai Gratis Sekarang
+</a>
+{% endblock %}

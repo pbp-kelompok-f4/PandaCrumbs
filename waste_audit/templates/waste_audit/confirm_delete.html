@@ -1,0 +1,7 @@
+{% extends 'waste_audit/base.html' %}
+{% load audit_format %}
+{% block title %}Hapus Catatan · Food Waste Audit{% endblock %}
+{% block audit_content %}
+<a class="audit-back" href="{% url 'waste_audit:index' %}">{% include 'waste_audit/partials/icon.html' with name='back' %} Kembali ke riwayat</a>
+{% include 'waste_audit/partials/delete_form.html' %}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'waste_audit/base.html' %}
+{% load static %}
+{% block title %}{% if entry %}Ubah{% else %}Tambah{% endif %} Catatan · Food Waste Audit{% endblock %}
+{% block audit_content %}
+<a class="audit-back" href="{% url 'waste_audit:index' %}">{% include 'waste_audit/partials/icon.html' with name='back' %} Kembali ke riwayat</a>
+<div class="audit-form-layout">
+  {% include 'waste_audit/partials/entry_form.html' %}
+  <aside class="audit-form-aside">
+    <img src="{% static 'main/images/pantryDesign-imgCopySvg12.png' %}" alt="" width="140" height="162">
+    <p class="audit-eyebrow">Sedikit panduan</p>
+    <h2>Perkiraan<br>sudah cukup.</h2>
+    <p>Tidak perlu tahu harga persisnya. Isi perkiraan <strong>total nilai makanan yang terbuang</strong>, atau kosongkan dulu jika belum tahu.</p>
+    <div class="audit-aside-note"><span>CONTOH</span><p>Dua potong roti terbuang, masing-masing sekitar Rp2.000. Isi kerugian <strong>Rp4.000</strong>.</p></div>
+    <p class="audit-private">{% include 'waste_audit/partials/icon.html' with name='lock' %} Catatan ini hanya milikmu.</p>
+  </aside>
+</div>
+{% endblock %}
