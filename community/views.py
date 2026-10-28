@@ -104,8 +104,8 @@ def offer_edit(request, pk):
     if request.method == "POST" and form.is_valid():
         updated_offer = form.save(commit=False)
         diff = updated_offer.portions - offer.portions
-        updated_offer.remaining.portions = max(0, offer.remaining_portions + diff)
-        if updated_offer.remaining.portions > 0 and updated_offer.status == "FULLY_CLAIMED":
+        updated_offer.remaining_portions = max(0, offer.remaining_portions + diff)
+        if updated_offer.remaining_portions > 0 and updated_offer.status == "FULLY_CLAIMED":
             updated_offer.status = "AVAILABLE"
         updated_offer.save()
         messages.success(request, "Perubahan penawaran berhasil disimpan.")
@@ -119,7 +119,7 @@ def offer_delete(request, pk):
     if offer.donor != request.user:
         raise PermissionDenied("Anda tidak memiliki izin untuk menghapus penawaran ini.")
 
-    if offer.claim.exists():
+    if offer.claims.exists():
         messages.error(request, "Penawaran tidak dapat dihapus karena sudah memiliki klaim dari penerima.")
         return redirect("community:detail", pk=offer.pk)
 
