@@ -27,6 +27,10 @@ class FoodWasteLogForm(forms.ModelForm):
 
 
 class AuditFilterForm(forms.Form):
+    q = forms.CharField(
+        label="Cari makanan", required=False, max_length=120,
+        widget=forms.TextInput(attrs={"placeholder": "Cari nama makanan, misalnya ayam"}),
+    )
     start_date = forms.DateField(
         label="Dari tanggal", required=False,
         widget=forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),

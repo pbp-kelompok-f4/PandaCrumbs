@@ -3,7 +3,7 @@
 <section class="audit-summary" aria-label="Ringkasan catatan">
   <div class="audit-stat audit-stat-loss">
     <span class="audit-stat-art">{% include 'waste_audit/partials/icon.html' with name='wallet' %}</span>
-    <div class="audit-summary-kicker"><h2>Perkiraan kerugian</h2><span>{% if filter_form.start_date.value or filter_form.end_date.value or filter_form.reason.value %}Hasil filter{% else %}Semua catatan{% endif %}</span></div>
+    <div class="audit-summary-kicker"><h2>Perkiraan kerugian</h2><span>{% if filter_form.start_date.value or filter_form.end_date.value or filter_form.reason.value or filter_form.cleaned_data.q %}Hasil filter{% else %}Semua catatan{% endif %}</span></div>
     {% if summary.valued_entries %}
       <p class="audit-loss-value">{{ summary.estimated_loss|rupiah }}</p>
       <p class="audit-stat-note">Nilai diisi pada <strong>{{ summary.valued_entries }} dari {{ summary.total_entries }}</strong> catatan.</p>
@@ -29,7 +29,7 @@
 
 <section class="audit-history" aria-labelledby="audit-history-title">
   <header class="audit-section-heading">
-    <div><h2 id="audit-history-title">Riwayat makanan terbuang</h2><p class="audit-section-intro">Lihat kembali catatanmu atau cari berdasarkan tanggal dan alasan.</p></div>
+    <div><h2 id="audit-history-title">Riwayat makanan terbuang</h2><p class="audit-section-intro">Lihat kembali catatanmu atau cari berdasarkan nama makanan, tanggal, dan alasan.</p></div>
     {% if filters_valid %}<span class="audit-record-count">{{ summary.total_entries }} catatan</span>{% endif %}
   </header>
   {% include 'waste_audit/partials/filters.html' %}
@@ -66,9 +66,9 @@
   {% else %}
     <div class="audit-empty">
       <img src="{% static 'main/images/pantryDesign-imgCopySvg12.png' %}" alt="" width="88" height="102">
-      {% if filter_form.start_date.value or filter_form.end_date.value or filter_form.reason.value %}
+      {% if filter_form.start_date.value or filter_form.end_date.value or filter_form.reason.value or filter_form.cleaned_data.q %}
         <h3>Belum ada catatan yang cocok.</h3>
-        <p>Coba rentang tanggal atau alasan lain untuk melihat catatanmu.</p>
+        <p>Coba nama makanan, rentang tanggal, atau alasan lain untuk melihat catatanmu.</p>
         <a class="button audit-secondary" data-audit-reset href="{% url 'waste_audit:index' %}">Reset filter</a>
       {% else %}
         <h3>Mulai dari satu catatan.</h3>

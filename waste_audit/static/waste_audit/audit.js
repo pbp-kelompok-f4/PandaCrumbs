@@ -193,7 +193,7 @@
         });
         mutating = false;
         document.querySelector('#audit-dialog')?.close();
-        historyLoaded = await refreshResults(location.href);
+        historyLoaded = await refreshResults(location.href, 'audit-filter-submit');
         if (historyLoaded) {
           const filter = document.querySelector('[data-audit-filter]');
           const filtered = [...new FormData(filter).values()].some(Boolean);

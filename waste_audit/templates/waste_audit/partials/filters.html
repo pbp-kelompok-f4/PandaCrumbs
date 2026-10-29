@@ -1,4 +1,8 @@
 <form class="audit-filters" method="get" action="{% url 'waste_audit:index' %}" data-audit-filter aria-label="Filter catatan makanan terbuang">
+  <div class="audit-filter-field audit-search-field">
+    <label for="{{ filter_form.q.id_for_label }}">Cari makanan</label>
+    {{ filter_form.q }}
+  </div>
   <div class="audit-filter-field">
     <label for="{{ filter_form.start_date.id_for_label }}">Dari tanggal</label>
     {{ filter_form.start_date }}
