@@ -303,3 +303,5 @@
   .audit-dialog .audit-form-panel, .audit-dialog .audit-delete-panel { padding: 12px 20px 24px; }
   .audit-dialog-status { margin: 12px 20px; }
 }
+
+.audit-page .audit-search-field { grid-column: 1 / -1; }

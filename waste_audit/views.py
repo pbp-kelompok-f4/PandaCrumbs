@@ -1,3 +1,5 @@
+import re
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Min, Sum
@@ -27,6 +29,10 @@ def index(request):
             entries = entries.filter(wasted_on__lte=filters["end_date"])
         if filters["reason"]:
             entries = entries.filter(reason=filters["reason"])
+        # Match every whole word, in any order. Escape user input as literal text.
+        for word in filters["q"].split():
+            pattern = r"(^|\W)" + re.escape(word) + r"(\W|$)"
+            entries = entries.filter(food_name__iregex=pattern)
     else:
         entries = entries.none()
 
