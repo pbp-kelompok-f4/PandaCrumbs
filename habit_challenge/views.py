@@ -32,6 +32,17 @@ CHALLENGES = (
 
 def dashboard_context(user, *, invalid_kind=None, invalid_form=None):
     today = timezone.localdate()
+
+    from .services import sync_community_posts
+    sync_community_posts(user, today)
+
+    completions = Completion.objects.filter(user=user)
+    done = {
+        entry.kind: entry
+        for entry in completions.filter(completed_on=today)
+    }
+    
+    today = timezone.localdate()
     from .services import award_community_post
     for offer in FoodOffer.objects.filter(donor=user, created_at__date=today):
         award_community_post(offer)

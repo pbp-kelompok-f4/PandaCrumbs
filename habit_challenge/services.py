@@ -34,3 +34,42 @@ def award_community_post(offer):
         defaults={"food": offer.title[:120], "points": 15},
     )
     return created
+
+
+def sync_community_posts(user, today=None):
+    from datetime import datetime, time, timedelta
+    from django.utils import timezone
+    from community.models import FoodOffer
+    from .models import Completion
+
+    today = today or timezone.localdate()
+    tz = timezone.get_current_timezone()
+
+    start = timezone.make_aware(
+        datetime.combine(today, time.min), tz
+    )
+    end = timezone.make_aware(
+        datetime.combine(today + timedelta(days=1), time.min), tz
+    )
+
+    offer = FoodOffer.objects.filter(
+        donor=user,
+        created_at__gte=start,
+        created_at__lt=end
+    ).order_by("created_at", "pk").first()
+
+    if offer is None:
+        return False
+
+    _, created = Completion.objects.get_or_create(
+        user=user,
+        kind="share",
+        completed_on=today,
+        defaults={
+            "food": offer.title[:120],
+            "points": 15,
+        },
+    )
+
+    return created
+
