@@ -9,6 +9,7 @@ from django.core.cache import cache
 SEARCH_URL = "https://world.openfoodfacts.org/cgi/search.pl"
 CACHE_SECONDS = 3600
 SEARCH_INTERVAL_SECONDS = 7
+SEARCH_TIMEOUT = (5, 20)
 
 
 class ProductSearchError(Exception):
@@ -74,7 +75,8 @@ def search_products(query, category=""):
         return products
     if not cache.add("off-search-gate", True, SEARCH_INTERVAL_SECONDS):
         raise ProductSearchError(
-            "Tunggu beberapa detik sebelum mencari produk lain.", 429
+            "Pencarian Open Food Facts baru saja digunakan. Tunggu beberapa detik sebelum mencoba lagi.",
+            429,
         )
 
     params = {
@@ -92,8 +94,20 @@ def search_products(query, category=""):
             SEARCH_URL,
             params=params,
             headers={"User-Agent": settings.OFF_USER_AGENT},
-            timeout=(3, 8),
+            timeout=SEARCH_TIMEOUT,
         )
+        if response.status_code == 429:
+            retry_after = str(response.headers.get("Retry-After", "")).strip()
+            wait = (
+                f" sekitar {retry_after} detik"
+                if retry_after.isdigit()
+                else " beberapa saat"
+            )
+            raise ProductSearchError(
+                "Open Food Facts sedang membatasi pencarian. "
+                f"Coba lagi{wait} atau isi nama produk secara manual.",
+                429,
+            )
         response.raise_for_status()
         payload = response.json()
         if not isinstance(payload, dict) or not isinstance(
@@ -114,6 +128,14 @@ def search_products(query, category=""):
                     "image": product.get("image_front_small_url", ""),
                 }
             )
+    except ProductSearchError:
+        raise
+    except requests.Timeout as error:
+        raise ProductSearchError(
+            "Open Food Facts terlalu lama merespons. Coba lagi beberapa saat "
+            "atau isi nama produk secara manual.",
+            503,
+        ) from error
     except (requests.RequestException, ValueError, TypeError) as error:
         raise ProductSearchError(
             "Open Food Facts belum dapat dihubungi. Isi data secara manual atau coba lagi nanti.",

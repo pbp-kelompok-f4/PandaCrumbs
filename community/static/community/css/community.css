@@ -1,4 +1,27 @@
 /* Layout Grid Katalog */
+.community-body {
+    background: #faf6ee;
+    isolation: isolate;
+}
+
+.community-body::before {
+    content: "";
+    position: fixed;
+    inset: -480px 0;
+    z-index: -1;
+    pointer-events: none;
+    background: url("../../waste_audit/kitchen-pattern.svg") repeat 0 0 / 480px 480px;
+    animation: community-drift 80s linear infinite;
+}
+
+@keyframes community-drift {
+    to { transform: translateY(-480px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .community-body::before { animation: none; }
+}
+
 .community-grid {
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));

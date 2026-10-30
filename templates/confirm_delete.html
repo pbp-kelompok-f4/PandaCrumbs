@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}{% if active == 'community' %}community-body{% endif %}{% endblock %}
+{% block extra_head %}
+  {% if active == 'community' %}<link rel="stylesheet" href="{% static 'community/css/community.css' %}">{% endif %}
+{% endblock %}
 
 {% block content %}
 <section class="form-panel delete-panel">
