@@ -1,9 +1,12 @@
-<html><head></head><body>{% load static %}
 
-<h1 class="habit-title">Habit Challenge</h1>
+{% load static %}
+
+<div class="page-heading flex items-center justify-between">
+    <h1>Habit Challenge</h1>
+</div>
 
 <section class="habit-profile" aria-label="Poin dan perkembangan Pao">
-  <div class="habit-mascot"><img src="{% static 'main/images/pantryDesign-imgCopySvg12.png' %}" width="407" height="457" alt="Pao, panda kecil yang sedang menikmati roti"></div>
+    <div class="habit-mascot"><img src="{% static 'main/images/pantryDesign-imgCopySvg12.png' %}" width="407" height="457" alt="Pao, panda kecil yang sedang menikmati roti"></div>
   <div class="habit-stats">
     <div class="habit-name"><h2>Pao</h2><span class="habit-level">Level {{ progress.level }}</span></div>
     <p class="habit-points">{{ progress.total }} poin total</p>
@@ -17,26 +20,47 @@
   <div class="habit-section-heading"><h2 id="challenge-heading">Tantanganmu</h2><span>{{ completed_count }}/3 selesai hari ini</span></div>
   <div class="habit-grid">
     {% for card in cards %}
-    <article class="habit-card {% if card.completion %}habit-card-done{% endif %}">
-      <h3>{{ card.title }}{% if card.completion %}<span aria-label="Selesai">✓</span>{% endif %}</h3>
-      <div class="habit-card-body">
-        <p class="habit-card-subtitle">{{ card.subtitle }}</p>
-        <div class="habit-tags">{% for tag in card.tags %}<span>{{ tag }}</span>{% endfor %}</div>
-        <p class="habit-card-hint">{{ card.hint }}</p>
-        <p class="habit-reward">+{{ card.points }} poin {{ card.reward }}</p>
-        {% if card.url %}<a class="habit-action" href="{{ card.url }}">{{ card.action }}</a>{% endif %}
-        {% if card.completion %}
-          <div class="habit-completed"><strong>✓ Selesai hari ini · +{{ card.completion.points }} poin</strong><span>{{ card.completion.food }}</span></div>
-        {% else %}
-          {% if card.kind == 'share' %}
-          <p>Posting makanan melalui Community agar +15 poin tercatat otomatis.</p>
-          {% else %}
-          <a class="habit-action" href="{% url 'habit_challenge:cook_form' card.kind %}">Sudah memasak? Pilih bahan yang dipakai · +10 poin</a>
-          {% endif %}
+<article class="habit-card {% if card.completion %}habit-card-done{% endif %}">
+  <h3>
+    {{ card.title }}
+    {% if card.completion %}<span aria-label="Selesai">✓</span>{% endif %}
+  </h3>
+
+  <div class="habit-card-body">
+    <p class="habit-card-subtitle">{{ card.subtitle }}</p>
+
+    <div class="habit-tags">
+      {% for tag in card.tags %}
+        <span>{{ tag }}</span>
+      {% endfor %}
+    </div>
+
+    <p class="habit-card-hint">{{ card.hint }}</p>
+    <p class="habit-reward">+{{ card.points }} poin {{ card.reward }}</p>
+
+    {% if card.completion %}
+      <div class="habit-completed">
+        <strong>✓ Selesai hari ini · +{{ card.completion.points }} poin</strong>
+        {% if card.completion.food %}
+          <span>{{ card.completion.food }}</span>
         {% endif %}
       </div>
-    </article>
-    {% endfor %}
+    {% else %}
+      <div class="habit-card-actions">
+        {% if card.url %}
+          <a class="habit-action" href="{{ card.url }}">{{ card.action }}</a>
+        {% endif %}
+
+        {% if card.kind != 'share' %}
+          <a class="habit-action habit-action-secondary" href="{% url 'habit_challenge:cook_form' card.kind %}">
+            Sudah memasak? Pilih bahan yang dipakai
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</article>
+{% endfor %}
   </div>
   <p class="habit-daily-note">Mulai lagi setiap hari. Setiap tantangan memberi poin sekali sehari; selesaikan satu untuk menjaga streak kamu.</p>
 </section>

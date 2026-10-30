@@ -1,22 +1,88 @@
-<html><head></head><body>{% extends 'base.html' %}
+{% extends 'base.html' %}
+{% load static %}
+
 {% block title %}Catat Memasak · PandaCrumbs{% endblock %}
-{% block content %}
-<div class="page-heading"><h1>Sudah memasak? · {{ challenge_title }}</h1></div>
-<p>Centang jumlah bahan yang digunakan. Setelah disimpan, stok pantry otomatis berkurang dan kamu mendapat 10 poin (maksimal sekali per jenis tantangan per hari).</p>
-<form method="post" action="{% url 'habit_challenge:cook' kind %}" class="habit-plan" style="max-width:650px;padding:24px">
-  {% csrf_token %}
-  <p><label for="food">Nama masakan</label><input id="food" name="food" maxlength="120" required="" placeholder="Contoh: nasi goreng" style="width:100%;padding:12px"></p>
-  <h2>Bahan dari pantry yang dipakai</h2>
-  {% for item in items %}
-    <div style="display:flex;justify-content:space-between;gap:16px;align-items:center;margin:12px 0">
-      <label for="qty_{{ item.pk }}">{{ item.name }} <small>(tersedia {{ item.quantity }} {{ item.unit }})</small></label>
-      <input id="qty_{{ item.pk }}" type="number" name="qty_{{ item.pk }}" min="0" max="{{ item.quantity }}" value="0" step="1" style="width:100px;padding:8px">
-    </div>
-  {% empty %}<p>Pantry kosong. <a href="{% url 'pantry:add' %}">Tambahkan bahan dahulu</a>.</p>{% endfor %}
-    <button class="button" type="submit" {% if not items %}disabled{% endif %}>
-        Simpan masakan &amp; kurangi stok
-    </button>
-  <a class="text-button" href="{% url 'habit_challenge:index' %}">Batal</a>
-</form>
+{% block body_class %}habit-page{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'habit_challenge/habit.css' %}">
 {% endblock %}
-</body></html>
+
+{% block content %}
+<a class="back-link" href="{% url 'habit_challenge:index' %}">← Kembali ke Habit Challenge</a>
+
+<section class="form-panel cook-panel">
+  <h1>Sudah memasak? · {{ challenge_title }}</h1>
+  <p class="help-text">
+    Isi nama masakan dan jumlah bahan pantry yang dipakai.
+    Setelah disimpan, stok pantry otomatis berkurang dan kamu mendapat 10 poin
+    (maksimal sekali per jenis tantangan per hari).
+  </p>
+
+  <form method="post" action="{% url 'habit_challenge:cook' kind %}" class="data-form cook-form">
+    {% csrf_token %}
+
+    <div class="field">
+      <label for="food">Nama masakan *</label>
+      <input
+        id="food"
+        name="food"
+        type="text"
+        maxlength="120"
+        required
+        placeholder="Contoh: nasi goreng"
+      >
+    </div>
+
+    <div class="field">
+      <label>Bahan dari pantry yang dipakai</label>
+
+      {% if items %}
+        <div class="cook-items">
+          {% for item in items %}
+            <div class="cook-item-row">
+              <div class="cook-item-info">
+                <strong>{{ item.name }}</strong>
+                <span>Tersedia {{ item.quantity }} {{ item.unit }}</span>
+              </div>
+
+              <div class="cook-item-input">
+                <label for="qty_{{ item.pk }}" class="sr-only">
+                  Jumlah {{ item.name }} yang dipakai
+                </label>
+                <input
+                  id="qty_{{ item.pk }}"
+                  type="number"
+                  name="qty_{{ item.pk }}"
+                  min="0"
+                  max="{{ item.quantity }}"
+                  value="0"
+                  step="1"
+                >
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="habit-empty cook-empty-note">
+          <span aria-hidden="true">✦</span>
+          <div>
+            <strong>Pantry kamu masih kosong.</strong>
+            <p>
+              Tambahkan bahan terlebih dahulu sebelum mencatat aktivitas memasak.
+            </p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="flex form-actions">
+      <button class="button" type="submit" {% if not items %}disabled{% endif %}>
+        Simpan masakan
+      </button>
+      <a class="button secondary" href="{% url 'habit_challenge:index' %}">
+        Batal
+      </a>
+    </div>
+  </form>
+</section>
+{% endblock %}
