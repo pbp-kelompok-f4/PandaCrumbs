@@ -18,3 +18,73 @@
 .habit-page .form-panel { max-width:740px; padding:30px 32px; }.habit-page .form-panel h1 { font-size:30px; }.habit-page .habit-plan input,.habit-page .habit-plan select { min-height:46px; border:1px solid #c9c2b9; border-radius:10px; background:#fff; font:inherit; }
 @media (max-width:980px) { .habit-profile { grid-template-columns:180px minmax(0,1fr); }.habit-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width:620px) { .habit-title { margin:0 0 22px; }.habit-profile { grid-template-columns:1fr; gap:12px; min-height:0; padding:22px; border-radius:28px; }.habit-mascot img { width:130px; }.habit-name h2 { font-size:30px; }.habit-points { font-size:24px; }.habit-grid { grid-template-columns:1fr; }.habit-section-heading { align-items:flex-start; flex-direction:column; gap:6px; }.habit-card { border-radius:28px; }.habit-plans,.habit-history,.habit-challenges { margin-top:34px; }.habit-history-points { font-size:11px; }.habit-page .form-panel { padding:26px 20px; } }
+
+.habit-card h3,
+.habit-card-body,
+.habit-card-subtitle,
+.habit-tags span,
+.habit-reward,
+.habit-action,
+.habit-completed {
+  font-family:Poppins,Inter,sans-serif;
+}
+.habit-card {
+  border-radius:38px;
+  background:#fff7f3;
+}
+.habit-card h3 {
+  min-height:58px;
+  padding:14px 18px;
+  font-size:18px;
+  font-weight:600;
+}
+.habit-card-body {
+  padding:16px 20px 22px;
+}
+.habit-card-subtitle {
+  font-size:14px;
+  font-weight:600;
+}
+.habit-tags span {
+  font-size:12px;
+  font-weight:600;
+}
+.habit-reward {
+  margin:12px 0;
+  font-size:14px;
+  font-weight:600;
+}
+.habit-action {
+  min-height:58px;
+  padding:12px 18px;
+  border-radius:30px;
+  background:var(--orange);
+  font-family:Poppins,Inter,sans-serif;
+  font-size:16px;
+  font-weight:600;
+  line-height:1.35;
+}
+.habit-completed {
+  font-size:14px;
+  font-weight:600;
+}
+
+.habit-page .button {
+  min-height:46px;
+  padding:12px 19px;
+  border-radius:9px;
+  font-size:13px;
+}
+.habit-page .habit-section-heading .button {
+  border-radius:32px;
+}
+.habit-page .field input,
+.habit-page .field select,
+.habit-page .field textarea {
+  min-height:49px;
+}
+@media (max-width:620px) {
+  .habit-card h3 { min-height:58px; padding:14px 18px; font-size:18px; }
+  .habit-card-body { padding:16px 20px 22px; }
+  .habit-action { min-height:54px; font-size:15px; }
+}
