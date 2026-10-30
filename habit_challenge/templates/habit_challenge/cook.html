@@ -13,7 +13,9 @@
       <input id="qty_{{ item.pk }}" type="number" name="qty_{{ item.pk }}" min="0" max="{{ item.quantity }}" value="0" step="1" style="width:100px;padding:8px">
     </div>
   {% empty %}<p>Pantry kosong. <a href="{% url 'pantry:add' %}">Tambahkan bahan dahulu</a>.</p>{% endfor %}
-  <button class="button" type="submit" {%="" if="" not="" items="" %}disabled{%="" endif="" %}="">Simpan masakan &amp; kurangi stok</button>
+    <button class="button" type="submit" {% if not items %}disabled{% endif %}>
+        Simpan masakan &amp; kurangi stok
+    </button>
   <a class="text-button" href="{% url 'habit_challenge:index' %}">Batal</a>
 </form>
 {% endblock %}
