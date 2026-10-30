@@ -1,20 +1,1309 @@
 
-.habit-content { max-width:1160px; }
-.habit-title { margin:0 24px 32px; font-size:clamp(36px,4vw,50px); line-height:1.14; letter-spacing:-1.2px; }
-.habit-profile { display:grid; grid-template-columns:240px minmax(0,1fr); align-items:center; gap:28px; min-height:300px; padding:24px 32px; border-radius:38px; background:var(--gradient); box-shadow:var(--shadow); }
-.habit-mascot { display:grid; place-items:center; }.habit-mascot img { width:min(100%,220px); }
-.habit-name { display:flex; align-items:center; gap:16px; margin-bottom:14px; }.habit-name h2 { font:600 36px/1.2 Poppins,Inter,sans-serif; color:var(--ink); }
-.habit-level { padding:8px 16px; border-radius:30px; background:#fff; color:var(--muted); font-size:16px; font-weight:700; }.habit-points { margin-bottom:12px; color:var(--olive); font:600 28px/1.3 Poppins,Inter,sans-serif; }
-.habit-progress { display:block; width:100%; height:7px; overflow:hidden; border:0; border-radius:12px; background:#6e7e5530; accent-color:var(--olive); }.habit-progress::-webkit-progress-bar { background:#6e7e5530; }.habit-progress::-webkit-progress-value,.habit-progress::-moz-progress-bar { background:var(--olive); }
-.habit-progress-label,.habit-card-hint,.habit-daily-note { color:#657060; font-size:12px; line-height:1.5; }.habit-progress-label { margin-top:7px; }
-.habit-streak { display:flex; align-items:center; gap:14px; margin-top:22px; padding:13px 18px; border-radius:18px; background:#fffdfb; }.habit-flame { font-size:42px; line-height:1; }.habit-streak p { color:var(--orange); font:600 24px/1.2 Poppins,Inter,sans-serif; }.habit-streak p span { display:block; margin-top:3px; color:var(--muted); font:400 12px/1.45 Inter,sans-serif; }
-.habit-challenges,.habit-plans,.habit-history { margin-top:44px; }.habit-section-heading { display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin:0 0 20px; }.habit-section-heading h2 { font-size:32px; letter-spacing:-.5px; }.habit-section-heading > span { color:#657060; font-size:12px; }
-.habit-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }.habit-card { min-width:0; overflow:hidden; border-radius:38px; background:#fff7f3; box-shadow:var(--shadow); }.habit-card h3 { display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:58px; margin:0; padding:14px 18px; background:var(--gradient); color:#fff; font:600 18px/1.25 Poppins,Inter,sans-serif; overflow-wrap:anywhere; }.habit-card h3 > span { display:grid; place-items:center; width:24px; height:24px; flex:0 0 24px; border-radius:50%; background:#fff; color:var(--olive); font-size:14px; }.habit-card-body { padding:16px 20px 22px; }.habit-card-subtitle { color:#1e1e1e; font:600 14px/1.45 Poppins,Inter,sans-serif; }
-.habit-tags { display:flex; flex-wrap:wrap; gap:7px; min-height:34px; margin:10px 0 8px; }.habit-tags span { max-width:100%; padding:6px 12px; overflow-wrap:anywhere; border:1px solid #e1dedb; border-radius:24px; background:#fff; color:var(--muted); font-size:12px; font-weight:600; }.habit-reward { margin:10px 0; color:var(--olive); font-size:12px; font-weight:700; }
-.habit-action { display:flex; align-items:center; justify-content:center; width:100%; min-height:44px; padding:10px 14px; border:0; border-radius:30px; background:var(--orange); color:#fff; font-size:12px; font-weight:700; line-height:1.35; text-align:center; }.habit-action:hover { filter:brightness(.94); }.habit-completed { display:grid; gap:4px; margin-top:10px; padding:10px 12px; border-radius:14px; background:var(--sage); color:var(--olive); font-size:12px; line-height:1.45; overflow-wrap:anywhere; }
-.habit-empty { display:flex; align-items:center; gap:16px; padding:24px; border:1px dashed #c8d2b7; border-radius:22px; color:var(--olive); }.habit-empty > span { font-size:28px; }.habit-empty strong { font-size:14px; }.habit-empty p { margin-top:5px; color:var(--muted); font-size:13px; line-height:1.5; }
-.habit-plan-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr)); gap:24px; }.habit-plan { padding:20px; overflow-wrap:anywhere; border:1px solid #e2ded5; border-radius:28px; background:#fff7f3; box-shadow:var(--shadow); }.habit-plan h3 { margin:14px 0 7px; font:600 18px/1.35 Poppins,Inter,sans-serif; }.habit-plan p { color:var(--muted); font-size:12px; line-height:1.65; }.habit-plan-top,.habit-plan-actions { display:flex; justify-content:space-between; gap:10px; color:var(--olive); font-size:12px; }.habit-plan-top > span:last-child { padding:3px 10px; border-radius:14px; background:var(--sage); }.habit-plan progress { width:100%; height:7px; margin-top:16px; accent-color:var(--olive); }.habit-plan-actions { justify-content:flex-start; margin-top:14px; font-weight:600; }.habit-plan-actions a { display:inline-flex; align-items:center; min-height:36px; text-decoration:underline; text-underline-offset:3px; }.habit-plan-actions a:last-child { color:var(--danger); }
-.habit-history ul { margin:0; padding:0; list-style:none; border-top:1px solid #d9ddcd; }.habit-history li { display:flex; align-items:center; gap:14px; padding:16px 4px; border-bottom:1px solid #d9ddcd; }.habit-history li > div { flex:1; min-width:0; overflow-wrap:anywhere; }.habit-history li strong { font-size:13px; }.habit-history li p { margin-top:4px; color:var(--muted); font-size:12px; }.habit-history-check { display:grid; place-items:center; width:32px; height:32px; flex:0 0 32px; border-radius:50%; background:var(--sage); color:var(--olive); }.habit-history-points { color:var(--olive); font-size:12px; font-weight:700; white-space:nowrap; }
-.habit-page .form-panel { max-width:740px; padding:30px 32px; }.habit-page .form-panel h1 { font-size:30px; }.habit-page .habit-plan input,.habit-page .habit-plan select { min-height:46px; border:1px solid #c9c2b9; border-radius:10px; background:#fff; font:inherit; }
-@media (max-width:980px) { .habit-profile { grid-template-columns:180px minmax(0,1fr); }.habit-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-@media (max-width:620px) { .habit-title { margin:0 0 22px; }.habit-profile { grid-template-columns:1fr; gap:12px; min-height:0; padding:22px; border-radius:28px; }.habit-mascot img { width:130px; }.habit-name h2 { font-size:30px; }.habit-points { font-size:24px; }.habit-grid { grid-template-columns:1fr; }.habit-section-heading { align-items:flex-start; flex-direction:column; gap:6px; }.habit-card { border-radius:28px; }.habit-plans,.habit-history,.habit-challenges { margin-top:34px; }.habit-history-points { font-size:11px; }.habit-page .form-panel { padding:26px 20px; } }
+/* ========================================
+   HABIT CHALLENGE — PANDACRUMBS
+   ======================================== */
+
+.habit-page {
+    font-family: "Inter", sans-serif;
+    color: var(--ink);
+}
+
+.habit-page * {
+    box-sizing: border-box;
+}
+
+/* Layout dan judul mengikuti app.css */
+
+/* ========================================
+   PROFILE
+   ======================================== */
+
+.habit-page .habit-profile {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    align-items: center;
+    gap: 28px;
+    min-width: 0;
+    min-height: 300px;
+    padding: 24px 32px;
+    border-radius: 38px;
+    background: var(--gradient);
+    box-shadow: var(--shadow);
+}
+
+.habit-page .habit-mascot {
+    display: grid;
+    place-items: center;
+}
+
+.habit-page .habit-mascot img {
+    display: block;
+    width: min(100%, 220px);
+    height: auto;
+}
+
+.habit-page .habit-stats {
+    min-width: 0;
+}
+
+.habit-page .habit-name {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.habit-page .habit-name h2 {
+    margin: 0;
+    font-family: "Gloock", Georgia, serif;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.habit-page .habit-level {
+    padding: 8px 16px;
+    border-radius: 30px;
+    background: white;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.habit-page .habit-points {
+    margin: 0 0 12px;
+    color: var(--olive);
+    font-family: "Poppins", "Inter", sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.habit-page .habit-progress,
+.habit-page .habit-plan progress {
+    display: block;
+    width: 100%;
+    height: 7px;
+    overflow: hidden;
+    border: 0;
+    border-radius: 12px;
+    background: #6e7e5530;
+    accent-color: var(--olive);
+}
+
+.habit-page .habit-progress::-webkit-progress-bar {
+    background: #6e7e5530;
+}
+
+.habit-page .habit-progress::-webkit-progress-value {
+    background: var(--olive);
+}
+
+.habit-page .habit-progress::-moz-progress-bar {
+    background: var(--olive);
+}
+
+.habit-page .habit-progress-label {
+    margin-top: 7px;
+    color: #657060;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.habit-page .habit-streak {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 22px;
+    padding: 13px 18px;
+    border-radius: 18px;
+    background: #fffdfb;
+}
+
+.habit-page .habit-flame {
+    font-size: 42px;
+    line-height: 1;
+}
+
+.habit-page .habit-streak p {
+    margin: 0;
+    color: var(--orange);
+    font-family: "Poppins", sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.habit-page .habit-streak p span {
+    display: block;
+    margin-top: 3px;
+    color: var(--muted);
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.45;
+}
+
+/* ========================================
+   SECTION HEADINGS
+   ======================================== */
+
+.habit-page .habit-challenges,
+.habit-page .habit-plans,
+.habit-page .habit-history {
+    margin-top: 44px;
+}
+
+.habit-page .habit-section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 52px;
+    margin: 0 0 20px;
+}
+
+.habit-page .habit-section-heading h2,
+.habit-page .habit-dialog h2 {
+    margin: 0;
+    font-family: "Gloock", Georgia, serif;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+}
+
+.habit-page .habit-section-heading > span {
+    color: #657060;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+/* ========================================
+   CHALLENGE CARDS
+   ======================================== */
+
+.habit-page .habit-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 24px;
+}
+
+.habit-page .habit-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 38px;
+    background: #fff7f3;
+    box-shadow: var(--shadow);
+}
+
+.habit-page .habit-card h3 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 75px;
+    margin: 0;
+    padding: 18px 24px;
+    background: var(--gradient);
+    color: white;
+    font-family: "Poppins", "Inter", sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.48px;
+    overflow-wrap: anywhere;
+}
+
+.habit-page .habit-card h3 > span {
+    display: grid;
+    place-items: center;
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: white;
+    color: var(--olive);
+    font-size: 18px;
+}
+
+.habit-page .habit-card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    gap: 12px;
+    padding: 24px 33px 26px;
+}
+
+.habit-page .habit-card-subtitle {
+    margin: 0;
+    color: #4e4b48;
+    font-family: "Poppins", "Inter", sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.habit-page .habit-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin: 0;
+    min-height: 0;
+}
+
+.habit-page .habit-tags span {
+    max-width: 100%;
+    padding: 8px 16px;
+    border: 1px solid #e1dedb;
+    border-radius: 999px;
+    background: white;
+    color: var(--muted);
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.habit-page .habit-card-hint {
+    margin: 0;
+    color: #6d6863;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.habit-page .habit-reward {
+    margin: 8px 0 0;
+    color: var(--olive);
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* ========================================
+   CHALLENGE BUTTONS
+   ======================================== */
+
+.habit-page .habit-card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    margin-top: auto;
+    padding-top: 12px;
+}
+
+.habit-page .habit-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 56px;
+    margin: 0;
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--orange);
+    color: white;
+    font-family: "Poppins", "Inter", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
+    text-decoration: none;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+}
+
+.habit-page .habit-action + .habit-action,
+.habit-page .habit-card-actions .habit-action + .habit-action {
+    margin-top: 0;
+}
+
+.habit-page .habit-action:hover {
+    filter: brightness(0.94);
+}
+
+.habit-page .habit-action:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.habit-page .habit-completed {
+    display: grid;
+    gap: 6px;
+    margin-top: auto;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: #dfe3d3;
+    color: var(--olive);
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.habit-page .habit-completed strong {
+    font-weight: 600;
+}
+
+/* ========================================
+   PERSONAL CHALLENGE PLANS
+   ======================================== */
+
+.habit-page .habit-plan-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 24px;
+}
+
+.habit-page .habit-plan {
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid #e2ded5;
+    border-radius: 28px;
+    background: #fff7f3;
+    box-shadow: var(--shadow);
+    overflow-wrap: anywhere;
+}
+
+.habit-page .habit-plan h3 {
+    margin: 14px 0 7px;
+    font-family: "Poppins", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.habit-page .habit-plan p {
+    margin: 8px 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.habit-page .habit-plan-top,
+.habit-page .habit-plan-actions {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: var(--olive);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.habit-page .habit-plan-top > span:last-child {
+    padding: 3px 10px;
+    border-radius: 14px;
+    background: var(--sage);
+}
+
+.habit-page .habit-plan progress {
+    margin-top: 16px;
+}
+
+.habit-page .habit-plan-actions {
+    justify-content: flex-start;
+    margin-top: 14px;
+}
+
+.habit-page .habit-plan-actions a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.habit-page .habit-plan-actions a:last-child {
+    color: var(--danger);
+}
+
+/* ========================================
+   HISTORY
+   ======================================== */
+
+.habit-page .habit-history ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid #d9ddcd;
+}
+
+.habit-page .habit-history li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 4px;
+    border-bottom: 1px solid #d9ddcd;
+}
+
+.habit-page .habit-history li > div {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.habit-page .habit-history li strong {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.habit-page .habit-history li p {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.habit-page .habit-history-check {
+    display: grid;
+    place-items: center;
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--sage);
+    color: var(--olive);
+}
+
+.habit-page .habit-history-points {
+    color: var(--olive);
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* ========================================
+   EMPTY STATE
+   ======================================== */
+
+.habit-page .habit-empty {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 24px;
+    border: 1px dashed #c8d2b7;
+    border-radius: 22px;
+    color: var(--olive);
+}
+
+.habit-page .habit-empty > span {
+    font-size: 28px;
+}
+
+.habit-page .habit-empty strong {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.habit-page .habit-empty p {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.habit-page .habit-daily-note {
+    margin-top: 28px;
+    color: #657060;
+    font-size: 14px;
+    line-height: 1.55;
+    text-align: center;
+}
+
+/* ========================================
+   GENERAL FORMS
+   ======================================== */
+
+.habit-page .form-panel h1 {
+    font-family: "Gloock", Georgia, serif;
+    font-weight: 400;
+}
+
+.habit-page .field input,
+.habit-page .field select,
+.habit-page .field textarea {
+    min-height: 49px;
+}
+
+.habit-page .button {
+    min-height: 46px;
+    padding: 12px 19px;
+    font-size: 13px;
+}
+
+.habit-page .habit-section-heading .button {
+    border-radius: 32px;
+}
+
+/* ========================================
+   COOK FORM
+   ======================================== */
+
+.habit-page .cook-panel {
+    width: 100%;
+    max-width: 1180px;
+}
+
+.habit-page .cook-form {
+    margin-top: 28px;
+}
+
+.habit-page .cook-form .field + .field {
+    margin-top: 28px;
+}
+
+.habit-page .cook-form .field > label {
+    display: block;
+    margin-bottom: 12px;
+    color: var(--ink);
+    font-family: "Inter", sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.habit-page .cook-form input[type="text"],
+.habit-page .cook-form input[type="number"] {
+    width: 100%;
+    min-height: 72px;
+    padding: 0 24px;
+    border: 1px solid #d5d1cb;
+    border-radius: 18px;
+    background: white;
+    color: var(--ink);
+    font-family: "Inter", sans-serif;
+    font-size: 18px;
+}
+
+.habit-page .cook-form input::placeholder {
+    color: #9aa1ac;
+}
+
+.habit-page .cook-items {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.habit-page .cook-item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px 24px;
+    border: 1px solid #e6e0d7;
+    border-radius: 20px;
+    background: #fffdfb;
+}
+
+.habit-page .cook-item-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.habit-page .cook-item-info strong {
+    display: block;
+    color: var(--ink);
+    font-family: "Poppins", sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.habit-page .cook-item-info span {
+    display: block;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.habit-page .cook-item-input {
+    flex: 0 0 140px;
+    width: 140px;
+}
+
+.habit-page .cook-item-input input[type="number"] {
+    min-height: 64px;
+    padding: 0 16px;
+    text-align: center;
+}
+
+.habit-page .cook-form .form-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 32px;
+}
+
+.habit-page .cook-form .form-actions .button {
+    min-height: 54px;
+    padding: 12px 24px;
+    border-radius: 32px;
+}
+
+/* ========================================
+   DIALOG
+   ======================================== */
+
+.habit-page .habit-dialog {
+    width: min(92vw, 540px);
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 32px;
+    border: 0;
+    border-radius: 28px;
+    background: white;
+    box-shadow: 0 12px 48px #00000030;
+    color: var(--ink);
+}
+
+.habit-page .habit-dialog::backdrop {
+    background: #00000060;
+}
+
+.habit-page .habit-dialog-close {
+    float: right;
+    border: 0;
+    background: transparent;
+    font-size: 28px;
+}
+
+.habit-page .habit-dialog-eyebrow {
+    color: var(--olive);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.habit-page .habit-dialog h2 {
+    margin: 12px 0;
+    font-size: 32px;
+}
+
+.habit-page .habit-dialog-description {
+    margin-bottom: 20px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.habit-page .habit-success-reward {
+    margin: 16px 0;
+    color: var(--olive);
+    font-weight: 700;
+}
+
+.habit-page .habit-success-back {
+    margin-top: 20px;
+}
+
+/* ========================================
+   TABLET
+   ======================================== */
+
+@media (max-width: 980px) {
+    .habit-page .habit-profile {
+        grid-template-columns: 180px minmax(0, 1fr);
+    }
+
+    .habit-page .habit-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .habit-page .habit-card h3 {
+        font-size: 20px;
+    }
+
+    .habit-page .habit-card-body {
+        padding: 20px 24px 24px;
+    }
+}
+
+/* ========================================
+   MOBILE
+   ======================================== */
+
+@media (max-width: 620px) {
+    .habit-page .habit-profile {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        min-height: 0;
+        padding: 22px;
+        border-radius: 28px;
+    }
+
+    .habit-page .habit-mascot img {
+        width: 130px;
+    }
+
+    .habit-page .habit-name h2 {
+        font-size: 30px;
+    }
+
+    .habit-page .habit-points {
+        font-size: 24px;
+    }
+
+    .habit-page .habit-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .habit-page .habit-challenges,
+    .habit-page .habit-plans,
+    .habit-page .habit-history {
+        margin-top: 34px;
+    }
+
+    .habit-page .habit-section-heading {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .habit-page .habit-section-heading h2 {
+        font-size: 30px;
+    }
+
+    .habit-page .habit-card {
+        border-radius: 28px;
+    }
+
+    .habit-page .habit-card h3 {
+        min-height: 64px;
+        padding: 16px 20px;
+        font-size: 20px;
+    }
+
+    .habit-page .habit-card-body {
+        gap: 10px;
+        padding: 20px;
+    }
+
+    .habit-page .habit-card-actions {
+        gap: 12px;
+    }
+
+    .habit-page .habit-action {
+        min-height: 54px;
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    .habit-page .habit-card-subtitle {
+        font-size: 16px;
+    }
+
+    .habit-page .habit-tags span {
+        padding: 7px 14px;
+        font-size: 12px;
+    }
+
+    .habit-page .habit-history-points {
+        font-size: 11px;
+    }
+
+    .habit-page .cook-item-row {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 18px;
+    }
+
+    .habit-page .cook-item-input {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+
+    .habit-page .cook-form input[type="text"],
+    .habit-page .cook-form input[type="number"] {
+        min-height: 60px;
+        padding: 0 16px;
+        font-size: 16px;
+    }
+}
+
+body.habit-page main.page {
+    max-width: 1160px;
+}
+
+body.habit-page .page-heading {
+    min-height: 0;
+    margin: 0 24px 32px;
+    gap: 24px;
+}
+
+body.habit-page .page-heading h1 {
+    font-family: "Gloock", Georgia, serif;
+    font-size: clamp(36px, 4vw, 50px);
+    font-weight: 400;
+    line-height: 1.14;
+    letter-spacing: -1.2px;
+    margin: 0;
+}
+
+@media (max-width: 620px) {
+    body.habit-page .page-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+        margin: 0 0 22px;
+    }
+}
+
+
+body.habit-page .page {
+    max-width: 1160px;
+}
+
+body.habit-page .page-heading {
+    min-height: 0;
+    margin: 0 24px 32px;
+}
+
+body.habit-page .page-heading h1 {
+    font-family: "Gloock", Georgia, serif;
+    font-size: clamp(36px, 4vw, 50px);
+    font-weight: 400;
+    line-height: 1.14;
+    letter-spacing: -1.2px;
+}
+
+.habit-page .habit-section-heading {
+    align-items: center;
+    min-height: 46px;
+}
+
+.habit-page .habit-section-heading h2 {
+    margin: 0;
+    font-family: "Gloock", Georgia, serif;
+    font-size: clamp(28px, 3vw, 36px);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+}
+
+/* 2. + BUAT RENCANA — SAME AS PANTRY OUTLINE */
+
+.habit-page .habit-plans
+.habit-section-heading .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-height: 46px;
+    padding: 10px 19px;
+    border: 3px solid var(--orange);
+    border-radius: 32px;
+    background: #f6eae6;
+    color: var(--orange);
+
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: none;
+}
+
+.habit-page .habit-plans
+.habit-section-heading .button:hover {
+    background: #f3ddd4;
+    filter: none;
+}
+
+/* 3. RENCANA PRIBADIMU — CHALLENGE CARD STYLE */
+
+.habit-page .habit-plan-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 24px;
+    align-items: stretch;
+}
+
+.habit-page .habit-plan {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 0 0 24px;
+    overflow: hidden;
+
+    border: 0;
+    border-radius: 32px;
+    background: #fff7f3;
+    box-shadow: var(--shadow);
+}
+
+/* Gradient header, matching challenge cards */
+
+.habit-page .habit-plan-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    min-height: 76px;
+    margin: 0 0 22px;
+    padding: 18px 24px;
+
+    background: var(--gradient);
+    color: white;
+
+    font-family: "Poppins", "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.habit-page .habit-plan-top > span:first-child {
+    color: white;
+}
+
+.habit-page .habit-plan-top > span:last-child {
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--olive);
+
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Plan card title and body */
+
+.habit-page .habit-plan h3 {
+    margin: 0 24px 12px;
+
+    color: #302c29;
+    font-family: "Poppins", "Inter", sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.habit-page .habit-plan p {
+    margin: 0 24px 12px;
+
+    color: #69635f;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.55;
+}
+
+.habit-page .habit-plan progress {
+    display: block;
+    width: calc(100% - 48px);
+    height: 8px;
+    margin: 16px 24px 12px;
+    border: 0;
+    border-radius: 999px;
+    overflow: hidden;
+    accent-color: var(--olive);
+}
+
+.habit-page .habit-plan-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin: auto 24px 0;
+    padding-top: 20px;
+}
+
+.habit-page .habit-plan-actions a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--olive);
+
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.habit-page .habit-plan-actions a:last-child {
+    color: var(--danger);
+}
+
+/* 4. FORM HEADINGS — MATCH PANTRY */
+
+.habit-page .form-panel,
+.habit-page .form-panel.cook-panel {
+    width: 100%;
+    max-width: 740px;
+    margin: 24px auto;
+    padding: 30px 32px;
+    border-radius: 24px;
+    background: white;
+    box-shadow: 0 4px 14px #00000008;
+}
+
+.habit-page .form-panel h1,
+.habit-page .form-panel.cook-panel h1 {
+    margin: 0 0 28px;
+    color: var(--ink);
+
+    font-family: "Inter", sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.6px;
+}
+
+/* Same text labels as Pantry */
+
+.habit-page .form-panel .field > label,
+.habit-page .cook-form .field > label {
+    display: block;
+    margin-bottom: 8px;
+
+    color: var(--ink);
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.habit-page .form-panel .help-text {
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* 5. INPUTS — SAME AS PANTRY */
+
+.habit-page .form-panel .field input,
+.habit-page .form-panel .field select,
+.habit-page .form-panel .field textarea,
+.habit-page .cook-form input[type="text"],
+.habit-page .cook-form input[type="number"] {
+    width: 100%;
+    min-height: 49px;
+    padding: 13px 16px;
+
+    border: 1px solid #d9d9d9;
+    border-radius: 9px;
+    background: white;
+    color: var(--ink);
+
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+.habit-page .form-panel input:focus,
+.habit-page .form-panel select:focus,
+.habit-page .form-panel textarea:focus {
+    outline: 2px solid var(--sage);
+    outline-offset: 2px;
+}
+
+/* Cook form quantity remains compact */
+
+.habit-page .cook-form .cook-item-input {
+    flex: 0 0 120px;
+    width: 120px;
+}
+
+.habit-page .cook-form
+.cook-item-input input[type="number"] {
+    min-height: 49px;
+    padding: 10px 12px;
+    text-align: center;
+}
+
+/* Cook ingredient cards */
+
+.habit-page .cook-item-row {
+    gap: 20px;
+    padding: 16px 20px;
+    border: 1px solid #e6e0d7;
+    border-radius: 16px;
+    background: #fffdfb;
+}
+
+.habit-page .cook-item-info strong {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.habit-page .cook-item-info span {
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+}
+
+/* 6. SAVE AND CANCEL BUTTONS — PANTRY STYLE */
+
+.habit-page .form-panel
+.form-actions .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: auto;
+    min-height: 46px;
+    padding: 12px 19px;
+    border: 0;
+    border-radius: 9px;
+
+    background: var(--orange);
+    color: white;
+
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+    box-shadow: none;
+}
+
+.habit-page .form-panel
+.form-actions .button.secondary {
+    background: var(--sage);
+    color: var(--ink);
+}
+
+.habit-page .form-panel
+.form-actions .button:hover {
+    filter: brightness(0.95);
+}
+
+.habit-page .cook-form .form-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+/* 7. RESPONSIVE */
+
+@media (max-width: 980px) {
+    .habit-page .habit-plan-top {
+        padding: 16px 20px;
+    }
+
+    .habit-page .habit-plan h3,
+    .habit-page .habit-plan p {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .habit-page .habit-plan progress {
+        width: calc(100% - 40px);
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .habit-page .habit-plan-actions {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+@media (max-width: 620px) {
+    .habit-page .page-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+        margin: 0 0 22px;
+    }
+
+    .habit-page .habit-section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .habit-page .habit-plan {
+        border-radius: 26px;
+    }
+
+    .habit-page .habit-plan-top {
+        min-height: 64px;
+        padding: 16px 20px;
+        font-size: 15px;
+    }
+
+    .habit-page .form-panel,
+    .habit-page .form-panel.cook-panel {
+        padding: 26px 20px;
+    }
+
+    .habit-page .form-panel h1,
+    .habit-page .form-panel.cook-panel h1 {
+        font-size: 26px;
+    }
+
+    .habit-page .cook-item-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .habit-page .cook-form .cook-item-input {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+
+    .habit-page .cook-form .form-actions {
+        gap: 10px;
+    }
+}
+
+
+/* =====================================
+   TOMBOL UBAH RENCANA — PANTRY STYLE
+   ===================================== */
+
+.habit-page .habit-plan-actions a:first-child {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: auto;
+    min-height: 46px;
+    padding: 12px 19px;
+
+    border: 0;
+    border-radius: 9px;
+    background: var(--orange);
+    color: #ffffff;
+
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+
+    transition: background 0.2s ease;
+}
+
+.habit-page .habit-plan-actions a:first-child:hover {
+    filter: brightness(0.95);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.habit-page .habit-plan-actions a:first-child:focus-visible {
+    outline: 2px solid var(--olive);
+    outline-offset: 3px;
+}
