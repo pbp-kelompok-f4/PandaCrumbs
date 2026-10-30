@@ -9,7 +9,6 @@ def progress_for(completions, today=None):
     today = today or timezone.localdate()
     completions = completions.filter(completed_on__lte=today)
     total = completions.aggregate(total=Sum("points"))["total"] or 0
-    # Level 1 needs 50 points, level 2 needs 100 more, and so on.
     level = (1 + isqrt(1 + 4 * (total // 25))) // 2
     floor = 25 * level * (level - 1)
     earned = total - floor
@@ -24,3 +23,14 @@ def progress_for(completions, today=None):
         "total": total, "level": level, "earned": earned, "target": target,
         "percent": earned * 100 // target, "streak": streak,
     }
+
+
+def award_community_post(offer):
+    from django.utils import timezone
+    from .models import Completion
+    local_day = timezone.localtime(offer.created_at).date()
+    completion, created = Completion.objects.get_or_create(
+        user=offer.donor, kind="share", completed_on=local_day,
+        defaults={"food": offer.title[:120], "points": 15},
+    )
+    return created

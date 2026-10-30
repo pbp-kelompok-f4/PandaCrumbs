@@ -1,4 +1,4 @@
-{% load static %}
+<html><head></head><body>{% load static %}
 
 <h1 class="habit-title">Habit Challenge</h1>
 
@@ -28,20 +28,11 @@
         {% if card.completion %}
           <div class="habit-completed"><strong>✓ Selesai hari ini · +{{ card.completion.points }} poin</strong><span>{{ card.completion.food }}</span></div>
         {% else %}
-          <details class="habit-checkin" data-challenge-title="{{ card.title }}" {% if card.open %}open{% endif %}>
-            <summary class="{% if card.kind == 'share' %}habit-action{% endif %}">{% if card.kind == 'share' %}{{ card.action }}{% else %}Sudah memasak? Catat tantangan{% endif %}</summary>
-            <form method="post" action="{% url 'habit_challenge:complete' card.kind %}" class="habit-form" data-habit-checkin>
-              {% csrf_token %}
-              <label for="{{ card.form.food.id_for_label }}">{% if card.kind == 'share' %}Makanan yang dibagikan{% else %}Makanan yang kamu masak{% endif %}</label>
-              {{ card.form.food }}{{ card.form.food.errors }}
-              <label for="{{ card.form.plan.id_for_label }}">{{ card.form.plan.label }}</label>
-              {{ card.form.plan }}{{ card.form.plan.errors }}
-              <label class="habit-confirm" for="{{ card.form.confirmed.id_for_label }}">{{ card.form.confirmed }}<span>{{ card.form.confirmed.label }}</span></label>
-              {{ card.form.confirmed.errors }}
-              <div class="habit-form-errors" role="alert"></div>
-              <button class="habit-action" type="submit">Selesaikan · +{{ card.points }} poin</button>
-            </form>
-          </details>
+          {% if card.kind == 'share' %}
+          <p>Posting makanan melalui Community agar +15 poin tercatat otomatis.</p>
+          {% else %}
+          <a class="habit-action" href="{% url 'habit_challenge:cook_form' card.kind %}">Sudah memasak? Pilih bahan yang dipakai · +10 poin</a>
+          {% endif %}
         {% endif %}
       </div>
     </article>
@@ -70,3 +61,4 @@
   {% if history %}<ul>{% for entry in history %}<li><span class="habit-history-check" aria-hidden="true">✓</span><div><strong>{{ entry.get_kind_display }}</strong><p>{{ entry.food }} <span>· {{ entry.completed_on|date:'j M Y' }}</span></p></div><span class="habit-history-points">+{{ entry.points }} poin</span></li>{% endfor %}</ul>
   {% else %}<div class="habit-empty"><span aria-hidden="true">✦</span><div><strong>Kebiasaan baik dimulai dari satu langkah.</strong><p>Selesaikan tantangan pertamamu dan ajak Pao naik level!</p></div></div>{% endif %}
 </section>
+</body></html>
