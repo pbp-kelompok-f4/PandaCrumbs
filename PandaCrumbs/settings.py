@@ -30,6 +30,7 @@ CSRF_TRUSTED_ORIGINS = env_list(
     "DJANGO_CSRF_TRUSTED_ORIGINS", "https://mohammad-adzka-pandacrumbs.pws.cs.ui.ac.id"
 )
 INSTALLED_APPS = [
+    "rest_framework",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -133,3 +134,9 @@ if os.getenv("TRUST_PROXY_HTTPS", "false").lower() == "true":
 
 SSO_UI_ENABLED = os.getenv("SSO_UI_ENABLED", "true" if DEBUG else "false").lower() == "true"
 SSO_UI_SERVER_URL = os.getenv("SSO_UI_SERVER_URL", "https://sso.ui.ac.id/cas2/")
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework.authentication.SessionAuthentication"],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+}

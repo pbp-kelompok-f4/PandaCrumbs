@@ -147,3 +147,8 @@ pemetaan akun, serta batasan endpoint dijelaskan pada [SSO UI](docs/SSO-UI.md).
 
 Setelah memperbarui dependensi, jalankan `python manage.py migrate` dan
 `python manage.py test` sebelum menggunakan atau menggabungkan perubahan.
+
+## API Mobile CP1 (Modul 1–2)
+
+Endpoint read-only Django REST Framework untuk Smart Pantry dan Leftover Recipe:
+[kontrak API dan autentikasi](docs/CP1-MOBILE-API.md).
