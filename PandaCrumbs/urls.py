@@ -4,6 +4,7 @@ from django.urls import path, include
 from ui_sso.views import PandaLogoutView
 
 urlpatterns = [
+    path("api/", include("PandaCrumbs.api_urls")),
     path("admin/", admin.site.urls),
     path("auth/", include("authentication.urls")),
     path("", include("main.urls")),
