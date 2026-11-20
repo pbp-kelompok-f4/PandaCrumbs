@@ -110,7 +110,27 @@ class CP1APITests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), [])
 
-    def test_modules_three_to_five_api_routes_are_removed(self):
+    def test_new_main_routes_keep_session_login_and_existing_modules(self):
+        response = self.client.post('/auth/login/', {'username': 'owner', 'password': 'test-pass'}, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['status'])
+        for path in ('/pantry/api/', '/api/pantry/'):
+            response = self.client.get(path)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual([item['id'] for item in response.json()], [self.items[0].pk])
+        for path in ('/waste-audit/api/', '/habit-challenge/api/plans/', '/habit-challenge/api/completions/'):
+            self.assertEqual(self.client.get(path).status_code, 200)
+        self.assertEqual(self.client.post('/auth/logout/').status_code, 200)
+        self.assertEqual(self.client.get('/pantry/api/').status_code, 403)
+        for path in ('/recipes/api/', '/community/api/'):
+            self.assertEqual(self.client.get(path).status_code, 200)
+
+    def test_module_first_routes_match_existing_api_contract(self):
         self.client.force_login(self.owner)
-        for path in ('waste-audit', 'community/offers', 'habit-challenge/plans', 'habit-challenge/completions'):
-            self.assertEqual(self.client.get(f'/api/{path}/').status_code, 404)
+        for short, alias, obj in (('/pantry/api/', '/api/pantry/', self.items[0]),
+                                  ('/recipes/api/', '/api/recipes/', self.recipe)):
+            for suffix in ('', f'{obj.pk}/'):
+                response = self.client.get(short + suffix)
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.json(), self.client.get(alias + suffix).json())
+            self.assertEqual(self.client.post(short, '{}', content_type='application/json').status_code, 405)

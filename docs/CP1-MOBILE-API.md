@@ -19,15 +19,23 @@ The API does not change stock, recipes or bookmarks.
 
 ## Authentication
 
-Django SessionAuthentication reuses `/accounts/login/`: GET its HTML login page
-for the CSRF token/cookie, POST username/password with them, then preserve the
-resulting `sessionid` cookie on API requests. Successful login uses the existing
-HTML redirect, not JSON. Flutter must maintain its own cookie session; a Safari
-login does not log in Flutter. Use HTTPS on PWS and retain CSRF protection on login.
-No token/JWT or additional login API was introduced.
+These endpoints inherit main's shared session authentication. POST JSON
+`{"username": "your-username", "password": "your-password"}` to `/auth/login/`.
+A successful response has `status: true`; preserve its `sessionid` cookie on
+subsequent API requests. POST `/auth/logout/` to end the session. Flutter should
+use the team's existing cookie-aware client (`pbp_django_auth`). A separate Safari
+session does not authenticate Flutter. Use HTTPS on PWS.
 
-For a browser smoke test, log into the website and open `/api/pantry/` in the
-same browser. `/api/recipes/` works without login.
+The existing website login also works. This change does not modify shared auth,
+CORS, cookie settings, or the modules 3–5 APIs. JSON rendering is selected only
+on the new Pantry and Recipe views, without changing other modules' renderers.
+
+## Team-standard routes
+
+Use `/pantry/api/` and `/pantry/api/<id>/`, or `/recipes/api/` and
+`/recipes/api/<id>/`, as listed in the main README. The `/api/pantry/` and
+`/api/recipes/` routes above remain equivalent aliases, including filters and
+permissions. Writes to either form return 405 for signed-in users.
 
 ## Pantry fields
 
@@ -76,8 +84,8 @@ migrations are still required for a fresh installation. These changes are local;
 deploy the Django backend to PWS and verify live access before submitting its URLs.
 Flutter implementation is separate.
 
-Eight API tests and ten JavaScript tests passed. The full Django test run used
-an isolated SQLite database: 164 tests, with the same 10 failures and 2 errors
+Nine API tests and ten JavaScript tests passed. The full Django test run used
+an isolated SQLite database: 165 tests, with the same 10 failures and 2 errors
 observed before the API work (156 tests). This is not a clean full-suite result.
 
 Pre-existing failures/errors — HabitChallengeTests (`habit_challenge.tests`):

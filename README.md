@@ -148,7 +148,39 @@ pemetaan akun, serta batasan endpoint dijelaskan pada [SSO UI](docs/SSO-UI.md).
 Setelah memperbarui dependensi, jalankan `python manage.py migrate` dan
 `python manage.py test` sebelum menggunakan atau menggabungkan perubahan.
 
-## API Mobile CP1 (Modul 1–2)
+## Integrasi Web Service (Django REST Framework)
 
-Endpoint read-only Django REST Framework untuk Smart Pantry dan Leftover Recipe:
-[kontrak API dan autentikasi](docs/CP1-MOBILE-API.md).
+### Alur Pengintegrasian Data
+Aplikasi mobile **PandaCrumbs** (`pandacrumbs_mobile`) terhubung secara asinkron dengan situs web Django (`PandaCrumbs`) yang di-deploy pada server PWS (`https://mohammad-adzka-pandacrumbs.pws.cs.ui.ac.id/`) menggunakan **Django REST Framework (DRF)** dengan format pertukaran data **JSON**.
+
+1. **Autentikasi & Sesi:** Pengguna melakukan login atau registrasi melalui endpoint `/auth/login/` dan `/auth/register/`. Server Django mengirimkan cookie sesi yang disimpan oleh klien Flutter (`pbp_django_auth`) untuk mengautentikasi request berikutnya.
+2. **Pengambilan Data (`GET`):** Halaman-halaman pada aplikasi Flutter mengirimkan HTTP `GET` request secara asinkron ke endpoint masing-masing modul, lalu mem-parsing respons JSON ke dalam model Dart untuk ditampilkan pada UI.
+3. **Pengiriman & Perubahan Data (`POST`, `PUT`/`PATCH`, `DELETE`):** Interaksi pengguna seperti menambah catatan food waste, membuat penawaran makanan, mengklaim porsi, atau melakukan check-in habit dikirimkan dalam format JSON ke endpoint DRF terkait, divalidasi oleh serializer Django, dan disimpan langsung ke database PWS.
+
+### Daftar Endpoint API
+**Base URL:** `https://mohammad-adzka-pandacrumbs.pws.cs.ui.ac.id`
+
+| Modul | Endpoint | Method | Akses | Fungsi |
+| :--- | :--- | :--- | :--- | :--- |
+| **Autentikasi** | `/auth/login/` | `POST` | Publik | Login pengguna dan membuat sesi Flutter |
+| **Autentikasi** | `/auth/register/` | `POST` | Publik | Registrasi akun pengguna baru |
+| **Autentikasi** | `/auth/logout/` | `POST` | Login | Menghapus sesi login pengguna |
+| **Smart Pantry (Gathfaan)** | `/pantry/api/` | `GET` | Login | Mengambil daftar stok pantry pribadi (CP1 read-only) |
+| **Leftover Recipe (Adzka)** | `/recipes/api/` | `GET` | Publik; tab mine/saved memerlukan login | Mengambil daftar resep komunitas (CP1 read-only) |
+| **Food Waste Audit (Fayiz)** | `/waste-audit/api/` | `GET`, `POST` | Login | Mengambil riwayat & menambah catatan makanan terbuang |
+| **Food Waste Audit (Fayiz)** | `/waste-audit/api/<id>/` | `GET`, `PUT`, `PATCH`, `DELETE` | Login | Melihat detail, mengubah, atau menghapus catatan pribadi |
+| **Food Waste Audit (Fayiz)** | `/waste-audit/api/summary/` | `GET` | Login | Mengambil ringkasan total catatan & estimasi kerugian |
+| **Community Sharing (Malvin)** | `/community/api/` | `GET`, `POST` | Publik (`GET`) / Login (`POST`) | Melihat daftar penawaran makanan & membuat penawaran baru |
+| **Community Sharing (Malvin)** | `/community/api/<id>/` | `GET`, `PUT`, `PATCH`, `DELETE` | Publik (`GET`) / Login | Melihat detail, mengubah, atau menghapus penawaran milik sendiri |
+| **Community Sharing (Malvin)** | `/community/api/<id>/claim/` | `POST` | Login | Mengajukan klaim porsi makanan pada penawaran tersedia |
+| **Community Sharing (Malvin)** | `/community/api/<id>/claims/` | `GET` | Publik | Melihat daftar klaim pada suatu penawaran makanan |
+| **Habit Challenge (Rakhel)** | `/habit-challenge/api/plans/` | `GET`, `POST` | Login | Mengambil daftar & membuat rencana tantangan pribadi |
+| **Habit Challenge (Rakhel)** | `/habit-challenge/api/plans/<id>/` | `GET`, `PUT`, `PATCH`, `DELETE` | Login | Melihat detail, mengubah, atau menghapus rencana tantangan |
+| **Habit Challenge (Rakhel)** | `/habit-challenge/api/completions/` | `GET`, `POST` | Login | Mengambil riwayat & mencatat check-in harian tantangan |
+
+### API CP1 modul 1–2
+
+Detail tersedia pada `/pantry/api/<id>/` dan `/recipes/api/<id>/`. Alias
+`/api/pantry/` dan `/api/recipes/` juga tersedia. Endpoint modul 1–2 masih
+read-only; operasi tulis belum diimplementasikan. Kontrak data, filter, dan
+autentikasi: [panduan API CP1](docs/CP1-MOBILE-API.md).

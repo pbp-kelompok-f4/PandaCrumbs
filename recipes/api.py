@@ -1,3 +1,4 @@
+from rest_framework.renderers import JSONRenderer
 from django.db.models import Exists, OuterRef, Q
 from rest_framework.exceptions import NotAuthenticated
 from rest_framework.permissions import AllowAny
@@ -8,6 +9,7 @@ from .serializers import RecipeSerializer
 
 
 class RecipeViewSet(ReadOnlyModelViewSet):
+    renderer_classes = [JSONRenderer]
     serializer_class = RecipeSerializer
     permission_classes = [AllowAny]
 
